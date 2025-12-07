@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
 import axios from 'axios';
@@ -16,11 +16,7 @@ const ProductDetail = () => {
   
   const { user, addToCart, addToWishlist, removeFromWishlist, wishlist, currency } = useApp();
 
-  useEffect(() => {
-    fetchProduct();
-  }, [id]);
-
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -66,7 +62,11 @@ const ProductDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, navigate]);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [fetchProduct]);
 
   const formatPrice = (price) => {
     const currencySymbols = {

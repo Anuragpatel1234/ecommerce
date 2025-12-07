@@ -13,7 +13,7 @@ const Cart = () => {
     if (user) {
       loadCart();
     }
-  }, [user]);
+  }, [user, loadCart]);
 
   const formatPrice = (price) => {
     const currencySymbols = {

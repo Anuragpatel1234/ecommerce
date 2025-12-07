@@ -10,8 +10,8 @@ const HandcraftSection = () => {
       <div className="handcraft-container">
         <div className="handcraft-item">
           <div>
-            <a href="#">
-              <img src="img/93cc167593f14ad0652725d72a9ddd59.jpg" alt="handcraft product image" />
+            <a href="/shop">
+              <img src="img/93cc167593f14ad0652725d72a9ddd59.jpg" alt="" />
             </a>
           </div>
         </div>

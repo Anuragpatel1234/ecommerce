@@ -21,7 +21,7 @@ const Login = () => {
 
   useEffect(() => {
     clearError();
-  }, []);
+  }, [clearError]);
 
   const handleChange = (e) => {
     setFormData({

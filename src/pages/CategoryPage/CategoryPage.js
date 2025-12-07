@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../../components/ProductCard/ProductCard';
@@ -10,11 +10,7 @@ const CategoryPage = () => {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('newest');
 
-  useEffect(() => {
-    fetchCategoryProducts();
-  }, [category, sortBy]);
-
-  const fetchCategoryProducts = async () => {
+  const fetchCategoryProducts = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -56,7 +52,11 @@ const CategoryPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [category, sortBy]);
+
+  useEffect(() => {
+    fetchCategoryProducts();
+  }, [fetchCategoryProducts]);
 
   const getCategoryImage = (categoryName) => {
     const categoryImages = {

@@ -24,7 +24,7 @@ const Register = () => {
 
   useEffect(() => {
     clearError();
-  }, []);
+  }, [clearError]);
 
   const handleChange = (e) => {
     setFormData({

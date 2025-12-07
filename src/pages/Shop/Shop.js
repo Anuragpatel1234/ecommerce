@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../../components/ProductCard/ProductCard';
@@ -30,11 +30,7 @@ const Shop = () => {
     { label: 'Above ₹5,000', value: '5000-999999' }
   ];
 
-  useEffect(() => {
-    fetchProducts();
-  }, [searchParams, filters]);
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -68,6 +64,9 @@ const Shop = () => {
               break;
             case 'featured':
               fetchedProducts = fetchedProducts.filter(p => p.featured);
+              break;
+            default:
+              // No filter applied
               break;
           }
         }
@@ -128,6 +127,9 @@ const Shop = () => {
             case 'featured':
               fetchedProducts = getFeaturedProducts();
               break;
+            default:
+              // No filter applied
+              break;
           }
         }
         
@@ -160,7 +162,11 @@ const Shop = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchParams, filters]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({

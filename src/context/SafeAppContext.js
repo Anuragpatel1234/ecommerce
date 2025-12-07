@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const AppContext = createContext();
@@ -83,14 +83,25 @@ export const AppProvider = ({ children }) => {
     }
   }, [state.token]);
 
-  // Load user on app start
-  useEffect(() => {
-    if (state.token) {
-      loadUser();
+  const loadCart = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/cart');
+      dispatch({ type: 'SET_CART', payload: res.data });
+    } catch (error) {
+      console.error('Error loading cart:', error);
     }
-  }, []);
+  };
 
-  const loadUser = async () => {
+  const loadWishlist = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/wishlist');
+      dispatch({ type: 'SET_WISHLIST', payload: res.data });
+    } catch (error) {
+      console.error('Error loading wishlist:', error);
+    }
+  };
+
+  const loadUser = useCallback(async () => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       const res = await axios.get('http://localhost:5000/api/auth/profile');
@@ -101,7 +112,15 @@ export const AppProvider = ({ children }) => {
       console.error('Error loading user:', error);
       dispatch({ type: 'LOGOUT' });
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Load user on app start
+  useEffect(() => {
+    if (state.token) {
+      loadUser();
+    }
+  }, [state.token, loadUser]);
 
   const login = async (email, password) => {
     try {
@@ -152,15 +171,6 @@ export const AppProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' });
   };
 
-  const loadCart = async () => {
-    try {
-      const res = await axios.get('http://localhost:5000/api/cart');
-      dispatch({ type: 'SET_CART', payload: res.data });
-    } catch (error) {
-      console.error('Error loading cart:', error);
-    }
-  };
-
   const addToCart = async (productId, quantity = 1, size, color) => {
     try {
       const res = await axios.post('http://localhost:5000/api/cart/add', {
@@ -175,15 +185,6 @@ export const AppProvider = ({ children }) => {
       const message = error.response?.data?.message || 'Failed to add to cart';
       dispatch({ type: 'SET_ERROR', payload: message });
       return { success: false, message };
-    }
-  };
-
-  const loadWishlist = async () => {
-    try {
-      const res = await axios.get('http://localhost:5000/api/wishlist');
-      dispatch({ type: 'SET_WISHLIST', payload: res.data });
-    } catch (error) {
-      console.error('Error loading wishlist:', error);
     }
   };
 

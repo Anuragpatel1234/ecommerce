@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
-import axios from 'axios';
 import './Checkout.css';
 
 const Checkout = () => {
-  const { user, cart, currency, loadCart } = useApp();
+  const { user, cart, currency } = useApp();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     shippingAddress: {
       firstName: '',
@@ -324,7 +323,10 @@ const Checkout = () => {
                   </button>
                   <button 
                     className="place-order-btn"
-                    onClick={handleProceedToPayment}
+                    onClick={() => {
+                      setLoading(true);
+                      handleProceedToPayment();
+                    }}
                     disabled={loading}
                   >
                     {loading ? 'Processing...' : `Proceed to Payment - ${formatPrice(total)}`}

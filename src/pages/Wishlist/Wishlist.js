@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import './Wishlist.css';
 
 const Wishlist = () => {
   const { user, wishlist, loadWishlist } = useApp();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
       loadWishlist();
     }
-  }, [user]);
+  }, [user, loadWishlist]);
 
   if (!user) {
     return (

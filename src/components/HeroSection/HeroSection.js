@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './HeroSection.css';
 
 const HeroSection = () => {
@@ -14,9 +14,9 @@ const HeroSection = () => {
     { src: 'img/Drzya_web_nur.webp', alt: 'Fashion collection' }
   ];
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentSlideIndex((prevIndex) => (prevIndex + 1) % slides.length);
-  };
+  }, [slides.length]);
 
   const goToSlide = (index) => {
     setCurrentSlideIndex(index);
@@ -25,7 +25,7 @@ const HeroSection = () => {
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [nextSlide]);
 
   return (
     <section className="hero-section">
