@@ -1,0 +1,66 @@
+.hero-section{
+    width: 100%;
+    height: 85vh;
+    position: relative;
+    overflow: hidden;
+}
+.hero-slider {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.hero-slide {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+.hero-slide.active {
+    opacity: 1;
+}
+.hero-slide img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: zoomEffect 8s ease-in-out infinite;
+}
+@keyframes zoomEffect {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.hero-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 222;
+    display: flex;
+    gap: 8px;
+}
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+.dot:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.3);
+}
+.dot.active {
+    background-color: white;
+    border-color: white;
+    width: 24px;
+    border-radius: 4px;
+}

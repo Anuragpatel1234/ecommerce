@@ -1,0 +1,105 @@
+.shop-section{
+    padding: var(--spacing-xl) var(--spacing-md);
+    background-color: var(--color-off-white);
+}
+.shop-images-section{
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Responsive grid for different screen sizes */
+@media (max-width: 768px) {
+    .shop-images-section {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 20px 15px 0;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .shop-images-section {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1400px) {
+    .shop-images-section {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1401px) {
+    .shop-images-section {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+.shop-product-container{
+    padding-top: 20px;
+    width: 100%;
+    height: 100%;
+}
+.shop-image{
+    width: 100%;
+    height: 50vh;
+    overflow: hidden;
+}
+.shop-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    transition: all 0.3s linear;
+}
+.shop-image img:hover{
+    scale: 1.1;
+}
+.shop-content{
+    padding-top: 10px;
+    width: 100%;
+    height: fit-content;
+    text-align: center;
+}
+.shop-content h3{
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+}
+.shop-content p{
+    font-size: 13px;
+    color: rgb(48, 48, 48);
+}.shop-section-footer {
+    text-align: center;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    padding-top: var(--spacing-md);
+}
+
+.view-all-btn {
+    display: inline-block;
+    background-color: var(--color-charcoal);
+    color: var(--color-off-white);
+    padding: 18px 50px;
+    border-radius: 0;
+    border: 2px solid var(--color-charcoal);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: var(--font-sans);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.view-all-btn:hover {
+    background-color: transparent;
+    color: var(--color-charcoal);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(31, 41, 55, 0.2);
+}

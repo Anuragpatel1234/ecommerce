@@ -1,0 +1,69 @@
+.product-section{
+    padding: 70px 40px;
+    width: 100%;
+    min-height: 100%;
+}
+.product-section-heading{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.view-text{
+    display: inline-block;
+    background-color: #6B2C1A;
+    color: white;
+    padding: 16px 40px;
+    border-radius: 0;
+    border: none;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.view-text:hover {
+    background-color: #5A2415;
+    transform: translateY(-1px);
+}
+.product-container{
+    padding-top: 40px;  
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 12px;
+}
+.product-image-section{
+    width: 100%;
+    height: 100%;
+}
+.product-image{
+    width: 100%;
+    height: 62vh;
+    overflow: hidden;
+}
+.product-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    transition: all 0.4s ease-in-out;
+}
+.product-image img:hover{
+    scale: 1.1;
+}
+.product-content{
+    padding-top: 10px;
+    width: 100%;
+    height: fit-content;
+}
+.product-content h3{
+    font-size: 14px;
+    font-weight: 500;
+}
+.product-content p{
+    font-size: 14px;
+    color: #303030;
+}

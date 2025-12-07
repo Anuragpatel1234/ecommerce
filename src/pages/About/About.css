@@ -1,0 +1,225 @@
+.about-page {
+    min-height: 100vh;
+    background-color: var(--color-off-white);
+}
+
+/* Hero Section */
+.about-hero {
+    padding: var(--spacing-xl) var(--spacing-md);
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-main-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--color-charcoal);
+    margin-bottom: var(--spacing-md);
+}
+
+.about-intro {
+    font-family: var(--font-sans);
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    max-width: 800px;
+    margin: 0 auto;
+    font-weight: 400;
+}
+
+/* Full-width Image Section */
+.about-image-section {
+    width: 100%;
+    margin: var(--spacing-xl) 0;
+    padding: 0;
+}
+
+.about-image-container {
+    width: 100%;
+    height: 70vh;
+    min-height: 500px;
+    overflow: hidden;
+    position: relative;
+}
+
+.about-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Content Section */
+.about-content {
+    padding: var(--spacing-xl) var(--spacing-md);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.about-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.about-text-block {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-text-block h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--color-charcoal);
+    margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.about-text-block p {
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    line-height: 1.9;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+    font-weight: 400;
+}
+
+/* Inline Image Section */
+.about-image-section-inline {
+    width: 100%;
+    max-width: 1000px;
+    margin: var(--spacing-lg) auto;
+    padding: 0 var(--spacing-md);
+}
+
+.about-inline-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+/* Philosophy Blockquote */
+.about-philosophy {
+    max-width: 900px;
+    margin: var(--spacing-xl) auto;
+    padding: var(--spacing-lg) var(--spacing-md);
+    background-color: var(--color-light-gray);
+    border-left: 4px solid var(--color-deep-indigo);
+    position: relative;
+}
+
+.philosophy-text {
+    font-family: var(--font-serif);
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.7;
+    color: var(--color-charcoal);
+    margin: 0;
+    padding-left: var(--spacing-md);
+}
+
+.about-philosophy::before {
+    content: '"';
+    font-family: var(--font-serif);
+    font-size: 6rem;
+    font-weight: 700;
+    color: var(--color-deep-indigo);
+    position: absolute;
+    left: -20px;
+    top: -10px;
+    opacity: 0.2;
+    line-height: 1;
+}
+
+/* Call to Action Section */
+.about-cta {
+    padding: var(--spacing-xl) var(--spacing-md);
+    background-color: var(--color-charcoal);
+    color: var(--color-off-white);
+    text-align: center;
+    margin-top: var(--spacing-xl);
+}
+
+.about-cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.about-cta-content h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--color-off-white);
+    margin-bottom: var(--spacing-sm);
+}
+
+.about-cta-content p {
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-md);
+}
+
+.about-cta-button {
+    display: inline-block;
+    padding: 18px 50px;
+    background-color: transparent;
+    color: var(--color-off-white);
+    border: 2px solid var(--color-off-white);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    margin-top: var(--spacing-sm);
+}
+
+.about-cta-button:hover {
+    background-color: var(--color-off-white);
+    color: var(--color-charcoal);
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-hero {
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .about-content {
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .about-image-container {
+        height: 50vh;
+        min-height: 400px;
+    }
+
+    .about-philosophy {
+        padding: var(--spacing-md) var(--spacing-sm);
+        margin: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .philosophy-text {
+        padding-left: var(--spacing-sm);
+    }
+
+    .about-cta {
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
+}
+

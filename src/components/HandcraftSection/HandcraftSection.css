@@ -1,0 +1,68 @@
+.handcraft-section{
+    width: 100%;
+    padding: var(--spacing-xl) var(--spacing-md);
+    background-color: var(--color-off-white);
+}
+.handcraft-section .handcraft-container{
+    margin-top: 50px;
+    width: 100%; 
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+.handcraft-item{
+    width: 100%;
+    height: 90vh;
+    position: relative;
+}
+.handcraft-item img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.center-div{
+    display: grid;
+    place-content: center;
+}
+.handcraft-content{
+    width: 100%;
+    min-height: 70%;
+    background-color: var(--color-charcoal);
+    color: var(--color-off-white);
+    padding: var(--spacing-lg);
+}
+.handcraft-content .common-heading{
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    padding-bottom: var(--spacing-md);
+    color: var(--color-off-white);
+}
+.handcraft-content p{
+    color: rgb(207, 207, 207);
+    font-size: 14px;
+    padding-bottom: 20px;
+}
+.handcraft-btn{
+    margin-top: var(--spacing-md);
+    display: inline-block;
+    background-color: transparent;
+    color: var(--color-off-white);
+    border: 2px solid var(--color-off-white);
+    padding: 16px 40px;
+    border-radius: 0;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: var(--font-sans);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.handcraft-btn:hover{
+    background-color: var(--color-off-white);
+    color: var(--color-charcoal);
+    transform: translateY(-2px);
+}

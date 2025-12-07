@@ -1,0 +1,29 @@
+.marquee {
+    margin-top: -30px;
+    margin-bottom: 100px;
+    background-color: black;
+    color: white;
+    display: flex ;
+    overflow: hidden ;
+    white-space: nowrap ;
+    width: 100%;
+}
+.marquee__item {
+    letter-spacing: 0.5px;
+    animation-name: marquee-content ;
+    animation-duration: 3s ;
+    animation-iteration-count: infinite ;
+    animation-timing-function: linear ;
+    padding: 8px 20px;
+}
+.marquee:hover .marquee__item {
+    animation-play-state: paused ;
+}
+@keyframes marquee-content {
+    from {
+        transform: translateX( 0% );
+    }
+    to {
+        transform: translateX( -200% );
+    }
+}
