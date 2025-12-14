@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
+import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 import './Auth.css';
 
 const Login = () => {
@@ -62,10 +64,31 @@ const Login = () => {
       return;
     }
 
+    // Use context login function which handles everything
     const result = await login(formData.email, formData.password);
+    
     if (result.success) {
+      // Check if user is admin and redirect accordingly
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const tempAxios = axios.create();
+          tempAxios.defaults.headers.common['x-auth-token'] = token;
+          const userRes = await tempAxios.get(API_ENDPOINTS.AUTH.PROFILE);
+          
+          if (userRes.data.role === 'admin') {
+            localStorage.setItem('adminToken', token);
+            navigate('/admin/dashboard');
+            return;
+          }
+        } catch (profileErr) {
+          console.error('Error checking user role:', profileErr);
+        }
+      }
+      // Regular user - redirect to home
       navigate('/');
     }
+    // Error is already set in context if login fails
   };
 
   return (
@@ -126,6 +149,30 @@ const Login = () => {
               Don't have an account? 
               <Link to="/register" className="auth-link"> Create one</Link>
             </p>
+            <div className="auth-divider">
+              <span>or</span>
+            </div>
+            <p>
+              <Link to="/admin/login" className="admin-link">
+                <i className="fa-solid fa-shield-halved"></i> Admin Login
+              </Link>
+            </p>
+          </div>
+
+          <div className="test-credentials">
+            <h4>Test Credentials</h4>
+            <div className="credentials-list">
+              <div className="credential-item">
+                <strong>Regular User:</strong>
+                <p>Email: test@rangaara.com</p>
+                <p>Password: test123</p>
+              </div>
+              <div className="credential-item">
+                <strong>Admin User:</strong>
+                <p>Email: admin@rangaara.com</p>
+                <p>Password: admin123</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

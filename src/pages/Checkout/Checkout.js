@@ -145,7 +145,7 @@ const Checkout = () => {
             <span className="step-number">1</span>
             <span className="step-title">Shipping</span>
           </div>
-          <div className={`step ${step >= 2 ? 'active' : ''}`}>
+          <div className={`step payment-step-header ${step >= 2 ? 'active' : ''}`}>
             <span className="step-number">2</span>
             <span className="step-title">Payment</span>
           </div>

@@ -103,7 +103,7 @@
 }
 
 .auth-btn {
-    background: linear-gradient(135deg, #1F2937, #374151);
+    background-color: #4e322d;
     color: white;
     border: none;
     padding: 14px 20px;
@@ -117,9 +117,9 @@
 }
 
 .auth-btn:hover:not(:disabled) {
-    background: linear-gradient(135deg, #374151, #4B5563);
+    background-color: #5a3d37;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(31, 41, 55, 0.3);
+    box-shadow: 0 8px 25px rgba(78, 50, 45, 0.3);
 }
 
 .auth-btn:disabled {
@@ -138,6 +138,7 @@
 .auth-footer p {
     color: #6B7280;
     font-size: 14px;
+    margin: 8px 0;
 }
 
 .auth-link {
@@ -150,6 +151,96 @@
 .auth-link:hover {
     color: #374151;
     text-decoration: underline;
+}
+
+.auth-divider {
+    margin: 20px 0;
+    position: relative;
+    text-align: center;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #E5E7EB;
+}
+
+.auth-divider span {
+    position: relative;
+    background: white;
+    padding: 0 15px;
+    color: #9CA3AF;
+    font-size: 12px;
+}
+
+.admin-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #1F2937;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border: 2px solid #1F2937;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.admin-link:hover {
+    background: #1F2937;
+    color: white;
+}
+
+.test-credentials {
+    margin-top: 30px;
+    padding: 20px;
+    background: #F9FAFB;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+}
+
+.test-credentials h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.credentials-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.credential-item {
+    padding: 12px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #E5E7EB;
+}
+
+.credential-item strong {
+    display: block;
+    font-size: 12px;
+    color: #6B7280;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.credential-item p {
+    font-size: 12px;
+    color: #1F2937;
+    margin: 4px 0;
+    font-family: 'Courier New', monospace;
 }
 
 @media (width < 768px) {

@@ -1,0 +1,56 @@
+.menu-toggle-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle-icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.menu-line {
+  transition: all 0.3s cubic-bezier(0.5, 0.85, 0.25, 1.1);
+  transform-origin: center;
+}
+
+.menu-line-1 {
+  transform: translateY(-7px);
+}
+
+.menu-line-2 {
+  opacity: 1;
+}
+
+.menu-line-3 {
+  transform: translateY(7px);
+}
+
+/* Open state animations */
+.menu-toggle-button.open .menu-line-1 {
+  transform: translateX(0) translateY(0) rotate(315deg);
+  transition-timing-function: cubic-bezier(0.5, 0.85, 0.25, 1.1);
+}
+
+.menu-toggle-button.open .menu-line-2 {
+  transform: rotate(45deg);
+  transition-timing-function: cubic-bezier(0.5, 0.85, 0.25, 1.8);
+}
+
+.menu-toggle-button.open .menu-line-3 {
+  transform: translateY(0) rotate(135deg);
+  transition-timing-function: cubic-bezier(0.5, 0.85, 0.25, 1.1);
+}
+
+/* Hover effects */
+.menu-toggle-button:hover {
+  background-color: #f9fafb;
+}
+
+.menu-toggle-button:active {
+  transform: scale(0.95);
+}
+

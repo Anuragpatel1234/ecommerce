@@ -1,6 +1,6 @@
 .marquee {
-    margin-top: -30px;
-    margin-bottom: 100px;
+    margin: 0;
+    padding: 20px 0;
     background-color: black;
     color: white;
     display: flex ;
@@ -15,6 +15,7 @@
     animation-iteration-count: infinite ;
     animation-timing-function: linear ;
     padding: 8px 20px;
+    color: white;
 }
 .marquee:hover .marquee__item {
     animation-play-state: paused ;

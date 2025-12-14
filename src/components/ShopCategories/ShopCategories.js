@@ -10,37 +10,49 @@ const ShopCategories = () => {
       id: 1,
       title: 'LEHENGAS',
       image: 'img/Untitled-4.webp',
-      alt: 'Jogiya Collection'
+      alt: 'Lehengas Collection'
     },
     {
       id: 2,
-      title: 'BLOUSES',
+      title: 'SHARARA SETS',
       image: 'img/0952.webp',
-      alt: 'Malka Collection'
+      alt: 'Sharara Sets Collection'
     },
     {
       id: 3,
-      title: 'DUPATTA',
+      title: 'ANARKALI SETS',
       image: 'img/dupatta1.webp',
-      alt: 'Taal Collection'
+      alt: 'Anarkali Sets Collection'
     },
     {
       id: 4,
-      title: 'SKIRTS',
+      title: 'KURTA SETS',
       image: 'img/SKIRTS1.jpg',
-      alt: 'Taal Collection'
+      alt: 'Kurta Sets Collection'
     },
     {
       id: 5,
-      title: 'TRADITIONAL OUTFIT',
+      title: 'COORD SETS',
       image: 'img/traditional outfit 2.webp',
-      alt: 'Taal Collection'
+      alt: 'Coord Sets Collection'
     },
     {
       id: 6,
-      title: 'KIDS OUTFITS',
+      title: 'KAFTAN SETS',
       image: 'img/kids lehenga set.webp',
-      alt: 'Taal Collection'
+      alt: 'Kaftan Sets Collection'
+    },
+    {
+      id: 7,
+      title: 'DHOTI SETS',
+      image: 'img/Untitled-4.webp',
+      alt: 'Dhoti Sets Collection'
+    },
+    {
+      id: 8,
+      title: 'LOUNGE WEAR',
+      image: 'img/0952.webp',
+      alt: 'Lounge Wear Collection'
     }
   ];
 
@@ -50,17 +62,24 @@ const ShopCategories = () => {
 
   return (
     <section className="shop-categories-section">
-      <h2 className="common-heading center">Shop Categories</h2>
+      <h2 className="common-heading center">Shop by Categories</h2>
       <div className="categories-container">
         {categories.map((category) => (
-          <div key={category.id} className="category-card">
-            <div className="category-image">
-              <img src={category.image} alt={category.alt} />
-              <div className="category-overlay">
+          <div 
+            key={category.id} 
+            className="category-card"
+            onClick={() => handleCategoryClick(category.title)}
+          >
+            <div className="category-image-section">
+              <img src={`/${category.image}`} alt={category.alt} />
+              <div className="category-text-overlay">
                 <h3 className="category-title">{category.title}</h3>
                 <button 
-                  className="category-btn"
-                  onClick={() => handleCategoryClick(category.title)}
+                  className="category-button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleCategoryClick(category.title);
+                  }}
                 >
                   VIEW PRODUCT
                 </button>

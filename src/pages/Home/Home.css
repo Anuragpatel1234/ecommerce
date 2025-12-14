@@ -1,0 +1,48 @@
+.home-page-container {
+    width: 100%;
+}
+
+/* Ensure seamless transition between sections */
+.home-page-container>section {
+    margin: 0;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+/* Remove extra spacing from specific sections */
+.home-page-container .shop-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    margin: 0;
+}
+
+.home-page-container .shop-section .shop-section-footer {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.home-page-container .featured-collection-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    margin: 0;
+}
+
+.home-page-container .handcraft-section {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.home-page-container .hero-section {
+    padding: 0;
+    margin: 0;
+}
+
+.home-page-container .marquee {
+    margin: 0;
+    padding: 20px 0;
+}
+
+.home-page-container .scrolling-effect {
+    margin: 0;
+    padding: 0;
+}

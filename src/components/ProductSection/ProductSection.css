@@ -1,16 +1,18 @@
-.product-section{
-    padding: 70px 40px;
+.product-section {
+    padding: 60px 40px;
     width: 100%;
-    min-height: 100%;
+    margin: 0;
 }
-.product-section-heading{
+
+.product-section-heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-.view-text{
+
+.view-text {
     display: inline-block;
-    background-color: #6B2C1A;
+    background-color: #4e322d;
     color: white;
     padding: 16px 40px;
     border-radius: 0;
@@ -27,43 +29,194 @@
 }
 
 .view-text:hover {
-    background-color: #5A2415;
+    background-color: #5a3d37;
     transform: translateY(-1px);
 }
-.product-container{
-    padding-top: 40px;  
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 12px;
+
+.product-section-container {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top: 40px;
 }
-.product-image-section{
+
+.product-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.product-container::-webkit-scrollbar {
+    display: none;
+}
+
+.product-container .product-card {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+.product-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #9CA3AF;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.product-nav-arrow.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.product-nav-arrow:hover {
+    background-color: #6B7280;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.product-nav-arrow i {
+    font-size: 16px;
+}
+
+.product-nav-arrow-left {
+    left: -20px;
+}
+
+.product-nav-arrow-right {
+    right: -20px;
+}
+
+@media (max-width: 1400px) {
+    .product-nav-arrow-left {
+        left: 0;
+    }
+    
+    .product-nav-arrow-right {
+        right: 0;
+    }
+}
+
+.product-image-section {
     width: 100%;
     height: 100%;
 }
-.product-image{
+
+.product-image {
     width: 100%;
     height: 62vh;
     overflow: hidden;
 }
-.product-image img{
+
+.product-image img {
     width: 100%;
     height: 100%;
     object-fit: fill;
     transition: all 0.4s ease-in-out;
 }
-.product-image img:hover{
+
+.product-image img:hover {
     scale: 1.1;
 }
-.product-content{
+
+.product-content {
     padding-top: 10px;
     width: 100%;
     height: fit-content;
 }
-.product-content h3{
+
+.product-content h3 {
     font-size: 14px;
     font-weight: 500;
 }
-.product-content p{
+
+.product-content p {
     font-size: 14px;
     color: #303030;
+}
+
+@media (max-width: 900px) {
+    .product-section {
+        padding: 40px 20px;
+    }
+
+    .product-container .product-card {
+        flex: 0 0 240px;
+        min-width: 240px;
+        max-width: 240px;
+    }
+
+    .product-image {
+        height: 50vh;
+    }
+}
+
+@media (max-width: 600px) {
+    .product-container .product-card {
+        flex: 0 0 200px;
+        min-width: 200px;
+        max-width: 200px;
+    }
+
+    .product-section-heading {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .view-text {
+        width: 100%;
+        padding: 14px 30px;
+        font-size: 14px;
+    }
+
+    .product-nav-arrow {
+        width: 36px;
+        height: 36px;
+        opacity: 0.8;
+    }
+
+    .product-nav-arrow i {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-container .product-card {
+        flex: 0 0 180px;
+        min-width: 180px;
+        max-width: 180px;
+    }
+
+    .view-text {
+        padding: 12px 25px;
+        font-size: 13px;
+    }
+
+    .product-nav-arrow {
+        width: 32px;
+        height: 32px;
+    }
+
+    .product-nav-arrow i {
+        font-size: 12px;
+    }
 }

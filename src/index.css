@@ -4,6 +4,14 @@
     box-sizing: border-box;
 }
 
+#root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--color-off-white);
+}
+
 :root {
     /* Modern Heritage Color Palette */
     --color-off-white: #FAFAF9;
@@ -13,11 +21,12 @@
     --color-text-primary: #1F2937;
     --color-text-secondary: #6B7280;
     --color-accent: #4A5568;
-    
+    --color-light-blue: #EBF8FF;
+
     /* Typography */
     --font-serif: 'Playfair Display', serif;
     --font-sans: 'Inter', 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    
+
     /* Spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
@@ -26,10 +35,12 @@
     --spacing-xl: 6rem;
 }
 
-html, 
+html,
 body {
     width: 100%;
     height: 100%;
+    margin: 0;
+    padding: 0;
     line-height: 1.6;
     letter-spacing: 0.01em;
     font-family: var(--font-sans);
@@ -37,10 +48,18 @@ body {
     background-color: var(--color-off-white);
     scroll-behavior: smooth;
     color: var(--color-text-primary);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Typography System */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-serif);
     font-weight: 700;
     line-height: 1.2;
@@ -64,7 +83,10 @@ h3 {
     font-weight: 600;
 }
 
-p, li, span, div {
+p,
+li,
+span,
+div {
     font-family: var(--font-sans);
     font-weight: 400;
     line-height: 1.7;
@@ -72,13 +94,16 @@ p, li, span, div {
 }
 
 /* Navigation and Buttons */
-nav a, button, .btn {
+nav a,
+button,
+.btn {
     font-family: var(--font-sans);
     font-weight: 500;
     letter-spacing: 0.05em;
 }
 
-ul, li {
+ul,
+li {
     text-decoration: none;
     list-style: none;
 }
@@ -86,4 +111,134 @@ ul, li {
 a {
     text-decoration: none;
     color: #1a1a1a;
+    transition: color 0.3s ease;
+}
+
+/* Global Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Button Styles */
+button {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Global Image Responsiveness */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Mobile Touch Improvements */
+@media (max-width: 768px) {
+    /* Improve touch targets */
+    button,
+    a,
+    .product-card,
+    .category-card {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+        touch-action: manipulation;
+    }
+
+    /* Prevent text selection on buttons */
+    button {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    /* Smooth scrolling */
+    html {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    /* Better font rendering on mobile */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+}
+
+/* Responsive Spacing & Typography */
+@media (max-width: 768px) {
+    :root {
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.75rem;
+        --spacing-md: 1.5rem;
+        --spacing-lg: 2.5rem;
+        --spacing-xl: 4rem;
+    }
+
+    h1 {
+        font-size: clamp(1.75rem, 6vw, 2.5rem);
+    }
+
+    h2 {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+    }
+
+    h3 {
+        font-size: clamp(1.25rem, 4vw, 1.5rem);
+    }
+}
+
+@media (max-width: 400px) {
+    :root {
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 2rem;
+        --spacing-xl: 3rem;
+    }
+}
+
+/* Common Section Headings */
+.common-heading.center {
+    text-align: center;
+    padding: 0 15px;
+}
+
+.common-para.center {
+    text-align: center;
+    padding: 0 15px;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 480px) {
+    .common-heading.center,
+    .common-para.center {
+        padding: 0 12px;
+    }
+
+    /* Ensure minimum touch target size */
+    button,
+    .product-card,
+    .category-card {
+        min-height: 44px;
+    }
+
+    /* Better spacing for small screens */
+    section {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
 }

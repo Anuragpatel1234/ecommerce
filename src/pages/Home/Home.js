@@ -9,9 +9,11 @@ import Marquee from '../../components/Marquee/Marquee';
 import ScrollingEffect from '../../components/ScrollingEffect/ScrollingEffect';
 import TestimonialSection from '../../components/TestimonialSection/TestimonialSection';
 
+import './Home.css';
+
 const Home = () => {
   return (
-    <>
+    <div className="home-page-container">
       <HeroSection />
       <ShopCategories />
       <ProductSection />
@@ -21,7 +23,7 @@ const Home = () => {
       <Marquee />
       <ScrollingEffect />
       <TestimonialSection />
-    </>
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 .testimonial-section {
-    padding: 120px 40px;
+    padding: 60px 40px;
     width: 100%;
-    min-height: 100%;
+    margin: 0;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     position: relative;
     overflow: hidden;
@@ -15,7 +15,7 @@
     width: 100%;
     height: 100%;
     background: radial-gradient(circle at 20% 50%, rgba(0, 0, 0, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.03) 0%, transparent 50%);
+        radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.03) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -97,6 +97,7 @@
     0% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(-50%);
     }
@@ -128,11 +129,25 @@
     animation: starPulse 2s ease-in-out infinite;
 }
 
-.testimonial-stars i:nth-child(1) { animation-delay: 0s; }
-.testimonial-stars i:nth-child(2) { animation-delay: 0.1s; }
-.testimonial-stars i:nth-child(3) { animation-delay: 0.2s; }
-.testimonial-stars i:nth-child(4) { animation-delay: 0.3s; }
-.testimonial-stars i:nth-child(5) { animation-delay: 0.4s; }
+.testimonial-stars i:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.testimonial-stars i:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.testimonial-stars i:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.testimonial-stars i:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.testimonial-stars i:nth-child(5) {
+    animation-delay: 0.4s;
+}
 
 .testimonial-text {
     font-size: 14px;
@@ -201,6 +216,7 @@
         opacity: 0;
         transform: translateY(-30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -212,6 +228,7 @@
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -219,9 +236,12 @@
 }
 
 @keyframes starPulse {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.2);
     }
@@ -229,24 +249,24 @@
 
 @media (width < 1020px) {
     .testimonial-section {
-        padding: 80px 20px;
+        padding: 40px 20px;
     }
-    
+
     .testimonial-wrapper {
         padding-top: 40px;
     }
-    
+
     .testimonial-container {
         gap: 20px;
     }
-    
+
     .testimonial-card {
         padding: 25px 20px;
         width: calc((100vw - 80px) / 1.5);
         min-width: 250px;
         max-width: 320px;
     }
-    
+
     .testimonial-text {
         font-size: 13px;
     }

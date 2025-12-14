@@ -25,7 +25,7 @@ const Payment = () => {
       navigate('/login');
       return;
     }
-    
+
     if (!cart || cart.items.length === 0) {
       navigate('/cart');
       return;
@@ -47,7 +47,7 @@ const Payment = () => {
       AUD: 'A$',
       SGD: 'S$'
     };
-    
+
     const rates = {
       INR: 1,
       USD: 0.012,
@@ -57,7 +57,7 @@ const Payment = () => {
       AUD: 0.018,
       SGD: 0.016
     };
-    
+
     const convertedPrice = Math.round(price * rates[currency]);
     return `${currencySymbols[currency]}${convertedPrice.toLocaleString()}`;
   };
@@ -124,35 +124,131 @@ const Payment = () => {
 
   const validateCard = () => {
     const newErrors = {};
-    
+
     if (!cardData.cardNumber || cardData.cardNumber.replace(/\s/g, '').length < 13) {
       newErrors.cardNumber = 'Please enter a valid card number';
     }
-    
+
     if (!cardData.cardName || cardData.cardName.length < 3) {
       newErrors.cardName = 'Please enter cardholder name';
     }
-    
+
     if (!cardData.expiryDate || cardData.expiryDate.length !== 5) {
       newErrors.expiryDate = 'Please enter valid expiry date (MM/YY)';
     } else {
       const [month, year] = cardData.expiryDate.split('/');
       const currentYear = new Date().getFullYear() % 100;
       const currentMonth = new Date().getMonth() + 1;
-      
+
       if (parseInt(month) < 1 || parseInt(month) > 12) {
         newErrors.expiryDate = 'Invalid month';
       } else if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
         newErrors.expiryDate = 'Card has expired';
       }
     }
-    
+
     if (!cardData.cvv || cardData.cvv.length < 3) {
       newErrors.cvv = 'Please enter CVV';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const [sdkReady, setSdkReady] = useState(false);
+
+  useEffect(() => {
+    if (paymentMethod === 'paypal') {
+      const addPayPalScript = async () => {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        // Replace 'sb' with the specific Client ID provided
+        script.src = `https://www.paypal.com/sdk/js?client-id=ATuy3BptZUjcrnZ10MhcAfwXc8E2bbsTv7gNuKxVdQXUXfs_HiSqTEqqcirhU4f5j_oj4ixa0VPwA5uR&currency=${currency}`;
+        script.async = true;
+        script.onload = () => {
+          setSdkReady(true);
+        };
+        document.body.appendChild(script);
+      };
+
+      if (!window.paypal) {
+        addPayPalScript();
+      } else {
+        setSdkReady(true);
+      }
+    }
+  }, [paymentMethod, currency]);
+
+  // eslint-disable-next-line no-unused-vars
+  const handlePayPalPayment = () => {
+    // This function is just a placeholder if needed, mostly logic is in buttons
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (sdkReady && paymentMethod === 'paypal' && window.paypal) {
+      // Clear any existing buttons
+      const container = document.getElementById('paypal-button-container');
+      if (container) container.innerHTML = "";
+
+      window.paypal.Buttons({
+        createOrder: (data, actions) => {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: calculateTotalForPayPal()
+              }
+            }]
+          });
+        },
+        onApprove: (data, actions) => {
+          // Call backend to capture
+          return axios.post('http://localhost:5000/api/paypal/capture-order', {
+            orderID: data.orderID
+          })
+            .then((response) => {
+              // Successful capture
+              // Create local order record
+              handlePayPalSuccess(response.data);
+            })
+            .catch((err) => {
+              console.error("Capture failed", err);
+              alert("Transaction failed");
+            });
+        },
+        onError: (err) => {
+          console.error("PayPal Error", err);
+          alert("Payment could not be completed");
+        }
+      }).render('#paypal-button-container');
+    }
+  }, [sdkReady, paymentMethod]);
+
+  const calculateTotalForPayPal = () => {
+    const subtotal = cart.totalAmount || 0;
+    const shipping = subtotal > 2000 ? 0 : 200;
+    const tax = subtotal * 0.18;
+    const total = subtotal + shipping + tax;
+    return total.toFixed(2);
+  };
+
+  const handlePayPalSuccess = async (details) => {
+    setLoading(true);
+    try {
+      // We reuse the create order API but mark it as paid via PayPal
+      // Or simply clear cart and redirect since payment is already captured
+      await axios.delete('http://localhost:5000/api/cart/clear');
+      loadCart();
+      navigate('/orders', {
+        state: {
+          success: true
+        }
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePayment = async () => {
@@ -163,7 +259,7 @@ const Payment = () => {
     }
 
     setLoading(true);
-    
+
     try {
       const orderPayload = {
         shippingAddress: orderData?.shippingAddress || {},
@@ -176,17 +272,17 @@ const Payment = () => {
       };
 
       const response = await axios.post('http://localhost:5000/api/orders/create', orderPayload);
-      
+
       // Clear cart after successful order
       await axios.delete('http://localhost:5000/api/cart/clear');
       loadCart();
-      
+
       // Navigate to order confirmation
-      navigate('/orders', { 
-        state: { 
+      navigate('/orders', {
+        state: {
           orderId: response.data.order?._id || response.data._id,
-          success: true 
-        } 
+          success: true
+        }
       });
     } catch (error) {
       console.error('Error processing payment:', error);
@@ -265,7 +361,7 @@ const Payment = () => {
             {paymentMethod === 'card' && (
               <div className="card-form">
                 <h3>Card Details</h3>
-                
+
                 <div className="form-group">
                   <label htmlFor="cardNumber">Card Number</label>
                   <div className="card-input-wrapper">
@@ -340,11 +436,8 @@ const Payment = () => {
 
             {paymentMethod === 'paypal' && (
               <div className="paypal-info">
-                <p>You will be redirected to PayPal to complete your payment.</p>
-                <button className="paypal-button">
-                  <i className="fa-brands fa-paypal"></i>
-                  Continue with PayPal
-                </button>
+                <p style={{ marginBottom: '15px' }}>Complete your payment securely with PayPal.</p>
+                <div id="paypal-button-container" style={{ maxWidth: '500px' }}></div>
               </div>
             )}
 
@@ -360,44 +453,46 @@ const Payment = () => {
               </div>
             )}
 
-            <div className="payment-actions">
-              <button 
-                className="back-btn"
-                onClick={() => navigate('/checkout')}
-                disabled={loading}
-              >
-                <i className="fa-solid fa-arrow-left"></i>
-                Back to Checkout
-              </button>
-              <button 
-                className="pay-btn"
-                onClick={handlePayment}
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <div className="spinner-small"></div>
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <i className="fa-solid fa-lock"></i>
-                    Pay {formatPrice(total)}
-                  </>
-                )}
-              </button>
-            </div>
+            {paymentMethod !== 'paypal' && (
+              <div className="payment-actions">
+                <button
+                  className="back-btn"
+                  onClick={() => navigate('/checkout')}
+                  disabled={loading}
+                >
+                  <i className="fa-solid fa-arrow-left"></i>
+                  Back to Checkout
+                </button>
+                <button
+                  className="pay-btn"
+                  onClick={handlePayment}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <div className="spinner-small"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fa-solid fa-lock"></i>
+                      Pay {formatPrice(total)}
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="payment-summary">
             <h3>Order Summary</h3>
-            
+
             <div className="summary-items">
               {cart.items.map((item) => (
                 <div key={item._id} className="summary-item">
-                  <img 
-                    src={item.product?.images?.[0] || 'img/placeholder.jpg'} 
-                    alt={item.product?.name} 
+                  <img
+                    src={item.product?.images?.[0] || 'img/placeholder.jpg'}
+                    alt={item.product?.name}
                   />
                   <div className="summary-item-details">
                     <h4>{item.product?.name}</h4>

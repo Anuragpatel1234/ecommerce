@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './HeroSection.css';
 
 const HeroSection = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const intervalRef = useRef(null);
   
   const slides = [
     { src: 'img/pexels-vikashkr50-27103969.jpg', alt: 'Fashion collection' },
@@ -14,17 +15,37 @@ const HeroSection = () => {
     { src: 'img/Drzya_web_nur.webp', alt: 'Fashion collection' }
   ];
 
+  // Preload images for smoother transitions
+  useEffect(() => {
+    slides.forEach((slide) => {
+      const img = new Image();
+      img.src = slide.src;
+    });
+  }, [slides]);
+
   const nextSlide = useCallback(() => {
-    setCurrentSlideIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    setCurrentSlideIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % slides.length;
+      return nextIndex;
+    });
   }, [slides.length]);
 
   const goToSlide = (index) => {
+    if (index === currentSlideIndex) return;
     setCurrentSlideIndex(index);
   };
 
   useEffect(() => {
-    const interval = setInterval(nextSlide, 5000);
-    return () => clearInterval(interval);
+    // Slide transition interval - animation runs continuously independently
+    intervalRef.current = setInterval(() => {
+      nextSlide();
+    }, 5000);
+    
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [nextSlide]);
 
   return (

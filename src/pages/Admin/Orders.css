@@ -1,0 +1,139 @@
+.admin-orders {
+  width: 100%;
+}
+
+.orders-header {
+  margin-bottom: 30px;
+}
+
+.orders-header h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.orders-header p {
+  font-size: 16px;
+  color: #666;
+}
+
+.orders-filters {
+  margin-bottom: 24px;
+}
+
+.filter-select {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 200px;
+}
+
+.orders-table-container {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th {
+  text-align: left;
+  padding: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.orders-table td {
+  padding: 16px;
+  font-size: 14px;
+  color: #1a1a1a;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.orders-table tr:hover {
+  background: #f9fafb;
+}
+
+.order-link {
+  color: #1a1a1a;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.order-link:hover {
+  text-decoration: underline;
+}
+
+.status-select {
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  background: white;
+}
+
+.btn-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.btn-view:hover {
+  background: #bfdbfe;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 20px;
+}
+
+.pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #1a1a1a;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+

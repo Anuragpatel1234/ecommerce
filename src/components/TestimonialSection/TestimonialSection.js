@@ -5,7 +5,7 @@ const TestimonialSection = () => {
   const testimonials = [
     {
       id: 1,
-      text: "The quality and craftsmanship are exceptional. Every piece tells a story and I feel confident wearing CHARACTR designs.",
+      text: "The quality and craftsmanship are exceptional. Every piece tells a story and I feel confident wearing RANGAARA designs.",
       name: "Priya Sharma",
       location: "Mumbai",
       avatar: "PS"
@@ -19,7 +19,7 @@ const TestimonialSection = () => {
     },
     {
       id: 3,
-      text: "CHARACTR has become my go-to brand for unique fashion. The designs are bold, beautiful, and truly one-of-a-kind.",
+      text: "RANGAARA has become my go-to brand for traditional elegance. The designs beautifully blend heritage craftsmanship with modern style.",
       name: "Riya Mehta",
       location: "Bangalore",
       avatar: "RM"

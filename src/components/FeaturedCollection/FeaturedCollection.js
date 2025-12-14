@@ -50,7 +50,7 @@ const FeaturedCollection = () => {
     <section className="featured-collection-section">
       <h2 className="common-heading center">Featured Collection</h2>
       <div className="featured-container">
-        {/* Left Hero Card - 50% width - Always show with img/0952.webp */}
+        {/* Hero Card - Left side */}
         <Link to={`/product/${heroProduct._id}`} className="hero-card">
           <div className="hero-image">
             <img 
@@ -61,6 +61,10 @@ const FeaturedCollection = () => {
                 e.target.src = '/img/placeholder.jpg';
               }}
             />
+            <div className="hero-image-overlay">
+              <h3>{heroProduct.name}</h3>
+              <p>{formatPrice(heroProduct.price)}</p>
+            </div>
           </div>
           <div className="hero-content">
             <h3>{heroProduct.name}</h3>
@@ -68,7 +72,7 @@ const FeaturedCollection = () => {
           </div>
         </Link>
 
-        {/* Right Grid - 2x2 layout */}
+        {/* Featured Cards Grid - Right side (2x2) */}
         <div className="featured-grid">
           {[0, 1, 2, 3].map((index) => {
             const cardImage = cardImages[index] || '/img/06e447550bc57e1226507591a9b847e5.jpg';
@@ -95,6 +99,10 @@ const FeaturedCollection = () => {
                       console.log(`Successfully loaded image at index ${index}: ${cardImage}`);
                     }}
                   />
+                  <div className="featured-card-image-overlay">
+                    <h3>{productName}</h3>
+                    <p>{formatPrice(productPrice)}</p>
+                  </div>
                 </div>
                 <div className="featured-card-content">
                   <h3>{productName}</h3>

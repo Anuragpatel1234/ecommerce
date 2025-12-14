@@ -1,0 +1,55 @@
+/* Header Location Section */
+.header-location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 15px;
+    /* Reduced from 20px for tighter fit */
+    cursor: pointer;
+    flex: 0 0 auto;
+    padding: 5px 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.header-location:hover {
+    background-color: #f3f4f6;
+    border-color: #e5e7eb;
+}
+
+.header-location i {
+    font-size: 18px;
+    /* Slightly larger */
+    color: #1a1a1a;
+    /* align-self: center is default via parent align-items: center */
+    padding-top: 5px;
+    /* Visual adjustment to align better with two lines of text */
+}
+
+.location-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    justify-content: center;
+}
+
+.deliver-to {
+    font-size: 11px;
+    color: #555;
+    font-weight: 400;
+}
+
+.update-location {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+/* Adjustments for responsive */
+@media (max-width: 1020px) {
+    .header-location {
+        display: none;
+        /* Hide on smaller screens usually */
+    }
+}

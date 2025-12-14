@@ -1,0 +1,109 @@
+.admin-users {
+  width: 100%;
+}
+
+.users-header {
+  margin-bottom: 30px;
+}
+
+.users-header h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.users-header p {
+  font-size: 16px;
+  color: #666;
+}
+
+.users-filters {
+  margin-bottom: 24px;
+}
+
+.search-input {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #1a1a1a;
+}
+
+.users-table-container {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th {
+  text-align: left;
+  padding: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.users-table td {
+  padding: 16px;
+  font-size: 14px;
+  color: #1a1a1a;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.users-table tr:hover {
+  background: #f9fafb;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 20px;
+}
+
+.pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #1a1a1a;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+

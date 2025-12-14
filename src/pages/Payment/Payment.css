@@ -273,17 +273,18 @@
 }
 
 .back-btn:hover {
-  border-color: #d1d5db;
-  background: #f9fafb;
+  border-color: #4e322d;
+  background: #4e322d;
+  color: white;
 }
 
 .pay-btn {
-  background: #1a1a1a;
+  background: #4e322d;
   color: white;
 }
 
 .pay-btn:hover:not(:disabled) {
-  background: #000;
+  background: #5a3d37;
 }
 
 .pay-btn:disabled {

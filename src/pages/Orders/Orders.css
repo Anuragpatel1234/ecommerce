@@ -75,7 +75,7 @@
 
 .shop-btn {
     display: inline-block;
-    background: linear-gradient(135deg, #1F2937, #374151);
+    background: #4e322d;
     color: white;
     padding: 14px 28px;
     border-radius: 8px;
@@ -85,8 +85,9 @@
 }
 
 .shop-btn:hover {
-    background: linear-gradient(135deg, #374151, #4B5563);
+    background: #5a3d37;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(78, 50, 45, 0.3);
 }
 
 .orders-list {

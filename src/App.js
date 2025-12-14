@@ -1,7 +1,9 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppProvider } from './context/SafeAppContext';
+import { ToastProvider } from './context/ToastContext';
 import './App.css';
+import ScrollToTop from './components/ScrollToTop';
 
 // Lazy load components to avoid initial loading issues
 const Header = React.lazy(() => import('./components/Header/Header'));
@@ -19,13 +21,23 @@ const Payment = React.lazy(() => import('./pages/Payment/Payment'));
 const Orders = React.lazy(() => import('./pages/Orders/Orders'));
 const CategoryPage = React.lazy(() => import('./pages/CategoryPage/CategoryPage'));
 const About = React.lazy(() => import('./pages/About/About'));
+const AdminLogin = React.lazy(() => import('./pages/Admin/AdminLogin'));
+const AdminLayout = React.lazy(() => import('./pages/Admin/AdminLayout'));
+const Dashboard = React.lazy(() => import('./pages/Admin/Dashboard'));
+const AdminProducts = React.lazy(() => import('./pages/Admin/Products'));
+const ProductForm = React.lazy(() => import('./pages/Admin/ProductForm'));
+const AdminOrders = React.lazy(() => import('./pages/Admin/Orders'));
+const OrderDetail = React.lazy(() => import('./pages/Admin/OrderDetail'));
+const AdminUsers = React.lazy(() => import('./pages/Admin/Users'));
+const Sections = React.lazy(() => import('./pages/Admin/Sections'));
+const SectionForm = React.lazy(() => import('./pages/Admin/SectionForm'));
 
 // Loading component
 const LoadingSpinner = () => (
-  <div style={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+  <div style={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: '200px',
     flexDirection: 'column'
   }}>
@@ -42,38 +54,71 @@ const LoadingSpinner = () => (
   </div>
 );
 
+// Component to conditionally show Header/Footer
+const AppContent = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  return (
+    <div className="App">
+      {!isAdminRoute && (
+        <Suspense fallback={<LoadingSpinner />}>
+          <Header />
+        </Suspense>
+      )}
+      <main>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/category/:category" element={<CategoryPage />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/about" element={<About />} />
+
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Navigate to="/admin/dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="products" element={<AdminProducts />} />
+              <Route path="products/new" element={<ProductForm />} />
+              <Route path="products/:id/edit" element={<ProductForm />} />
+              <Route path="orders" element={<AdminOrders />} />
+              <Route path="orders/:id" element={<OrderDetail />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="sections" element={<Sections />} />
+              <Route path="sections/new" element={<SectionForm />} />
+              <Route path="sections/:id/edit" element={<SectionForm />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </main>
+      {!isAdminRoute && (
+        <Suspense fallback={<LoadingSpinner />}>
+          <Footer />
+        </Suspense>
+      )}
+    </div>
+  );
+};
+
 function App() {
   return (
     <BrowserRouter>
-      <AppProvider>
-        <div className="App">
-          <Suspense fallback={<LoadingSpinner />}>
-            <Header />
-          </Suspense>
-          <main>
-            <Suspense fallback={<LoadingSpinner />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/category/:category" element={<CategoryPage />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/payment" element={<Payment />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/about" element={<About />} />
-              </Routes>
-            </Suspense>
-          </main>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Footer />
-          </Suspense>
-        </div>
-      </AppProvider>
+      <ScrollToTop />
+      <ToastProvider>
+        <AppProvider>
+          <AppContent />
+        </AppProvider>
+      </ToastProvider>
     </BrowserRouter>
   );
 }

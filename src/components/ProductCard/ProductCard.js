@@ -3,11 +3,17 @@ import { Link } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
 import './ProductCard.css';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, showNewBadge = false }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   const { user, wishlist, addToWishlist, removeFromWishlist, addToCart, currency } = useApp();
+
+  // Mock data for visual enhancement if missing from API
+  const mockRating = product?.rating || 4.5;
+  const mockReviewCount = product?.reviews?.length || Math.floor(Math.random() * 50) + 10;
+  const mockColors = product?.colors?.length > 0 ? product.colors : ['#FF0000', '#FFD700', '#0000FF'];
+  const isNew = product?.newArrival || Math.random() > 0.7; // Randomly assign "NEW" if missing
 
   // Check if product is in wishlist
   React.useEffect(() => {
@@ -19,7 +25,7 @@ const ProductCard = ({ product }) => {
   const handleWishlistToggle = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!user) {
       // Redirect to login or show login modal
       return;
@@ -42,7 +48,7 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!user) {
       // Redirect to login or show login modal
       return;
@@ -60,6 +66,11 @@ const ProductCard = ({ product }) => {
   };
 
   const formatPrice = (price) => {
+    if (showNewBadge) {
+      // For New Arrivals section, always show in Rs. format
+      return `Rs. ${price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+
     const currencySymbols = {
       INR: '₹',
       USD: '$',
@@ -69,7 +80,7 @@ const ProductCard = ({ product }) => {
       AUD: 'A$',
       SGD: 'S$'
     };
-    
+
     // Simple currency conversion (in real app, use proper exchange rates)
     const rates = {
       INR: 1,
@@ -80,7 +91,7 @@ const ProductCard = ({ product }) => {
       AUD: 0.018,
       SGD: 0.016
     };
-    
+
     const convertedPrice = Math.round(price * rates[currency]);
     return `${currencySymbols[currency]}${convertedPrice.toLocaleString()}`;
   };
@@ -91,22 +102,40 @@ const ProductCard = ({ product }) => {
     <div className="product-card">
       <Link to={`/product/${product._id}`} className="product-link">
         <div className="product-image-container">
-          <img 
-            src={product.images?.[0] || 'img/placeholder.jpg'} 
+          <img
+            src={product.images?.[0] || 'img/placeholder.jpg'}
             alt={product.name}
             className="product-image"
           />
-          
-          {product.onSale && (
-            <span className="product-badge sale-badge">SALE</span>
+
+          {showNewBadge && (
+            <span className="product-badge new-arrivals-badge">New Arrivals</span>
           )}
-          
-          {product.newArrival && (
+
+          {!showNewBadge && isNew && (
             <span className="product-badge new-badge">NEW</span>
           )}
-          
+
+          <button
+            className={`product-wishlist-icon ${isWishlisted ? 'active' : ''}`}
+            onClick={handleWishlistToggle}
+            disabled={loading}
+          >
+            <i className={`fa-${isWishlisted ? 'solid' : 'regular'} fa-heart`}></i>
+          </button>
+
+          {showNewBadge ? (
+            <button
+              className="product-add-to-cart-btn"
+              onClick={handleAddToCart}
+              disabled={loading}
+            >
+              <i className="fa-solid fa-bag-shopping"></i>
+              Add to Cart
+            </button>
+          ) : (
           <div className="product-overlay">
-            <button 
+            <button
               className="overlay-btn add-to-cart-btn"
               onClick={handleAddToCart}
               disabled={loading}
@@ -114,54 +143,48 @@ const ProductCard = ({ product }) => {
               <i className="fa-solid fa-bag-shopping"></i>
               Add to Collection
             </button>
-            
-            <button 
-              className={`overlay-btn wishlist-btn ${isWishlisted ? 'active' : ''}`}
-              onClick={handleWishlistToggle}
-              disabled={loading}
-            >
-              <i className={`fa-${isWishlisted ? 'solid' : 'regular'} fa-heart`}></i>
-            </button>
           </div>
+          )}
         </div>
-        
+
         <div className="product-info">
           <h3 className="product-name">{product.name}</h3>
+
           <div className="product-price">
-            {product.originalPrice && product.originalPrice > product.price && (
+            {product.originalPrice && product.originalPrice > product.price && !showNewBadge && (
               <span className="original-price">{formatPrice(product.originalPrice)}</span>
             )}
             <span className="current-price">{formatPrice(product.price)}</span>
           </div>
-          
-          {product.rating > 0 && (
-            <div className="product-rating">
-              <div className="stars">
-                {[...Array(5)].map((_, i) => (
-                  <i 
-                    key={i}
-                    className={`fa-${i < Math.floor(product.rating) ? 'solid' : 'regular'} fa-star`}
-                  ></i>
-                ))}
-              </div>
-              <span className="rating-text">({product.reviews?.length || 0})</span>
-            </div>
-          )}
-          
-          {product.colors && product.colors.length > 0 && (
-            <div className="product-colors">
-              {product.colors.slice(0, 4).map((color, index) => (
-                <span 
-                  key={index}
-                  className="color-dot"
-                  style={{ backgroundColor: color.toLowerCase() }}
-                  title={color}
-                ></span>
+
+          {!showNewBadge && (
+            <>
+          <div className="product-rating">
+            <div className="stars">
+              {[...Array(5)].map((_, i) => (
+                <i
+                  key={i}
+                  className={`fa-${i < Math.floor(mockRating) ? 'solid' : 'regular'} fa-star`}
+                ></i>
               ))}
-              {product.colors.length > 4 && (
-                <span className="more-colors">+{product.colors.length - 4}</span>
-              )}
             </div>
+            <span className="rating-text">({mockReviewCount})</span>
+          </div>
+
+          <div className="product-colors">
+            {mockColors.slice(0, 4).map((color, index) => (
+              <span
+                key={index}
+                className="color-dot"
+                style={{ backgroundColor: color.toLowerCase() }}
+                title={color}
+              ></span>
+            ))}
+            {mockColors.length > 4 && (
+              <span className="more-colors">+{mockColors.length - 4}</span>
+            )}
+          </div>
+            </>
           )}
         </div>
       </Link>
