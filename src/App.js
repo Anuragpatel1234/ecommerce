@@ -4,6 +4,7 @@ import { AppProvider } from './context/SafeAppContext';
 import { ToastProvider } from './context/ToastContext';
 import './App.css';
 import ScrollToTop from './components/ScrollToTop';
+import ScrollToTopButton from './components/ScrollToTopButton/ScrollToTopButton';
 
 // Lazy load components to avoid initial loading issues
 const Header = React.lazy(() => import('./components/Header/Header'));
@@ -106,6 +107,7 @@ const AppContent = () => {
           <Footer />
         </Suspense>
       )}
+      <ScrollToTopButton />
     </div>
   );
 };

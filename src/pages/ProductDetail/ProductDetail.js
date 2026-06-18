@@ -14,7 +14,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   
-  const { user, addToCart, addToWishlist, removeFromWishlist, wishlist, currency } = useApp();
+  const { user, addToCart, addToWishlist, removeFromWishlist, wishlist, currency, formatPrice } = useApp();
 
   const fetchProduct = useCallback(async () => {
     try {
@@ -67,31 +67,6 @@ const ProductDetail = () => {
   useEffect(() => {
     fetchProduct();
   }, [fetchProduct]);
-
-  const formatPrice = (price) => {
-    const currencySymbols = {
-      INR: '₹',
-      USD: '$',
-      EUR: '€',
-      GBP: '£',
-      CAD: 'C$',
-      AUD: 'A$',
-      SGD: 'S$'
-    };
-    
-    const rates = {
-      INR: 1,
-      USD: 0.012,
-      EUR: 0.011,
-      GBP: 0.0095,
-      CAD: 0.016,
-      AUD: 0.018,
-      SGD: 0.016
-    };
-    
-    const convertedPrice = Math.round(price * rates[currency]);
-    return `${currencySymbols[currency]}${convertedPrice.toLocaleString()}`;
-  };
 
   const handleAddToCart = async () => {
     if (!user) {

@@ -5,7 +5,7 @@ import axios from 'axios';
 import './Cart.css';
 
 const Cart = () => {
-  const { user, cart, loadCart, currency } = useApp();
+  const { user, cart, loadCart, currency, formatPrice } = useApp();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -14,31 +14,6 @@ const Cart = () => {
       loadCart();
     }
   }, [user, loadCart]);
-
-  const formatPrice = (price) => {
-    const currencySymbols = {
-      INR: '₹',
-      USD: '$',
-      EUR: '€',
-      GBP: '£',
-      CAD: 'C$',
-      AUD: 'A$',
-      SGD: 'S$'
-    };
-    
-    const rates = {
-      INR: 1,
-      USD: 0.012,
-      EUR: 0.011,
-      GBP: 0.0095,
-      CAD: 0.016,
-      AUD: 0.018,
-      SGD: 0.016
-    };
-    
-    const convertedPrice = Math.round(price * rates[currency]);
-    return `${currencySymbols[currency]}${convertedPrice.toLocaleString()}`;
-  };
 
   const updateQuantity = async (itemId, newQuantity) => {
     if (newQuantity < 1) return;

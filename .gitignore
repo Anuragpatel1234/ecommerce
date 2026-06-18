@@ -67,3 +67,9 @@ dist/
 tmp/
 temp/
 
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+

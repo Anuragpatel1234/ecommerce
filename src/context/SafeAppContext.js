@@ -44,7 +44,16 @@ const initialState = {
   location: JSON.parse(safeLocalStorage.getItem('location') || 'null'),
   cart: { items: [], totalAmount: 0 },
   wishlist: [],
-  currency: 'INR',
+  currency: safeLocalStorage.getItem('currency') || 'INR',
+  rates: {
+    INR: 1,
+    USD: 0.012,
+    EUR: 0.011,
+    GBP: 0.0095,
+    CAD: 0.016,
+    AUD: 0.018,
+    SGD: 0.016
+  },
   loading: false,
   error: null
 };
@@ -79,7 +88,10 @@ const appReducer = (state, action) => {
     case 'SET_WISHLIST':
       return { ...state, wishlist: action.payload };
     case 'SET_CURRENCY':
+      safeLocalStorage.setItem('currency', action.payload);
       return { ...state, currency: action.payload };
+    case 'SET_RATES':
+      return { ...state, rates: action.payload };
     case 'SET_LOCATION':
       return { ...state, location: action.payload };
     default:
@@ -273,6 +285,39 @@ export const AppProvider = ({ children }) => {
     dispatch({ type: 'SET_CURRENCY', payload: currency });
   };
 
+  const fetchRates = useCallback(async () => {
+    try {
+      // Using a free API for demonstration. In production, use a paid key.
+      const res = await axios.get('https://open.er-api.com/v6/latest/INR');
+      if (res.data && res.data.rates) {
+        dispatch({ type: 'SET_RATES', payload: res.data.rates });
+      }
+    } catch (error) {
+      console.warn('Failed to fetch real-time rates, using fallback:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchRates();
+  }, [fetchRates]);
+
+  const formatPrice = useCallback((price) => {
+    const currencySymbols = {
+      INR: '₹',
+      USD: '$',
+      EUR: '€',
+      GBP: '£',
+      CAD: 'C$',
+      AUD: 'A$',
+      SGD: 'S$'
+    };
+    
+    const rate = state.rates[state.currency] || 1;
+    const convertedPrice = Math.round(price * rate);
+    
+    return `${currencySymbols[state.currency] || ''}${convertedPrice.toLocaleString()}`;
+  }, [state.currency, state.rates]);
+
   const updateLocation = async (locationData) => {
     try {
       // Always update local state
@@ -287,7 +332,7 @@ export const AppProvider = ({ children }) => {
             zipCode: pincode,
             city: city,
             state: locState,
-            country: 'India' // Defaulting to India for now based on context
+            country: locationData.country || 'India'
           }
         });
         // Reload user to sync
@@ -317,6 +362,7 @@ export const AppProvider = ({ children }) => {
     removeFromWishlist,
     subscribeNewsletter,
     setCurrency,
+    formatPrice,
     updateLocation,
     clearError
   };

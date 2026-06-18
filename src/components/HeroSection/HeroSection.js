@@ -5,7 +5,7 @@ const HeroSection = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const intervalRef = useRef(null);
   
-  const slides = [
+  const slides = React.useMemo(() => [
     { src: 'img/pexels-vikashkr50-27103969.jpg', alt: 'Fashion collection' },
     { src: 'img/Approved_Drzya-Desktop-14.webp', alt: 'Fashion collection' },
     { src: 'img/Drzya-Desktop-1_2.webp', alt: 'Fashion collection' },
@@ -13,7 +13,7 @@ const HeroSection = () => {
     { src: 'img/ishq_new_arrivals_dekstop.webp', alt: 'Fashion collection' },
     { src: 'img/pexels-vikashkr50-27103969.jpg', alt: 'Fashion collection' },
     { src: 'img/Drzya_web_nur.webp', alt: 'Fashion collection' }
-  ];
+  ], []);
 
   // Preload images for smoother transitions
   useEffect(() => {

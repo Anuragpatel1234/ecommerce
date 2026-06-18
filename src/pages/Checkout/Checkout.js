@@ -4,7 +4,7 @@ import { useApp } from '../../context/SafeAppContext';
 import './Checkout.css';
 
 const Checkout = () => {
-  const { user, cart, currency } = useApp();
+  const { user, cart, currency, formatPrice } = useApp();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -50,31 +50,6 @@ const Checkout = () => {
       }));
     }
   }, [user, cart, navigate]);
-
-  const formatPrice = (price) => {
-    const currencySymbols = {
-      INR: '₹',
-      USD: '$',
-      EUR: '€',
-      GBP: '£',
-      CAD: 'C$',
-      AUD: 'A$',
-      SGD: 'S$'
-    };
-    
-    const rates = {
-      INR: 1,
-      USD: 0.012,
-      EUR: 0.011,
-      GBP: 0.0095,
-      CAD: 0.016,
-      AUD: 0.018,
-      SGD: 0.016
-    };
-    
-    const convertedPrice = Math.round(price * rates[currency]);
-    return `${currencySymbols[currency]}${convertedPrice.toLocaleString()}`;
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -133,7 +108,10 @@ const Checkout = () => {
   }
 
   const subtotal = cart.totalAmount || 0;
-  const shipping = subtotal > 2000 ? 0 : 200;
+  const isInternational = formData.shippingAddress.country.toLowerCase() !== 'india' && formData.shippingAddress.country.toLowerCase() !== 'in';
+  
+  // International shipping logic
+  const shipping = isInternational ? 1500 : (subtotal > 2000 ? 0 : 200);
   const tax = subtotal * 0.18;
   const total = subtotal + shipping + tax;
 
@@ -309,10 +287,19 @@ const Checkout = () => {
                     />
                     <div className="payment-info">
                       <i className="fa-solid fa-money-bill"></i>
-                      <span>Cash on Delivery</span>
+                      <span>
+                        Cash on Delivery {isInternational && <small className="intl-cod-label">(International COD)</small>}
+                      </span>
                     </div>
                   </label>
                 </div>
+
+                {formData.paymentMethod === 'cod' && isInternational && (
+                  <div className="intl-cod-notice">
+                    <i className="fa-solid fa-circle-info"></i>
+                    <p>International COD orders may require a verification call and may have longer processing times.</p>
+                  </div>
+                )}
 
                 <div className="checkout-actions">
                   <button 

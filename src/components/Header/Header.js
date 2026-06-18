@@ -102,6 +102,8 @@ const Header = () => {
           <form onSubmit={handleSearch} className="search-form">
             <input
               type="text"
+              id="desktop-search"
+              name="search"
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -198,6 +200,8 @@ const Header = () => {
         <form onSubmit={handleSearch} className="mobile-search-form">
           <input
             type="text"
+            id="mobile-search"
+            name="search"
             placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

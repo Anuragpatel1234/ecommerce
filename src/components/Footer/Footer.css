@@ -111,7 +111,7 @@
     font-family: var(--font-serif);
     font-size: 16px;
     font-weight: 600;
-    color: #ffffff;
+    color: #ffffff !important;
     margin-bottom: 25px;
     letter-spacing: 0.05em;
     position: relative;
@@ -148,7 +148,7 @@
     font-family: var(--font-serif);
     font-size: 16px;
     font-weight: 600;
-    color: #ffffff;
+    color: #ffffff !important;
     letter-spacing: 0.05em;
     position: relative;
     padding-bottom: 15px;
@@ -158,13 +158,18 @@
 }
 
 .footer-accordion-toggle:hover {
-    color: #ffffff;
+    color: #ffffff !important;
+}
+
+.footer-accordion-toggle span {
+    color: #ffffff !important;
+    font-weight: 600;
 }
 
 .footer-accordion-toggle i {
     font-size: 12px;
     transition: transform 0.3s ease;
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 .footer-accordion-toggle i.open {
@@ -220,17 +225,19 @@
 }
 
 .footer-links a {
-    color: #ffffff;
+    color: #ffffff !important;
     text-decoration: none;
     font-size: 14px;
     transition: all 0.3s ease;
     display: inline-block;
     position: relative;
+    font-weight: 400;
 }
 
 .footer-links a:hover {
-    color: #ffffff;
+    color: #e0e0e0 !important;
     transform: translateX(5px);
+    opacity: 0.9;
 }
 
 /* Social Media Links */
@@ -248,10 +255,15 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #ffffff;
+    color: #ffffff !important;
     text-decoration: none;
     font-size: 14px;
     transition: all 0.3s ease;
+    font-weight: 400;
+}
+
+.social-link span {
+    color: #ffffff !important;
 }
 
 .social-link i {
@@ -259,15 +271,20 @@
     width: 24px;
     text-align: center;
     transition: transform 0.3s ease;
+    color: #ffffff !important;
 }
 
 .social-link:hover {
-    color: #ffffff;
+    color: #e0e0e0 !important;
+}
+
+.social-link:hover span {
+    color: #e0e0e0 !important;
 }
 
 .social-link:hover i {
     transform: scale(1.2) rotate(5deg);
-    color: #667eea;
+    color: #667eea !important;
 }
 
 /* Bottom Section */
@@ -385,13 +402,14 @@
         text-transform: uppercase;
         font-size: 13px;
         letter-spacing: 0.1em;
-        color: #ffffff;
+        color: #ffffff !important;
+        font-weight: 600;
     }
 
     .footer-accordion-toggle i {
         display: block;
         font-size: 10px;
-        color: #ffffff;
+        color: #ffffff !important;
     }
 
     .footer-accordion-content {

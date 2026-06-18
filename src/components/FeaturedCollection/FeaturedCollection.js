@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../../config/api';
 import './FeaturedCollection.css';
 
 const FeaturedCollection = () => {
@@ -13,20 +14,34 @@ const FeaturedCollection = () => {
   const fetchFeaturedProducts = async () => {
     try {
       // Try to fetch from backend API
-      const response = await axios.get('http://localhost:5000/api/products?featured=true&limit=5');
-      const fetchedProducts = response.data.products || response.data || [];
+      const response = await axios.get(`${API_BASE_URL}/api/products?featured=true&limit=5`);
+      let fetchedProducts = response.data.products || response.data || [];
+      
+      // Ensure it's an array
+      if (!Array.isArray(fetchedProducts)) {
+        fetchedProducts = [];
+      }
+      
       setProducts(fetchedProducts.slice(0, 5));
     } catch (error) {
       console.error('Error fetching featured products:', error);
       // Fallback to sample data
-      const { getFeaturedProducts } = await import('../../data/sampleProducts');
-      const featuredProducts = getFeaturedProducts();
-      setProducts(featuredProducts.slice(0, 5));
+      try {
+        const { getFeaturedProducts } = await import('../../data/sampleProducts');
+        const featuredProducts = getFeaturedProducts();
+        setProducts(Array.isArray(featuredProducts) ? featuredProducts.slice(0, 5) : []);
+      } catch (fallbackError) {
+        console.error('Error loading fallback products:', fallbackError);
+        setProducts([]);
+      }
     }
   };
 
   const formatPrice = (price) => {
-    return `₹${price.toLocaleString('en-IN')}`;
+    if (price === null || price === undefined || isNaN(price)) {
+      return '₹0';
+    }
+    return `₹${Number(price).toLocaleString('en-IN')}`;
   };
 
   // Ensure we have at least 5 products (1 hero + 4 grid items)
@@ -36,7 +51,12 @@ const FeaturedCollection = () => {
   }
 
   const heroProduct = displayProducts[0] || { _id: '1', name: 'MANISHYA KARAM PANTS', price: 2295 };
-  const gridProducts = displayProducts.slice(1, 5);
+  const gridProducts = displayProducts.slice(1, 5).filter(p => p !== null);
+  
+  // Ensure heroProduct has a valid price
+  if (!heroProduct.price && heroProduct.price !== 0) {
+    heroProduct.price = 2295;
+  }
 
   // Define specific images for each card position
   const cardImages = [

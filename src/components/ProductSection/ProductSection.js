@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../ProductCard/ProductCard';
+import API_BASE_URL from '../../config/api';
 import './ProductSection.css';
 
 const ProductSection = () => {
@@ -12,8 +13,13 @@ const ProductSection = () => {
 
   const fetchProducts = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/products?bestseller=true&limit=10');
+      const response = await axios.get(`${API_BASE_URL}/api/products?bestseller=true&limit=10`);
       let fetchedProducts = response.data.products || response.data || [];
+
+      // Ensure it's an array
+      if (!Array.isArray(fetchedProducts)) {
+        fetchedProducts = [];
+      }
 
       // Fallback if API returns empty array (e.g. no products marked as bestseller in DB yet)
       if (fetchedProducts.length === 0) {
@@ -22,12 +28,20 @@ const ProductSection = () => {
         fetchedProducts = getBestsellerProducts();
       }
 
-      setProducts(fetchedProducts.slice(0, 10));
+      // Ensure we have an array before setting
+      const productsArray = Array.isArray(fetchedProducts) ? fetchedProducts.slice(0, 10) : [];
+      setProducts(productsArray);
     } catch (error) {
       console.error('Error fetching products:', error);
       // Fallback to sample data on error
-      const { getBestsellerProducts } = await import('../../data/sampleProducts');
-      setProducts(getBestsellerProducts().slice(0, 10));
+      try {
+        const { getBestsellerProducts } = await import('../../data/sampleProducts');
+        const fallbackProducts = getBestsellerProducts();
+        setProducts(Array.isArray(fallbackProducts) ? fallbackProducts.slice(0, 10) : []);
+      } catch (fallbackError) {
+        console.error('Error loading fallback products:', fallbackError);
+        setProducts([]);
+      }
     }
   }, []);
 
@@ -85,6 +99,9 @@ const ProductSection = () => {
     }
   };
 
+  // Ensure products is always an array
+  const safeProducts = Array.isArray(products) ? products : [];
+
   return (
     <section className="product-section">
       <div className="product-section-heading">
@@ -100,8 +117,8 @@ const ProductSection = () => {
           <i className="fa-solid fa-chevron-left"></i>
         </button>
         <div className="product-container" ref={scrollContainerRef}>
-        {products.map((product) => (
-          <ProductCard key={product._id} product={product} />
+        {safeProducts.map((product) => (
+          <ProductCard key={product._id || product.id} product={product} />
         ))}
         </div>
         <button className={`product-nav-arrow product-nav-arrow-right ${isHovered ? 'visible' : ''}`} onClick={scrollRight}>

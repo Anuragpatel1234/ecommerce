@@ -395,3 +395,36 @@
         flex: none;
     }
 }
+
+.intl-cod-label {
+    background: #4e322d;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+.intl-cod-notice {
+    background: #fff7ed;
+    border: 1px solid #ffedd5;
+    padding: 16px;
+    border-radius: 8px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: center;
+}
+
+.intl-cod-notice i {
+    color: #f97316;
+    font-size: 20px;
+}
+
+.intl-cod-notice p {
+    font-size: 14px;
+    color: #9a3412;
+    margin: 0;
+}

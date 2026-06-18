@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../ProductCard/ProductCard';
+import API_BASE_URL from '../../config/api';
 import './ShopSection.css';
 
 const ShopSection = () => {
@@ -12,22 +13,38 @@ const ShopSection = () => {
 
   const fetchProducts = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/products?newArrival=true&limit=10');
-      const fetchedProducts = response.data.products || response.data || [];
+      const response = await axios.get(`${API_BASE_URL}/api/products?newArrival=true&limit=10`);
+      let fetchedProducts = response.data.products || response.data || [];
+      
+      // Ensure it's an array
+      if (!Array.isArray(fetchedProducts)) {
+        fetchedProducts = [];
+      }
+      
       // Prioritize sample data to ensure we have enough products
       const { getNewArrivalProducts } = await import('../../data/sampleProducts');
       const sampleProducts = getNewArrivalProducts();
+      
+      // Ensure sampleProducts is an array
+      const safeSampleProducts = Array.isArray(sampleProducts) ? sampleProducts : [];
+      
       // Use sample data if API returns fewer products, or combine them
       if (fetchedProducts.length < 4) {
-        setProducts(sampleProducts.slice(0, 10));
+        setProducts(safeSampleProducts.slice(0, 10));
       } else {
         setProducts(fetchedProducts.slice(0, 10));
       }
     } catch (error) {
       console.error('Error fetching products:', error);
       // Fallback to sample data
-      const { getNewArrivalProducts } = await import('../../data/sampleProducts');
-      setProducts(getNewArrivalProducts().slice(0, 10));
+      try {
+        const { getNewArrivalProducts } = await import('../../data/sampleProducts');
+        const fallbackProducts = getNewArrivalProducts();
+        setProducts(Array.isArray(fallbackProducts) ? fallbackProducts.slice(0, 10) : []);
+      } catch (fallbackError) {
+        console.error('Error loading fallback products:', fallbackError);
+        setProducts([]);
+      }
     }
   }, []);
 
@@ -85,6 +102,9 @@ const ShopSection = () => {
     }
   };
 
+  // Ensure products is always an array
+  const safeProducts = Array.isArray(products) ? products : [];
+
   return (
     <section className="shop-section">
       <h2 className="common-heading center">New Arrival</h2>
@@ -97,8 +117,8 @@ const ShopSection = () => {
           <i className="fa-solid fa-chevron-left"></i>
         </button>
         <div className="shop-images-section" ref={scrollContainerRef}>
-        {products.map((product) => (
-            <ProductCard key={product._id} product={product} showNewBadge={true} />
+        {safeProducts.map((product) => (
+            <ProductCard key={product._id || product.id} product={product} showNewBadge={true} />
         ))}
         </div>
         <button className={`shop-nav-arrow shop-nav-arrow-right ${isHovered ? 'visible' : ''}`} onClick={scrollRight}>
