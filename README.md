@@ -1,124 +1,83 @@
-# RANGAARA - React Fashion E-commerce
+# RANGAARA - Fashion E-commerce Platform
 
-This is a React conversion of the RANGAARA fashion e-commerce website. The original HTML/CSS/JavaScript code has been converted to a modern React application with component-based architecture.
+This repository contains the full source code for the RANGAARA fashion e-commerce platform. It is structured into two main components: a frontend React application and a backend Node.js/Express API.
 
-## Features
+---
 
-- **Responsive Design**: Mobile-friendly layout that adapts to different screen sizes
-- **Hero Slider**: Auto-playing image carousel with navigation dots
-- **Product Sections**: Multiple product display sections with hover effects
-- **Currency Dropdown**: Multi-currency support with flag icons
-- **Testimonial Carousel**: Auto-scrolling customer testimonials
-- **Newsletter Signup**: Email subscription form
-- **Smooth Animations**: CSS animations and transitions throughout
-
-## Components Structure
+## Codebase Architecture
 
 ```
-src/
-├── components/
-│   ├── Header/
-│   │   ├── Header.js
-│   │   └── Header.css
-│   ├── HeroSection/
-│   │   ├── HeroSection.js
-│   │   └── HeroSection.css
-│   ├── ShopCategories/
-│   │   ├── ShopCategories.js
-│   │   └── ShopCategories.css
-│   ├── ProductSection/
-│   │   ├── ProductSection.js
-│   │   └── ProductSection.css
-│   ├── HandcraftSection/
-│   │   ├── HandcraftSection.js
-│   │   └── HandcraftSection.css
-│   ├── ShopSection/
-│   │   ├── ShopSection.js
-│   │   └── ShopSection.css
-│   ├── FeaturedCollection/
-│   │   ├── FeaturedCollection.js
-│   │   └── FeaturedCollection.css
-│   ├── Marquee/
-│   │   ├── Marquee.js
-│   │   └── Marquee.css
-│   ├── ScrollingEffect/
-│   │   ├── ScrollingEffect.js
-│   │   └── ScrollingEffect.css
-│   ├── TestimonialSection/
-│   │   ├── TestimonialSection.js
-│   │   └── TestimonialSection.css
-│   └── Footer/
-│       ├── Footer.js
-│       └── Footer.css
-├── App.js
-├── App.css
-├── index.js
-└── index.css
+rangaara/
+├── frontend/             # React Frontend Application
+│   ├── public/           # Static assets (images, icons, etc.)
+│   ├── src/              # React components, pages, hooks, context
+│   ├── .env              # Frontend configuration (ports, etc.)
+│   └── package.json      # Frontend dependencies
+│
+├── backend/              # Node.js/Express Backend API
+│   ├── middleware/       # Express middlewares (auth, validation, etc.)
+│   ├── models/           # Mongoose models (Product, Order, User, etc.)
+│   ├── routes/           # API routes (auth, products, checkout, etc.)
+│   ├── .env              # Backend configuration (DB URI, JWT keys, etc.)
+│   ├── seedData.js       # Database seeding script
+│   └── package.json      # Backend dependencies
+│
+├── package.json          # Root manager package.json (dev orchestration)
+└── README.md             # This documentation
 ```
+
+---
+
+## Tech Stack
+
+* **Frontend**: React, React Router, Axios, CSS (Vanilla)
+* **Backend**: Node.js, Express, Mongoose (MongoDB)
+* **Payment**: PayPal REST Integration
+
+---
 
 ## Installation & Setup
 
-1. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
+To get the application up and running locally, follow these steps:
 
-2. **Start Development Server**:
-   ```bash
-   npm start
-   ```
+### 1. Install Dependencies
 
-3. **Build for Production**:
-   ```bash
-   npm run build
-   ```
+Install both frontend and backend dependencies using the root orchestration command:
+```bash
+npm run install:all
+```
 
-## Key React Features Implemented
+### 2. Configure Environment Variables
 
-### State Management
-- **Hero Slider**: Uses `useState` and `useEffect` for slide management and auto-play
-- **Currency Dropdown**: State-controlled dropdown with outside click detection
-- **Newsletter Form**: Controlled form input with state management
+#### Backend configuration (`backend/.env`):
+Make sure to create or verify the `backend/.env` file with your MongoDB connection string and API credentials:
+```env
+MONGODB_URI=mongodb://localhost:27017/rangaara
+JWT_SECRET=your_jwt_secret_key_here
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_password
+PAYPAL_CLIENT_ID=your_paypal_client_id
+PAYPAL_CLIENT_SECRET=your_paypal_client_secret
+```
 
-### React Hooks Used
-- `useState`: For managing component state
-- `useEffect`: For side effects like intervals and event listeners
-- `useRef`: For DOM element references
+#### Frontend configuration (`frontend/.env`):
+Make sure the `frontend/.env` contains the default port configuration:
+```env
+PORT=3002
+BROWSER=none
+```
 
-### Event Handling
-- Click handlers for navigation and interactions
-- Form submission handling
-- Scroll-to-top functionality
+### 3. Database Seeding (Optional)
 
-### Component Architecture
-- Modular component structure
-- Reusable components with props
-- Separation of concerns with individual CSS files
+If you need to seed the MongoDB database with initial product and section data, run:
+```bash
+cd backend
+npm run seed
+```
 
-## Browser Support
+### 4. Run Locally
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
-## Performance Features
-
-- Optimized images and assets
-- CSS animations using GPU acceleration
-- Efficient React rendering with proper key props
-- Lazy loading ready structure
-
-## Responsive Breakpoints
-
-- Desktop: 1020px and above
-- Tablet/Mobile: Below 1020px
-
-## External Dependencies
-
-- **Font Awesome**: For icons
-- **Google Fonts**: Open Sans font family
-- **React**: ^18.2.0
-- **React DOM**: ^18.2.0
-
-The application maintains the original design and functionality while providing a modern React-based architecture for better maintainability and scalability.
+To run both the React frontend (port 3002) and backend server (port 5000) concurrently, use the root dev script:
+```bash
+npm run dev
+```
