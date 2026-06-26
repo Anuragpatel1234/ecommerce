@@ -163,7 +163,9 @@ const Payment = () => {
         const script = document.createElement('script');
         script.type = 'text/javascript';
         // Replace 'sb' with the specific Client ID provided
-        script.src = `https://www.paypal.com/sdk/js?client-id=ATuy3BptZUjcrnZ10MhcAfwXc8E2bbsTv7gNuKxVdQXUXfs_HiSqTEqqcirhU4f5j_oj4ixa0VPwA5uR&currency=${currency}`;
+        // Use USD as fallback since PayPal does not support INR payments
+        const paypalCurrency = currency === 'INR' ? 'USD' : currency;
+        script.src = `https://www.paypal.com/sdk/js?client-id=ATuy3BptZUjcrnZ10MhcAfwXc8E2bbsTv7gNuKxVdQXUXfs_HiSqTEqqcirhU4f5j_oj4ixa0VPwA5uR&currency=${paypalCurrency}`;
         script.async = true;
         script.onload = () => {
           setSdkReady(true);
@@ -229,7 +231,22 @@ const Payment = () => {
     const shipping = subtotal > 2000 ? 0 : 200;
     const tax = subtotal * 0.18;
     const total = subtotal + shipping + tax;
-    return total.toFixed(2);
+    
+    // Convert base price (INR) to checkout currency
+    // Use USD if base currency is INR since PayPal does not support INR
+    const targetCurrency = currency === 'INR' ? 'USD' : currency;
+    const rates = {
+      INR: 1,
+      USD: 0.012,
+      EUR: 0.011,
+      GBP: 0.0095,
+      CAD: 0.016,
+      AUD: 0.018,
+      SGD: 0.016
+    };
+    
+    const convertedTotal = total * (rates[targetCurrency] || 1);
+    return convertedTotal.toFixed(2);
   };
 
   const handlePayPalSuccess = async (details) => {
