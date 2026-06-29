@@ -14,14 +14,31 @@ import './Home.css';
 const Home = () => {
   return (
     <div className="home-page-container">
+      {/* 1. Hero Banner */}
       <HeroSection />
+      
+      {/* 2. Featured Categories */}
       <ShopCategories />
+      
+      {/* 3. Best Sellers */}
       <ProductSection />
+      
+      {/* 4. Brand Story (Indian Craftsmanship) */}
       <HandcraftSection />
+      
+      {/* 5. New Arrivals */}
       <ShopSection />
+      
+      {/* 6. Featured Collection */}
       <FeaturedCollection />
+      
+      {/* Luxury Divider / Discount Banner */}
       <Marquee />
+      
+      {/* Luxury Scroll Effect Divider */}
       <ScrollingEffect />
+      
+      {/* 7. Testimonials */}
       <TestimonialSection />
     </div>
   );

@@ -1,11 +1,29 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../../config/api';
 import './Header.css';
 
 const Header = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -93,7 +111,7 @@ const Header = () => {
   }, [user]);
 
   return (
-    <header id="navbar-section">
+    <header id="navbar-section" className={`${isScrolled ? 'scrolled' : ''} ${isHomePage ? 'home-header' : 'other-header'}`}>
       <div className="top-header">
         <div className="header-left">
           <div className="hamburger-menu" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -118,7 +136,7 @@ const Header = () => {
         <div className="header-center">
           <Link to="/" className="brand-logo">
             <img
-              src={process.env.PUBLIC_URL + "/img/RANGAARA-logo.png"}
+              src={process.env.PUBLIC_URL + "/img/RANGAARA-navbar-logo.png"}
               alt="Rangaara"
               className="logo-image"
               onError={(e) => {
@@ -163,7 +181,7 @@ const Header = () => {
             </div>
           </div>
 
-          <Link to="/wishlist" className="header-icon">
+          <Link to="/wishlist" className="header-icon desktop-wishlist-icon">
             <i className="fa-regular fa-heart"></i>
             {wishlist.length > 0 && <span className="badge">{wishlist.length}</span>}
           </Link>
@@ -196,37 +214,16 @@ const Header = () => {
         </div>
       </div>
       <nav className={`main-navigation ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
-        {/* Mobile Search Bar */}
-        <form onSubmit={handleSearch} className="mobile-search-form">
-          <input
-            type="text"
-            id="mobile-search"
-            name="search"
-            placeholder="Search products..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="mobile-search-input"
-          />
-          <button type="submit" className="mobile-search-btn">
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </form>
+
 
         <div 
           className="nav-item-with-dropdown"
-          onMouseEnter={() => !isMobileMenuOpen && setActiveDropdown('newArrivals')}
-          onMouseLeave={() => setActiveDropdown(null)}
         >
           <Link 
             to="/shop?filter=newArrival" 
             onClick={(e) => {
-              if (window.innerWidth < 1300) {
-                e.preventDefault();
-                setActiveDropdown(activeDropdown === 'newArrivals' ? null : 'newArrivals');
-              } else {
-                setIsMobileMenuOpen(false);
-                setActiveDropdown(null);
-              }
+              e.preventDefault();
+              setActiveDropdown(activeDropdown === 'newArrivals' ? null : 'newArrivals');
             }}
           >
             NEW ARRIVALS <i className="fa-solid fa-chevron-down"></i>
@@ -256,19 +253,12 @@ const Header = () => {
 
         <div 
           className="nav-item-with-dropdown"
-          onMouseEnter={() => !isMobileMenuOpen && setActiveDropdown('shop')}
-          onMouseLeave={() => setActiveDropdown(null)}
         >
           <Link 
             to="/shop" 
             onClick={(e) => {
-              if (window.innerWidth < 1300) {
-                e.preventDefault();
-                setActiveDropdown(activeDropdown === 'shop' ? null : 'shop');
-              } else {
-                setIsMobileMenuOpen(false);
-                setActiveDropdown(null);
-              }
+              e.preventDefault();
+              setActiveDropdown(activeDropdown === 'shop' ? null : 'shop');
             }}
           >
             SHOP <i className="fa-solid fa-chevron-down"></i>
@@ -319,24 +309,16 @@ const Header = () => {
         <Link to="/shop?filter=readyToShip" onClick={() => setIsMobileMenuOpen(false)}>READY TO SHIP</Link>
         <Link to="/shop?filter=luxury" onClick={() => setIsMobileMenuOpen(false)}>LUXURY COLLECTION</Link>
         <Link to="/shop?filter=bestseller" onClick={() => setIsMobileMenuOpen(false)}>BESTSELLERS</Link>
-        <Link to="/shop?filter=celebrity" onClick={() => setIsMobileMenuOpen(false)}>CELEBRITY STYLE</Link>
         <Link to="/shop?filter=onSale" onClick={() => setIsMobileMenuOpen(false)}>ON SALE</Link>
 
         <div 
           className="nav-item-with-dropdown"
-          onMouseEnter={() => !isMobileMenuOpen && setActiveDropdown('kids')}
-          onMouseLeave={() => setActiveDropdown(null)}
         >
           <Link 
             to="/category/KIDS OUTFITS" 
             onClick={(e) => {
-              if (window.innerWidth < 1300) {
-                e.preventDefault();
-                setActiveDropdown(activeDropdown === 'kids' ? null : 'kids');
-              } else {
-                setIsMobileMenuOpen(false);
-                setActiveDropdown(null);
-              }
+              e.preventDefault();
+              setActiveDropdown(activeDropdown === 'kids' ? null : 'kids');
             }}
           >
             KIDS COLLECTION<i className="fa-solid fa-chevron-down"></i>
@@ -354,6 +336,24 @@ const Header = () => {
             </div>
           )}
         </div>
+
+        <Link to="/wishlist" className="mobile-wishlist-nav-link" onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span>WISHLIST</span>
+          {wishlist.length > 0 && (
+            <span className="wishlist-menu-badge" style={{
+              backgroundColor: 'var(--color-primary-maroon)',
+              color: 'white',
+              borderRadius: '50%',
+              width: '18px',
+              height: '18px',
+              fontSize: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: '600'
+            }}>{wishlist.length}</span>
+          )}
+        </Link>
       </nav>
     </header>
   );

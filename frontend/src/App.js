@@ -59,6 +59,7 @@ const LoadingSpinner = () => (
 const AppContent = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const isHomePage = location.pathname === '/';
 
   return (
     <div className="App">
@@ -67,7 +68,7 @@ const AppContent = () => {
           <Header />
         </Suspense>
       )}
-      <main>
+      <main className={isHomePage ? 'home-main' : 'other-main'}>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             <Route path="/" element={<Home />} />

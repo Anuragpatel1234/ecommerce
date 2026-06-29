@@ -114,23 +114,23 @@ export const AppProvider = ({ children }) => {
     }
   }, [state.token]);
 
-  const loadCart = async () => {
+  const loadCart = useCallback(async () => {
     try {
       const res = await axios.get(`${API_BASE_URL}/api/cart`);
       dispatch({ type: 'SET_CART', payload: res.data });
     } catch (error) {
       console.error('Error loading cart:', error);
     }
-  };
+  }, []);
 
-  const loadWishlist = async () => {
+  const loadWishlist = useCallback(async () => {
     try {
       const res = await axios.get(`${API_BASE_URL}/api/wishlist`);
       dispatch({ type: 'SET_WISHLIST', payload: res.data });
     } catch (error) {
       console.error('Error loading wishlist:', error);
     }
-  };
+  }, []);
 
   const loadUser = useCallback(async () => {
     try {
@@ -143,8 +143,7 @@ export const AppProvider = ({ children }) => {
       console.error('Error loading user:', error);
       dispatch({ type: 'LOGOUT' });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadCart, loadWishlist]);
 
   // Load user on app start
   useEffect(() => {
@@ -153,11 +152,17 @@ export const AppProvider = ({ children }) => {
     }
   }, [state.token, loadUser]);
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null }); // Clear previous errors
       const res = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
+      
+      // Set header immediately so subsequent requests (loadCart/loadWishlist) succeed
+      if (res.data.token) {
+        axios.defaults.headers.common['x-auth-token'] = res.data.token;
+      }
+      
       dispatch({ type: 'SET_TOKEN', payload: res.data.token });
       dispatch({ type: 'SET_USER', payload: res.data.user });
       loadCart();
@@ -184,13 +189,19 @@ export const AppProvider = ({ children }) => {
       showToast(message, 'error');
       return { success: false, message };
     }
-  };
+  }, [loadCart, loadWishlist, showToast]);
 
-  const register = async (userData) => {
+  const register = useCallback(async (userData) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null }); // Clear previous errors
       const res = await axios.post(`${API_BASE_URL}/api/auth/register`, userData);
+      
+      // Set header immediately so subsequent requests (loadCart/loadWishlist) succeed
+      if (res.data.token) {
+        axios.defaults.headers.common['x-auth-token'] = res.data.token;
+      }
+      
       dispatch({ type: 'SET_TOKEN', payload: res.data.token });
       dispatch({ type: 'SET_USER', payload: res.data.user });
       loadCart();
@@ -217,14 +228,14 @@ export const AppProvider = ({ children }) => {
       showToast(message, 'error');
       return { success: false, message };
     }
-  };
+  }, [loadCart, loadWishlist, showToast]);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     dispatch({ type: 'LOGOUT' });
     showToast('You have been logged out.', 'info');
-  };
+  }, [showToast]);
 
-  const addToCart = async (productId, quantity = 1, size, color) => {
+  const addToCart = useCallback(async (productId, quantity = 1, size, color) => {
     try {
       const res = await axios.post(`${API_BASE_URL}/api/cart/add`, {
         productId,
@@ -241,9 +252,9 @@ export const AppProvider = ({ children }) => {
       showToast(message, 'error');
       return { success: false, message };
     }
-  };
+  }, [showToast]);
 
-  const addToWishlist = async (productId) => {
+  const addToWishlist = useCallback(async (productId) => {
     try {
       const res = await axios.post(`${API_BASE_URL}/api/wishlist/add/${productId}`);
       dispatch({ type: 'SET_WISHLIST', payload: res.data });
@@ -254,9 +265,9 @@ export const AppProvider = ({ children }) => {
       showToast(message, 'error');
       return { success: false, message };
     }
-  };
+  }, [showToast]);
 
-  const removeFromWishlist = async (productId) => {
+  const removeFromWishlist = useCallback(async (productId) => {
     try {
       const res = await axios.delete(`${API_BASE_URL}/api/wishlist/remove/${productId}`);
       dispatch({ type: 'SET_WISHLIST', payload: res.data });
@@ -267,9 +278,9 @@ export const AppProvider = ({ children }) => {
       showToast(message, 'error');
       return { success: false, message };
     }
-  };
+  }, [showToast]);
 
-  const subscribeNewsletter = async (email) => {
+  const subscribeNewsletter = useCallback(async (email) => {
     try {
       await axios.post(`${API_BASE_URL}/api/newsletter/subscribe`, { email });
       showToast('Successfully subscribed to newsletter!', 'success');
@@ -279,11 +290,11 @@ export const AppProvider = ({ children }) => {
       showToast(message, 'error');
       return { success: false, message };
     }
-  };
+  }, [showToast]);
 
-  const setCurrency = (currency) => {
+  const setCurrency = useCallback((currency) => {
     dispatch({ type: 'SET_CURRENCY', payload: currency });
-  };
+  }, []);
 
   const fetchRates = useCallback(async () => {
     try {
@@ -318,7 +329,7 @@ export const AppProvider = ({ children }) => {
     return `${currencySymbols[state.currency] || ''}${convertedPrice.toLocaleString()}`;
   }, [state.currency, state.rates]);
 
-  const updateLocation = async (locationData) => {
+  const updateLocation = useCallback(async (locationData) => {
     try {
       // Always update local state
       dispatch({ type: 'SET_LOCATION', payload: locationData });
@@ -344,11 +355,11 @@ export const AppProvider = ({ children }) => {
       showToast('Failed to update location', 'error');
       return { success: false, message: error.message };
     }
-  };
+  }, [state.token, loadUser, showToast]);
 
-  const clearError = () => {
+  const clearError = useCallback(() => {
     dispatch({ type: 'SET_ERROR', payload: null });
-  };
+  }, []);
 
   const value = {
     ...state,

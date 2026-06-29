@@ -1,30 +1,45 @@
 .handcraft-section {
     width: 100%;
-    padding: 0;
+    padding: 120px 0 60px 0; /* Premium spacing */
     margin: 0;
-    background-color: var(--color-off-white);
+    background-color: var(--color-warm-ivory);
 }
 
-/* Ensure headings have padding since container is now full width */
-.handcraft-section>.common-heading,
-.handcraft-section>.common-para {
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
+.handcraft-section > .common-heading {
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.handcraft-section > .common-para {
+    text-align: center;
+    font-family: var(--font-sans);
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    margin-bottom: 50px;
 }
 
 .handcraft-section .handcraft-container {
     margin-top: 0;
     width: 100%;
-    height: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
+    box-shadow: 0 20px 50px rgba(45, 42, 38, 0.05);
 }
 
 .handcraft-item {
     width: 100%;
-    height: 90vh;
+    height: 80vh;
+    min-height: 500px;
     position: relative;
+    overflow: hidden;
 }
 
 .handcraft-item img {
@@ -32,122 +47,105 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.handcraft-item:hover img {
+    transform: scale(1.04);
 }
 
 .center-div {
     display: grid;
     place-content: center;
+    background-color: var(--color-deep-wine); /* Deep wine background */
 }
 
 .handcraft-content {
     width: 100%;
-    min-height: 70%;
-    background-color: var(--color-charcoal);
-    color: var(--color-off-white);
-    padding: var(--spacing-lg);
+    height: 100%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .handcraft-content .common-heading {
-    font-size: clamp(1.75rem, 3vw, 2.25rem);
-    padding-bottom: var(--spacing-md);
-    color: var(--color-off-white);
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--color-accent); /* Antique gold */
+    margin-bottom: 30px;
 }
 
-.handcraft-content p {
-    color: rgb(207, 207, 207);
-    font-size: 14px;
-    padding-bottom: 20px;
+.handcraft-content-center p {
+    font-family: var(--font-sans);
+    color: var(--color-soft-cream);
+    font-size: clamp(13px, 1.5vw, 15px);
+    line-height: 1.8;
+    margin-bottom: 24px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
 }
 
 .handcraft-btn {
-    margin-top: var(--spacing-md);
+    margin-top: 20px;
     display: inline-block;
-    background-color: transparent;
-    color: var(--color-off-white);
-    border: 2px solid var(--color-off-white);
-    padding: 16px 40px;
-    border-radius: 0;
+    background-color: var(--color-primary-maroon);
+    color: #ffffff;
+    border: 1px solid var(--color-primary-maroon);
+    padding: 14px 40px;
+    border-radius: 12px; /* Rounded 12px */
     text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
-    letter-spacing: 0.1em;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     text-align: center;
     font-family: var(--font-sans);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .handcraft-btn:hover {
-    background-color: var(--color-off-white);
-    color: var(--color-charcoal);
+    background-color: var(--color-deep-wine);
+    border-color: var(--color-accent);
     transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 900px) {
+    .handcraft-section {
+        padding: 60px 0 40px 0;
+    }
+
     .handcraft-section .handcraft-container {
         grid-template-columns: 1fr;
     }
 
     .handcraft-item {
-        height: 60vh;
+        height: 50vh;
+        min-height: 350px;
     }
 
     .handcraft-content {
-        min-height: auto;
-        padding: 40px 20px;
+        padding: 40px 24px;
+    }
+    
+    .handcraft-content .common-heading {
+        margin-bottom: 20px;
     }
 }
 
 @media (max-width: 600px) {
-    .handcraft-item {
-        height: 50vh;
-        min-height: 300px;
-    }
-
     .handcraft-content {
-        padding: 30px 15px;
-    }
-
-    .handcraft-content .common-heading {
-        font-size: clamp(1.5rem, 4vw, 2rem);
-        padding-bottom: 15px;
-    }
-
-    .handcraft-content p {
-        font-size: 13px;
-        padding-bottom: 15px;
+        padding: 30px 16px;
     }
 
     .handcraft-btn {
-        padding: 14px 30px;
-        font-size: 13px;
-    }
-}
-
-@media (max-width: 480px) {
-    .handcraft-item {
-        height: 45vh;
-        min-height: 280px;
-    }
-
-    .handcraft-content {
-        padding: 25px 12px;
-    }
-
-    .handcraft-content .common-heading {
-        font-size: clamp(1.25rem, 5vw, 1.75rem);
-    }
-
-    .handcraft-content p {
-        font-size: 12px;
-    }
-
-    .handcraft-btn {
-        padding: 12px 25px;
-        font-size: 12px;
         width: 100%;
-        max-width: 280px;
-        text-align: center;
+        padding: 12px 24px;
     }
 }

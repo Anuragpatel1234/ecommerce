@@ -13,32 +13,39 @@
 }
 
 :root {
-    /* Modern Heritage Color Palette */
-    --color-off-white: #FAFAF9;
-    --color-charcoal: #1F2937;
-    --color-deep-indigo: #1E3A5F;
-    --color-light-gray: #F5F5F4;
-    --color-text-primary: #1F2937;
-    --color-text-secondary: #6B7280;
-    --color-accent: #4A5568;
-    --color-light-blue: #EBF8FF;
+    /* Luxury Brand Colors */
+    --color-primary-maroon: #5B1E23;
+    --color-deep-wine: #3B1418;
+    --color-antique-gold: #C8A66A;
+    --color-warm-ivory: #FAF6F2;
+    --color-soft-cream: #F4ECE4;
+    --color-borders: #E6DDD5;
+
+    /* Legacy Mappings (to maintain existing component styles) */
+    --color-off-white: #FAF6F2;       /* Warm Ivory */
+    --color-charcoal: #2D2A26;        /* Primary Text */
+    --color-deep-indigo: #5B1E23;     /* Royal Maroon */
+    --color-light-gray: #F4ECE4;      /* Soft Cream */
+    --color-text-primary: #2D2A26;
+    --color-text-secondary: #6E625A;
+    --color-accent: #C8A66A;          /* Antique Gold */
+    --color-light-blue: #F4ECE4;
 
     /* Typography */
-    --font-serif: 'Playfair Display', serif;
-    --font-sans: 'Inter', 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-serif: 'Cormorant Garamond', serif;
+    --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-    /* Spacing */
+    /* Spacing (160px Section Spacing on Desktop) */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
     --spacing-md: 2rem;
-    --spacing-lg: 4rem;
-    --spacing-xl: 6rem;
+    --spacing-lg: 5rem;
+    --spacing-xl: 10rem; /* 160px section spacing */
 }
 
 html,
 body {
     width: 100%;
-    height: 100%;
     margin: 0;
     padding: 0;
     line-height: 1.6;
@@ -48,7 +55,7 @@ body {
     background-color: var(--color-off-white);
     scroll-behavior: smooth;
     color: var(--color-text-primary);
-    overflow-x: hidden;
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -132,13 +139,49 @@ a {
 }
 
 /* Button Styles */
-button {
+button, .btn {
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    border-radius: 12px; /* 12px rounded buttons */
+    outline: none;
 }
 
-button:active {
-    transform: scale(0.98);
+button:active, .btn:active {
+    transform: scale(0.97);
+}
+
+/* Primary Luxury Button - Automatically styles all main action buttons */
+.btn-primary, button:not(.qty-btn):not(.product-wishlist-icon):not(.wishlist-btn):not(.search-btn):not(.color-option):not(.size-option):not(.currency-selector):not(.nav-item-with-dropdown a):not(.mega-dropdown a):not(.user-dropdown i):not(.currency-dropdown-menu button):not(.user-dropdown-menu button):not(.hamburger-menu):not(.nav-item) {
+    background-color: var(--color-primary-maroon);
+    color: #ffffff;
+    border: 1px solid var(--color-primary-maroon);
+    padding: 12px 28px;
+    font-size: 11px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(91, 30, 35, 0.1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary:hover, button:not(.qty-btn):not(.product-wishlist-icon):not(.wishlist-btn):not(.search-btn):not(.color-option):not(.size-option):not(.currency-selector):not(.nav-item-with-dropdown a):not(.mega-dropdown a):not(.user-dropdown i):not(.currency-dropdown-menu button):not(.user-dropdown-menu button):not(.hamburger-menu):not(.nav-item):hover {
+    background-color: var(--color-deep-wine);
+    border-color: var(--color-antique-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(91, 30, 35, 0.2);
+}
+
+.btn-primary:disabled, button:not(.qty-btn):not(.product-wishlist-icon):not(.wishlist-btn):not(.search-btn):not(.color-option):not(.size-option):not(.currency-selector):not(.nav-item-with-dropdown a):not(.mega-dropdown a):not(.user-dropdown i):not(.currency-dropdown-menu button):not(.user-dropdown-menu button):not(.hamburger-menu):not(.nav-item):disabled {
+    background-color: var(--color-borders);
+    border-color: var(--color-borders);
+    color: var(--color-text-secondary);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 /* Global Image Responsiveness */

@@ -38,3 +38,19 @@
         font-size: 14px;
     }
 }
+
+.other-main {
+    padding-top: 0;
+}
+
+@media (max-width: 1300px) {
+    .other-main {
+        padding-top: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .other-main {
+        padding-top: 0;
+    }
+}

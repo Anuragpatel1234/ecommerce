@@ -3,7 +3,7 @@
     background-color: #111827;
     /* Darker charcoal */
     color: var(--color-off-white);
-    padding: 80px 40px 30px;
+    padding: 50px 40px 20px;
     margin-top: auto;
     position: relative;
     overflow: hidden;
@@ -36,9 +36,9 @@
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr;
+    grid-template-columns: 2fr 1fr 1fr 1.2fr;
     gap: 50px;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
 }
 
 /* Brand Column */
@@ -57,17 +57,14 @@
 }
 
 .footer-logo-image {
-    height: 70px;
+    height: 100px;
     width: auto;
-    min-width: 150px;
-    max-width: 200px;
+    max-width: 280px;
     object-fit: contain;
     display: block;
     opacity: 0.95;
     transition: opacity 0.3s ease;
     background-color: transparent;
-    /* Remove filter to show original logo colors, or use filter only if logo is dark */
-    /* filter: brightness(0) invert(1); */
 }
 
 .footer-logo-image:hover {
@@ -112,7 +109,7 @@
     font-size: 16px;
     font-weight: 600;
     color: #ffffff !important;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     letter-spacing: 0.05em;
     position: relative;
     display: inline-block;
@@ -221,7 +218,7 @@
 }
 
 .footer-links li {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .footer-links a {
@@ -248,7 +245,7 @@
 }
 
 .footer-social-links li {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .social-link {
@@ -291,7 +288,7 @@
 .footer-bottom {
     max-width: 1200px;
     margin: 0 auto;
-    padding-top: 30px;
+    padding-top: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-between;
@@ -301,8 +298,12 @@
 }
 
 .footer-copyright {
-    color: #ffffff;
     font-size: 13px;
+}
+
+.footer-copyright p {
+    color: #ffffff !important;
+    margin: 0;
 }
 
 .footer-legal {
@@ -339,11 +340,6 @@
         grid-template-columns: 1.5fr 1fr 1fr 1fr;
         gap: 30px;
     }
-
-    .footer-column:last-child {
-        grid-column: 1 / -1;
-        margin-top: 20px;
-    }
 }
 
 @media (max-width: 768px) {
@@ -372,6 +368,7 @@
     }
 
     .footer-logo-image {
+        height: 85px;
         margin: 0 0 15px 0;
     }
 
@@ -469,7 +466,7 @@
     }
 
     .footer-logo-image {
-        height: 55px;
+        height: 75px;
         margin: 0 0 12px 0;
     }
 

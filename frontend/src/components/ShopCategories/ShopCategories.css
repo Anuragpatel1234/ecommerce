@@ -1,24 +1,28 @@
 .shop-categories-section {
-    padding: 40px 0 30px 0;
-    background-color: var(--color-off-white);
+    padding: 100px 0 60px 0; /* Premium spacing */
+    background-color: var(--color-warm-ivory);
     margin: 0;
 }
 
 .shop-categories-section .common-heading {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 .categories-container {
     display: flex;
-    gap: 20px;
+    gap: 24px;
     margin-top: 0;
     max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
-    padding: 0 20px 10px 20px;
+    padding: 15px 40px 30px 40px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -30,29 +34,30 @@
 
 .category-card {
     position: relative;
-    background-color: white;
-    border-radius: 10px;
+    background-color: var(--color-soft-cream);
+    border-radius: 18px; /* Luxury 18px radius */
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 12px 35px rgba(45, 42, 38, 0.04);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
-    height: 320px;
-    flex: 0 0 380px;
-    min-width: 380px;
-    max-width: 380px;
+    height: 420px;
+    flex: 0 0 340px;
+    min-width: 340px;
+    max-width: 340px;
     margin: 0;
 }
 
 .category-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 45px rgba(45, 42, 38, 0.1);
 }
 
 .category-image-section {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: #000;
+    background-color: var(--color-deep-wine);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -63,15 +68,15 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 30%;
+    object-position: center top;
     display: block;
-    transition: transform 0.3s ease;
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
     z-index: 1;
     position: relative;
 }
 
 .category-card:hover .category-image-section img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 .category-text-overlay {
@@ -79,114 +84,101 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.5), transparent);
+    background: linear-gradient(
+        to top, 
+        rgba(59, 20, 24, 0.85) 0%, 
+        rgba(59, 20, 24, 0.45) 50%, 
+        transparent 100%
+    );
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
     gap: 16px;
-    padding: 30px 20px 25px;
+    padding: 40px 24px 30px;
     box-sizing: border-box;
     z-index: 2;
-    min-height: 140px;
-}
-
-.category-text-section {
-    display: none;
-}
-
-.category-title {
-    font-family: var(--font-sans);
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: var(--color-text-primary);
-    margin: 0;
-    text-transform: uppercase;
-    text-align: center;
+    min-height: 160px;
 }
 
 .category-text-overlay .category-title {
-    font-family: 'Georgia', 'Times New Roman', serif;
-    font-size: 32px;
-    font-weight: 400;
-    letter-spacing: 1px;
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
     color: #FFFFFF;
     margin: 0;
     text-transform: uppercase;
     text-align: center;
     line-height: 1.2;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: color 0.3s ease;
+}
+
+.category-card:hover .category-text-overlay .category-title {
+    color: var(--color-accent); /* Golden accent on card hover */
 }
 
 .category-button {
     font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 1.2px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
     color: #FFFFFF;
-    background-color: #6B4423;
-    border: none;
-    border-radius: 5px;
-    padding: 12px 32px;
+    background-color: var(--color-primary-maroon);
+    border: 1px solid var(--color-primary-maroon);
+    border-radius: 4px;
+    padding: 10px 24px;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     text-decoration: none;
     display: inline-block;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     white-space: nowrap;
 }
 
 .category-button:hover {
-    background-color: #7B5233;
+    background-color: var(--color-deep-wine);
+    border-color: var(--color-accent);
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
 .category-button:active {
     transform: translateY(0);
 }
 
-.category-link {
-    display: none;
-}
-
 @media (max-width: 900px) {
     .shop-categories-section {
-        padding: 30px 0 25px 0;
-    }
-
-    .shop-categories-section .common-heading {
-        margin-bottom: 15px;
+        padding: 60px 0 40px 0;
     }
 
     .categories-container {
         gap: 16px;
-        margin-top: 0;
-        padding: 0 15px 10px 15px;
+        padding: 0 20px 20px 20px;
     }
 
     .category-card {
-        height: 300px;
-        flex: 0 0 340px;
-        min-width: 340px;
-        max-width: 340px;
+        height: 340px;
+        flex: 0 0 280px;
+        min-width: 280px;
+        max-width: 280px;
     }
 
     .category-text-overlay {
-        gap: 14px;
-        padding: 25px 15px 20px;
+        gap: 12px;
+        padding: 24px 16px 20px;
         min-height: 120px;
     }
 
     .category-text-overlay .category-title {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     .category-button {
-        font-size: 12px;
-        padding: 10px 22px;
+        font-size: 10px;
+        padding: 8px 18px;
     }
 }
 
@@ -203,84 +195,23 @@
 
 @media (max-width: 600px) {
     .shop-categories-section {
-        padding: 25px 0 20px 0;
-    }
-
-    .shop-categories-section .common-heading {
-        margin-bottom: 12px;
+        padding: 40px 0 30px 0;
     }
 
     .categories-container {
         gap: 12px;
-        margin-top: 0;
-        padding: 0 12px 10px 12px;
-        scroll-snap-type: x mandatory;
-        scroll-padding: 0 12px;
+        padding: 0 12px 15px 12px;
     }
 
     .category-card {
-        height: 280px;
-        /* Calculate width to show exactly 2 cards: (100vw - padding - gap) / 2 */
-        flex: 0 0 calc((100vw - 48px) / 2);
-        min-width: calc((100vw - 48px) / 2);
-        max-width: calc((100vw - 48px) / 2);
-        scroll-snap-align: start;
-    }
-
-    .category-text-overlay {
-        gap: 12px;
-        padding: 20px 12px 18px;
-        min-height: 110px;
-    }
-
-    .category-text-overlay .category-title {
-        font-size: 20px;
-    }
-
-    .category-button {
-        font-size: 11px;
-        padding: 9px 18px;
-    }
-}
-
-@media (max-width: 480px) {
-    .shop-categories-section {
-        padding: 20px 0 15px 0;
-    }
-
-    .shop-categories-section .common-heading {
-        margin-bottom: 10px;
-    }
-
-    .categories-container {
-        gap: 12px;
-        margin-top: 0;
-        padding: 0 12px 10px 12px;
-        scroll-snap-type: x mandatory;
-        scroll-padding: 0 12px;
-    }
-
-    .category-card {
-        height: 260px;
-        /* Calculate width to show exactly 2 cards: (100vw - padding - gap) / 2 */
-        flex: 0 0 calc((100vw - 48px) / 2);
-        min-width: calc((100vw - 48px) / 2);
-        max-width: calc((100vw - 48px) / 2);
-        scroll-snap-align: start;
-    }
-
-    .category-text-overlay {
-        gap: 10px;
-        padding: 18px 10px 15px;
-        min-height: 100px;
+        height: 300px;
+        flex: 0 0 240px;
+        min-width: 240px;
+        max-width: 240px;
+        border-radius: 12px; /* Slightly smaller radius on small mobile */
     }
 
     .category-text-overlay .category-title {
         font-size: 18px;
-    }
-
-    .category-button {
-        font-size: 10px;
-        padding: 8px 16px;
     }
 }

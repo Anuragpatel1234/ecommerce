@@ -2,11 +2,10 @@
     width: 100%;
     position: relative;
     overflow: hidden;
-    background-color: transparent;
-    aspect-ratio: 16 / 8; /* Taller aspect ratio to show more vertical content */
-    max-height: 900px;
-    min-height: 550px;
-    height: auto;
+    background-color: #111827;
+    height: calc(100vh - 77px);
+    margin: 0;
+    padding: 0;
 }
 
 .hero-slider {
@@ -22,181 +21,226 @@
     top: 0;
     left: 0;
     opacity: 0;
-    transition: opacity 1.2s ease-in-out;
+    transition: opacity 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     z-index: 1;
     overflow: hidden;
-    will-change: opacity;
-    pointer-events: none;
     visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero-slide.active {
     opacity: 1;
     z-index: 2;
-    pointer-events: auto;
     visibility: visible;
 }
 
-/* Ensure first slide is visible on initial load */
-.hero-slider > .hero-slide:first-child {
-    opacity: 1;
-    visibility: visible;
+/* Luxury dark overlay to ensure readability of white text */
+.hero-dark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(45, 42, 38, 0.35) 0%,
+        rgba(45, 42, 38, 0.2) 40%,
+        rgba(45, 42, 38, 0.65) 100%
+    );
+    z-index: 2;
+    pointer-events: none;
 }
 
 .hero-slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
-    transform: scale(1);
-    background-color: transparent;
-    display: block;
-    animation: continuousZoom 8s ease-in-out infinite;
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transform-style: preserve-3d;
+    object-position: center center;
 }
 
 .hero-slide.active img {
-    object-position: center top;
+    animation: zoomInOut 6s ease-in-out infinite alternate;
 }
 
-@keyframes continuousZoom {
-    0%, 100% {
+@keyframes zoomInOut {
+    0% {
         transform: scale(1);
     }
-    50% {
-        transform: scale(1.05);
+    100% {
+        transform: scale(1.08);
     }
 }
 
-/* Optional: Add an overlay for better text readability if we add text later */
-.hero-slide::after {
-    content: '';
+/* Centered Editorial Content */
+.hero-content {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    pointer-events: none;
+    z-index: 5;
+    text-align: center;
+    color: #ffffff;
+    max-width: 800px;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px; /* Offset for fixed header spacing */
 }
 
+/* Fade up animation for active slide text */
+.hero-slide.active .hero-subtitle-top {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+}
+
+.hero-slide.active .hero-title {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+}
+
+.hero-slide.active .hero-subtitle {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.7s;
+}
+
+.hero-slide.active .hero-cta-btn {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s;
+}
+
+/* Initial inactive state for text elements */
+.hero-subtitle-top {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--color-accent); /* Antique gold */
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(15px);
+    text-transform: uppercase;
+}
+
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+    color: #ffffff;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    text-transform: uppercase;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hero-subtitle {
+    font-family: var(--font-sans);
+    font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 36px;
+    line-height: 1.6;
+    max-width: 600px;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.hero-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid var(--color-accent);
+    padding: 14px 32px;
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(15px);
+}
+
+.hero-cta-btn i {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.hero-cta-btn:hover {
+    background-color: var(--color-primary-maroon);
+    border-color: var(--color-primary-maroon);
+    color: #ffffff;
+}
+
+.hero-cta-btn:hover i {
+    transform: translateX(5px);
+}
+
+/* Dots Page indicator */
 .hero-dots {
     position: absolute;
-    bottom: 40px;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
     display: flex;
     gap: 12px;
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
+    padding: 8px 16px;
+    background: rgba(45, 42, 38, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 30px;
 }
 
 .dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.4);
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 2px solid transparent;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .dot:hover {
     background-color: rgba(255, 255, 255, 0.8);
-    transform: scale(1.2);
 }
 
 .dot.active {
-    background-color: white;
-    width: 30px;
+    background-color: var(--color-accent);
+    width: 24px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* Responsive - Tablet */
-@media (max-width: 1024px) {
+/* Responsive adjustments */
+@media (max-width: 1300px) {
     .hero-section {
-        aspect-ratio: 16 / 9; /* Slightly taller on tablets */
-        max-height: 600px;
-    }
-
-    .hero-dots {
-        bottom: 30px;
-        gap: 10px;
-        padding: 8px 16px;
+        height: calc(100vh - 67px);
     }
 }
 
-/* Responsive - Mobile */
 @media (max-width: 768px) {
     .hero-section {
-        aspect-ratio: 16 / 10; /* Taller on mobile */
-        max-height: 500px;
-        min-height: 400px;
+        height: 50vh;
+        min-height: 350px;
     }
-
+    
     .hero-slide img {
-        object-position: center 25%;
-    }
-
-    .hero-slide.active img {
-        object-position: center 25%;
-    }
-
-    .hero-dots {
-        bottom: 20px;
-        gap: 8px;
-        padding: 6px 12px;
-    }
-
-    .dot {
-        width: 8px;
-        height: 8px;
-        min-width: 8px;
-        min-height: 8px;
-    }
-
-    .dot.active {
-        width: 24px;
+        object-position: center center;
     }
 }
 
-/* Responsive - Small Mobile */
-@media (max-width: 480px) {
-    .hero-section {
-        aspect-ratio: 4 / 3; /* Even taller on small mobile */
-        max-height: 400px;
-        min-height: 350px;
-    }
-
-    .hero-slide img {
-        object-position: center 30%;
-    }
-
-    .hero-slide.active img {
-        object-position: center 30%;
-    }
-
-    .hero-dots {
-        bottom: 15px;
-        gap: 6px;
-        padding: 5px 10px;
-    }
-
-    .dot {
-        width: 7px;
-        height: 7px;
-        min-width: 7px;
-        min-height: 7px;
-    }
-
-    .dot.active {
-        width: 20px;
-    }
+@media (max-width: 600px) {
+    /* Inherit the responsive aspect ratio */
 }

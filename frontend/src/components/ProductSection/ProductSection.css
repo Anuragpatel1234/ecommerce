@@ -1,52 +1,69 @@
 .product-section {
-    padding: 60px 40px;
+    padding: 100px 40px; /* Premium spacing */
     width: 100%;
     margin: 0;
+    background-color: var(--color-warm-ivory);
 }
 
 .product-section-heading {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    border-bottom: 1px solid var(--color-borders);
+    padding-bottom: 20px;
+}
+
+.product-section-heading .common-heading {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 .view-text {
     display: inline-block;
-    background-color: #4e322d;
-    color: white;
-    padding: 16px 40px;
-    border-radius: 0;
-    border: none;
+    background-color: var(--color-primary-maroon);
+    color: #ffffff;
+    padding: 12px 32px;
+    border-radius: 12px; /* Rounded 12px */
+    border: 1px solid var(--color-primary-maroon);
     text-decoration: none;
     font-weight: 600;
-    font-size: 16px;
-    letter-spacing: 1px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     text-align: center;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    transition: all 0.3s ease;
+    font-family: var(--font-sans);
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(91, 30, 35, 0.15);
 }
 
 .view-text:hover {
-    background-color: #5a3d37;
-    transform: translateY(-1px);
+    background-color: var(--color-deep-wine);
+    border-color: var(--color-antique-gold); /* Gold border on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(91, 30, 35, 0.25);
 }
 
 .product-section-container {
     position: relative;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding-top: 40px;
 }
 
 .product-container {
     display: flex;
-    gap: 20px;
+    gap: 24px;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
-    padding-bottom: 10px;
+    padding: 20px 5px 30px 5px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -62,25 +79,29 @@
     max-width: 280px;
 }
 
+/* Premium Arrow Controls */
 .product-nav-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: #9CA3AF;
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: var(--color-warm-ivory) !important;
+    color: var(--color-text-primary) !important;
+    border: 1px solid var(--color-borders) !important;
+    width: 44px;
+    height: 44px;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     z-index: 10;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(45, 42, 38, 0.05) !important;
     opacity: 0;
     visibility: hidden;
+    padding: 0 !important;
+    min-width: 0 !important;
+    text-transform: none !important;
 }
 
 .product-nav-arrow.visible {
@@ -89,23 +110,25 @@
 }
 
 .product-nav-arrow:hover {
-    background-color: #6B7280;
-    transform: translateY(-50%) scale(1.1);
+    background-color: var(--color-primary-maroon) !important;
+    border-color: var(--color-primary-maroon) !important;
+    color: #ffffff !important;
+    transform: translateY(-50%) scale(1.1) !important;
 }
 
 .product-nav-arrow i {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .product-nav-arrow-left {
-    left: -20px;
+    left: -22px;
 }
 
 .product-nav-arrow-right {
-    right: -20px;
+    right: -22px;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1300px) {
     .product-nav-arrow-left {
         left: 0;
     }
@@ -115,47 +138,9 @@
     }
 }
 
-.product-image-section {
-    width: 100%;
-    height: 100%;
-}
-
-.product-image {
-    width: 100%;
-    height: 62vh;
-    overflow: hidden;
-}
-
-.product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-    transition: all 0.4s ease-in-out;
-}
-
-.product-image img:hover {
-    scale: 1.1;
-}
-
-.product-content {
-    padding-top: 10px;
-    width: 100%;
-    height: fit-content;
-}
-
-.product-content h3 {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.product-content p {
-    font-size: 14px;
-    color: #303030;
-}
-
 @media (max-width: 900px) {
     .product-section {
-        padding: 40px 20px;
+        padding: 60px 20px;
     }
 
     .product-container .product-card {
@@ -163,60 +148,30 @@
         min-width: 240px;
         max-width: 240px;
     }
-
-    .product-image {
-        height: 50vh;
-    }
 }
 
 @media (max-width: 600px) {
+    .product-section-heading {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        text-align: center;
+    }
+
     .product-container .product-card {
         flex: 0 0 200px;
         min-width: 200px;
         max-width: 200px;
     }
 
-    .product-section-heading {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
-
     .view-text {
         width: 100%;
-        padding: 14px 30px;
-        font-size: 14px;
+        padding: 12px 24px;
+        font-size: 11px;
     }
 
     .product-nav-arrow {
         width: 36px;
         height: 36px;
-        opacity: 0.8;
-    }
-
-    .product-nav-arrow i {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 480px) {
-    .product-container .product-card {
-        flex: 0 0 180px;
-        min-width: 180px;
-        max-width: 180px;
-    }
-
-    .view-text {
-        padding: 12px 25px;
-        font-size: 13px;
-    }
-
-    .product-nav-arrow {
-        width: 32px;
-        height: 32px;
-    }
-
-    .product-nav-arrow i {
-        font-size: 12px;
     }
 }

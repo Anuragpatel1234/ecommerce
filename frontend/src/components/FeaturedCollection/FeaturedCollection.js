@@ -44,27 +44,41 @@ const FeaturedCollection = () => {
     return `₹${Number(price).toLocaleString('en-IN')}`;
   };
 
-  // Ensure we have at least 5 products (1 hero + 4 grid items)
-  const displayProducts = [...products];
-  while (displayProducts.length < 5) {
-    displayProducts.push(null);
-  }
-
-  const heroProduct = displayProducts[0] || { _id: '1', name: 'MANISHYA KARAM PANTS', price: 2295 };
-  const gridProducts = displayProducts.slice(1, 5).filter(p => p !== null);
-  
-  // Ensure heroProduct has a valid price
-  if (!heroProduct.price && heroProduct.price !== 0) {
-    heroProduct.price = 2295;
-  }
-
-  // Define specific images for each card position
-  const cardImages = [
-    '/img/06e447550bc57e1226507591a9b847e5.jpg', // First grid card - keep existing
-    '/img/Attached_image.png', // Second grid card - new lehenga image
-    '/img/lehenga-2.jpg', // Third grid card - new lehenga image
-    '/img/06e447550bc57e1226507591a9b847e5.jpg'  // Fourth grid card - keep existing
+  const staticProducts = [
+    {
+      _id: 'hero',
+      name: 'HANDLOOM SILK SAREE',
+      price: 6500,
+      image: '/img/0952.webp'
+    },
+    {
+      _id: '1',
+      name: 'VELVET BRIDAL LEHENGA',
+      price: 24999,
+      image: '/img/06e447550bc57e1226507591a9b847e5.jpg'
+    },
+    {
+      _id: '2',
+      name: 'KIDS LEHENGA SET',
+      price: 2499,
+      image: '/img/Attached_image.png'
+    },
+    {
+      _id: '3',
+      name: 'BANARASI DUPATTA',
+      price: 3499,
+      image: '/img/lehenga-2.jpg'
+    },
+    {
+      _id: '4',
+      name: 'ROYAL LEHENGA SET',
+      price: 8999,
+      image: '/img/06e447550bc57e1226507591a9b847e5.jpg'
+    }
   ];
+
+  const heroProduct = staticProducts[0];
+  const gridProducts = staticProducts.slice(1);
 
   return (
     <section className="featured-collection-section">
@@ -74,10 +88,10 @@ const FeaturedCollection = () => {
         <Link to={`/product/${heroProduct._id}`} className="hero-card">
           <div className="hero-image">
             <img 
-              src="/img/0952.webp" 
-              alt={heroProduct.name || 'Featured Product'}
+              src={heroProduct.image} 
+              alt={heroProduct.name}
               onError={(e) => {
-                console.error('Failed to load hero image: /img/0952.webp');
+                console.error(`Failed to load hero image: ${heroProduct.image}`);
                 e.target.src = '/img/placeholder.jpg';
               }}
             />
@@ -86,7 +100,7 @@ const FeaturedCollection = () => {
               <p>{formatPrice(heroProduct.price)}</p>
             </div>
           </div>
-          <div className="hero-content">
+          <div className="featured-hero-content">
             <h3>{heroProduct.name}</h3>
             <p>{formatPrice(heroProduct.price)}</p>
           </div>
@@ -94,39 +108,30 @@ const FeaturedCollection = () => {
 
         {/* Featured Cards Grid - Right side (2x2) */}
         <div className="featured-grid">
-          {[0, 1, 2, 3].map((index) => {
-            const cardImage = cardImages[index] || '/img/06e447550bc57e1226507591a9b847e5.jpg';
-            const product = gridProducts[index];
-            const productName = product?.name || 'ROYAL LEHENGA SET';
-            const productPrice = product?.price || 8999;
-            const productId = product?._id || '2';
-
+          {gridProducts.map((product, index) => {
             return (
               <Link 
                 key={index} 
-                to={`/product/${productId}`} 
+                to={`/product/${product._id}`} 
                 className="featured-card"
               >
                 <div className="featured-card-image">
                   <img 
-                    src={cardImage}
-                    alt={productName}
+                    src={product.image}
+                    alt={product.name}
                     onError={(e) => {
-                      console.error(`Failed to load image at index ${index}: ${cardImage}`);
+                      console.error(`Failed to load image at index ${index}: ${product.image}`);
                       e.target.src = '/img/placeholder.jpg';
-                    }}
-                    onLoad={() => {
-                      console.log(`Successfully loaded image at index ${index}: ${cardImage}`);
                     }}
                   />
                   <div className="featured-card-image-overlay">
-                    <h3>{productName}</h3>
-                    <p>{formatPrice(productPrice)}</p>
+                    <h3>{product.name}</h3>
+                    <p>{formatPrice(product.price)}</p>
                   </div>
                 </div>
                 <div className="featured-card-content">
-                  <h3>{productName}</h3>
-                  <p>{formatPrice(productPrice)}</p>
+                  <h3>{product.name}</h3>
+                  <p>{formatPrice(product.price)}</p>
                 </div>
               </Link>
             );

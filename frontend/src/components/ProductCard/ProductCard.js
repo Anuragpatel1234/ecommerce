@@ -170,20 +170,6 @@ const ProductCard = ({ product, showNewBadge = false }) => {
             </div>
             <span className="rating-text">({mockReviewCount})</span>
           </div>
-
-          <div className="product-colors">
-            {mockColors.slice(0, 4).map((color, index) => (
-              <span
-                key={index}
-                className="color-dot"
-                style={{ backgroundColor: color.toLowerCase() }}
-                title={color}
-              ></span>
-            ))}
-            {mockColors.length > 4 && (
-              <span className="more-colors">+{mockColors.length - 4}</span>
-            )}
-          </div>
             </>
           )}
         </div>

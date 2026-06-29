@@ -1,0 +1,203 @@
+.celebrity-section {
+    width: 100%;
+    padding: 120px 40px; /* Premium spacing */
+    background-color: var(--color-soft-cream); /* Warm soft cream background */
+    margin: 0;
+}
+
+.celebrity-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: center;
+}
+
+/* Editorial Block */
+.celebrity-editorial {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.celebrity-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.celebrity-heading {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    letter-spacing: 0.05em;
+    margin-bottom: 24px;
+    line-height: 1.15;
+}
+
+.celebrity-text {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.celebrity-subtext {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    margin-bottom: 36px;
+    font-weight: 300;
+}
+
+.celebrity-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--color-primary-maroon);
+    color: #ffffff;
+    border: 1px solid var(--color-primary-maroon);
+    padding: 14px 36px;
+    border-radius: 12px; /* 12px rounded */
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 4px 10px rgba(91, 30, 35, 0.1);
+}
+
+.celebrity-cta i {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.celebrity-cta:hover {
+    background-color: var(--color-deep-wine);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(91, 30, 35, 0.2);
+}
+
+.celebrity-cta:hover i {
+    transform: translateX(5px);
+}
+
+/* Gallery Block */
+.celebrity-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 100%;
+}
+
+.gallery-large, .gallery-small {
+    position: relative;
+    border-radius: 18px; /* 18px radius */
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(45, 42, 38, 0.04);
+}
+
+.gallery-large {
+    grid-column: span 1;
+    height: 500px;
+}
+
+.gallery-stacked {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 500px;
+}
+
+.gallery-small {
+    height: 240px;
+}
+
+.gallery-large img, .gallery-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.gallery-large:hover img, .gallery-small:hover img {
+    transform: scale(1.05);
+}
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background: linear-gradient(to top, rgba(59, 20, 24, 0.75), transparent);
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+}
+
+.celebrity-name {
+    font-family: var(--font-serif);
+    font-size: clamp(14px, 1.8vw, 18px);
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@media (max-width: 900px) {
+    .celebrity-section {
+        padding: 60px 20px;
+    }
+
+    .celebrity-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .gallery-large, .gallery-stacked {
+        height: 400px;
+    }
+
+    .gallery-small {
+        height: 190px;
+    }
+}
+
+@media (max-width: 600px) {
+    .celebrity-gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .gallery-large {
+        height: 350px;
+    }
+
+    .gallery-stacked {
+        height: auto;
+        gap: 15px;
+    }
+
+    .gallery-small {
+        height: 200px;
+    }
+
+    .celebrity-cta {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}

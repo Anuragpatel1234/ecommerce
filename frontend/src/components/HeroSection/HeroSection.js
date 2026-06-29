@@ -6,13 +6,42 @@ const HeroSection = () => {
   const intervalRef = useRef(null);
   
   const slides = React.useMemo(() => [
-    { src: 'img/pexels-vikashkr50-27103969.jpg', alt: 'Fashion collection' },
-    { src: 'img/Approved_Drzya-Desktop-14.webp', alt: 'Fashion collection' },
-    { src: 'img/Drzya-Desktop-1_2.webp', alt: 'Fashion collection' },
-    { src: 'img/Drzya-Desktop-11.webp', alt: 'Fashion collection' },
-    { src: 'img/ishq_new_arrivals_dekstop.webp', alt: 'Fashion collection' },
-    { src: 'img/pexels-vikashkr50-27103969.jpg', alt: 'Fashion collection' },
-    { src: 'img/Drzya_web_nur.webp', alt: 'Fashion collection' }
+    { 
+      src: 'img/pexels-vikashkr50-27103969.jpg', 
+      alt: 'Royal Heritage Collection', 
+      subtitleTop: 'RANGAARA AUTUMN EDIT',
+      title: 'THE ROYAL HERITAGE',
+      subtitle: 'Experience the regal elegance of handcrafted Indian couture',
+      ctaText: 'EXPLORE COLLECTION',
+      link: '/shop'
+    },
+    { 
+      src: 'img/Approved_Drzya-Desktop-14.webp', 
+      alt: 'Festive Splendor', 
+      subtitleTop: 'THE SHADI COLLECTION',
+      title: 'FESTIVE SPLENDOR',
+      subtitle: 'Premium ethnic wear designed for your special celebrations',
+      ctaText: 'DISCOVER NOW',
+      link: '/shop?collection=Nur'
+    },
+    { 
+      src: 'img/Drzya-Desktop-1_2.webp', 
+      alt: 'Modern Craftsmanship', 
+      subtitleTop: 'ARTISANAL CHRONICLES',
+      title: 'THE ART OF WEAVING',
+      subtitle: 'Where traditional artisan techniques meet contemporary design',
+      ctaText: 'OUR HERITAGE',
+      link: '/about'
+    },
+    { 
+      src: 'img/Drzya-Desktop-11.webp', 
+      alt: 'Luxury Edit', 
+      subtitleTop: 'VELVET & TISSUE SPECIALS',
+      title: 'THE LUXURY EDIT',
+      subtitle: 'Hand-selected silk, tissue and embroidered velvet silhouettes',
+      ctaText: 'SHOP EXCLUSIVES',
+      link: '/shop?filter=luxury'
+    }
   ], []);
 
   // Preload images for smoother transitions
@@ -24,10 +53,7 @@ const HeroSection = () => {
   }, [slides]);
 
   const nextSlide = useCallback(() => {
-    setCurrentSlideIndex((prevIndex) => {
-      const nextIndex = (prevIndex + 1) % slides.length;
-      return nextIndex;
-    });
+    setCurrentSlideIndex((prevIndex) => (prevIndex + 1) % slides.length);
   }, [slides.length]);
 
   const goToSlide = (index) => {
@@ -36,10 +62,9 @@ const HeroSection = () => {
   };
 
   useEffect(() => {
-    // Slide transition interval - animation runs continuously independently
     intervalRef.current = setInterval(() => {
       nextSlide();
-    }, 5000);
+    }, 6000);
     
     return () => {
       if (intervalRef.current) {

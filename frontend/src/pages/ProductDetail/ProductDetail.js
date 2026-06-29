@@ -13,6 +13,11 @@ const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [activeAccordion, setActiveAccordion] = useState(null);
+  
+  const toggleAccordion = (panel) => {
+    setActiveAccordion(activeAccordion === panel ? null : panel);
+  };
   
   const { user, addToCart, addToWishlist, removeFromWishlist, wishlist, currency, formatPrice } = useApp();
 
@@ -184,12 +189,45 @@ const ProductDetail = () => {
             <p>{product.description}</p>
           </div>
 
-          <div className="product-details">
-            <div className="detail-item">
-              <strong>Material:</strong> {product.material}
+          <div className="luxury-accordions">
+            <div className={`accordion-item ${activeAccordion === 'fabric' ? 'open' : ''}`}>
+              <button className="accordion-title-btn" onClick={() => toggleAccordion('fabric')}>
+                <span>Fabric & Materials</span>
+                <i className="fa-solid fa-chevron-down"></i>
+              </button>
+              <div className="accordion-content">
+                <p>Meticulously hand-selected premium {product.material || 'Organic cotton and silk blends'}, designed for drape, breathability, and luxurious comfort against the skin.</p>
+              </div>
             </div>
-            <div className="detail-item">
-              <strong>Care Instructions:</strong> {product.careInstructions}
+
+            <div className={`accordion-item ${activeAccordion === 'craft' ? 'open' : ''}`}>
+              <button className="accordion-title-btn" onClick={() => toggleAccordion('craft')}>
+                <span>Craftsmanship</span>
+                <i className="fa-solid fa-chevron-down"></i>
+              </button>
+              <div className="accordion-content">
+                <p>Hand-woven and embroidered by master artisans. Each stitch, print, and weave honors age-old traditional Indian heritage methods, reimagined with meticulous modern finishing.</p>
+              </div>
+            </div>
+
+            <div className={`accordion-item ${activeAccordion === 'shipping' ? 'open' : ''}`}>
+              <button className="accordion-title-btn" onClick={() => toggleAccordion('shipping')}>
+                <span>Shipping & Returns</span>
+                <i className="fa-solid fa-chevron-down"></i>
+              </button>
+              <div className="accordion-content">
+                <p>Complimentary shipping on all domestic orders. Orders are processed within 24-48 hours. Easy 30-day hassle-free returns and exchanges in pristine condition.</p>
+              </div>
+            </div>
+
+            <div className={`accordion-item ${activeAccordion === 'care' ? 'open' : ''}`}>
+              <button className="accordion-title-btn" onClick={() => toggleAccordion('care')}>
+                <span>Care Guide</span>
+                <i className="fa-solid fa-chevron-down"></i>
+              </button>
+              <div className="accordion-content">
+                <p>{product.careInstructions || 'Dry clean only to maintain fabric weave, hand embellishments, and structural integrity. Iron on low heat under a protective cloth.'}</p>
+              </div>
             </div>
           </div>
 
