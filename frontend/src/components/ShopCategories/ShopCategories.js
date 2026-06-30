@@ -133,7 +133,12 @@ const ShopCategories = () => {
             onClick={() => handleCategoryClick(category.title)}
           >
             <div className="category-image-section">
-              <img src={`/${category.image}`} alt={category.alt} />
+              <img 
+                src={`/${category.image}`} 
+                alt={category.alt} 
+                loading="lazy" 
+                decoding="async" 
+              />
               <div className="category-text-overlay">
                 <h3 className="category-title">{category.title}</h3>
                 <button 

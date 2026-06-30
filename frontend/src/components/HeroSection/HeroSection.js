@@ -44,13 +44,6 @@ const HeroSection = () => {
     }
   ], []);
 
-  // Preload images for smoother transitions
-  useEffect(() => {
-    slides.forEach((slide) => {
-      const img = new Image();
-      img.src = slide.src;
-    });
-  }, [slides]);
 
   const nextSlide = useCallback(() => {
     setCurrentSlideIndex((prevIndex) => (prevIndex + 1) % slides.length);
@@ -81,7 +74,13 @@ const HeroSection = () => {
             key={index}
             className={`hero-slide ${index === currentSlideIndex ? 'active' : ''}`}
           >
-            <img src={slide.src} alt={slide.alt} />
+            <img 
+              src={slide.src} 
+              alt={slide.alt} 
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchpriority={index === 0 ? "high" : "auto"}
+              decoding={index === 0 ? "sync" : "async"}
+            />
           </div>
         ))}
       </div>

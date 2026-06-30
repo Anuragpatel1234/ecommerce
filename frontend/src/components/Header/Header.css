@@ -101,6 +101,13 @@
     transform: translateY(-1px);
 }
 
+.header-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
 /* Search Form */
 .search-form {
     display: flex;

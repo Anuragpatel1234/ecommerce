@@ -1,14 +1,18 @@
 .product-detail-page {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 40px;
-    background-color: var(--color-warm-ivory);
+    padding: 24px 40px;
+    background: transparent !important;
+}
+
+.product-detail-page .product-info {
+    background: transparent !important;
 }
 
 .product-detail-page .product-detail-container {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
-    gap: 60px;
+    gap: 40px;
     align-items: start;
 }
 
@@ -98,14 +102,14 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     border-bottom: 1px solid var(--color-borders);
-    padding-bottom: 24px;
+    padding-bottom: 16px;
 }
 
 .product-detail-page .product-title {
     font-family: var(--font-serif);
-    font-size: clamp(28px, 4vw, 38px);
+    font-size: clamp(24px, 3.5vw, 32px);
     font-weight: 500;
     color: var(--color-text-primary);
     line-height: 1.25;
@@ -148,7 +152,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 .product-detail-page .original-price {
@@ -161,7 +165,7 @@
 
 .product-detail-page .current-price {
     font-family: var(--font-sans);
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     color: var(--color-primary-maroon);
 }
@@ -182,7 +186,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 28px;
+    margin-bottom: 16px;
 }
 
 .product-detail-page .stars i {
@@ -197,7 +201,7 @@
 }
 
 .product-detail-page .product-description {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     line-height: 1.8;
     color: var(--color-text-primary);
     font-size: 14px;
@@ -206,7 +210,7 @@
 }
 
 .product-detail-page .product-options {
-    margin-bottom: 28px;
+    margin-bottom: 20px;
 }
 
 .product-detail-page .product-options h4 {
@@ -376,7 +380,7 @@
 
 /* Luxury storytelling accordions */
 .luxury-accordions {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
     border-top: 1px solid var(--color-borders);
 }
 
@@ -391,7 +395,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
+    padding: 14px 0;
     cursor: pointer;
     font-family: var(--font-sans);
     font-size: 12px;

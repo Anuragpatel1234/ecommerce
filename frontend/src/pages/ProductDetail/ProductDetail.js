@@ -119,6 +119,14 @@ const ProductDetail = () => {
     );
   }
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return '/img/placeholder.jpg';
+    if (imagePath.startsWith('http') || imagePath.startsWith('data:')) {
+      return imagePath;
+    }
+    return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+  };
+
   const isWishlisted = wishlist.some(item => item._id === product._id);
 
   return (
@@ -127,8 +135,11 @@ const ProductDetail = () => {
         <div className="product-images">
           <div className="main-image">
             <img 
-              src={product.images[activeImageIndex] || 'img/placeholder.jpg'} 
+              src={getImageUrl(product.images?.[activeImageIndex])} 
               alt={product.name}
+              fetchpriority="high"
+              loading="eager"
+              decoding="sync"
             />
             {product.onSale && <span className="sale-badge">SALE</span>}
             {product.newArrival && <span className="new-badge">NEW</span>}
@@ -138,7 +149,7 @@ const ProductDetail = () => {
               {product.images.map((image, index) => (
                 <img
                   key={index}
-                  src={image}
+                  src={getImageUrl(image)}
                   alt={`${product.name} ${index + 1}`}
                   className={activeImageIndex === index ? 'active' : ''}
                   onClick={() => setActiveImageIndex(index)}

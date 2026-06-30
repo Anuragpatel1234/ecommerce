@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
 import './ProductCard.css';
 
 const ProductCard = ({ product, showNewBadge = false }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const { user, wishlist, addToWishlist, removeFromWishlist, addToCart, currency } = useApp();
 
@@ -27,7 +28,7 @@ const ProductCard = ({ product, showNewBadge = false }) => {
     e.stopPropagation();
 
     if (!user) {
-      // Redirect to login or show login modal
+      navigate('/login');
       return;
     }
 
@@ -50,7 +51,7 @@ const ProductCard = ({ product, showNewBadge = false }) => {
     e.stopPropagation();
 
     if (!user) {
-      // Redirect to login or show login modal
+      navigate('/login');
       return;
     }
 
@@ -106,6 +107,8 @@ const ProductCard = ({ product, showNewBadge = false }) => {
             src={product.images?.[0] || 'img/placeholder.jpg'}
             alt={product.name}
             className="product-image"
+            loading="lazy"
+            decoding="async"
           />
 
           {showNewBadge && (
@@ -130,8 +133,8 @@ const ProductCard = ({ product, showNewBadge = false }) => {
               onClick={handleAddToCart}
               disabled={loading}
             >
-              <i className="fa-solid fa-bag-shopping"></i>
-              Add to Cart
+              {loading ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-bag-shopping"></i>}
+              {loading ? 'Adding...' : 'Add to Cart'}
             </button>
           ) : (
           <div className="product-overlay">
@@ -140,8 +143,8 @@ const ProductCard = ({ product, showNewBadge = false }) => {
               onClick={handleAddToCart}
               disabled={loading}
             >
-              <i className="fa-solid fa-bag-shopping"></i>
-              Add to Collection
+              {loading ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-bag-shopping"></i>}
+              {loading ? 'ADDING...' : 'ADD TO COLLECTION'}
             </button>
           </div>
           )}
