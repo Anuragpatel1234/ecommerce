@@ -231,25 +231,6 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          {product.colors && product.colors.length > 0 && (
-            <div className="product-options">
-              <h4>Color</h4>
-              <div className="color-options">
-                {product.colors.map((color) => (
-                  <button
-                    key={color}
-                    className={`color-option ${selectedColor === color ? 'selected' : ''}`}
-                    onClick={() => setSelectedColor(color)}
-                    style={{ backgroundColor: color.toLowerCase() }}
-                    title={color}
-                  >
-                    {selectedColor === color && <i className="fa-solid fa-check"></i>}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {product.sizes && product.sizes.length > 0 && (
             <div className="product-options">
               <h4>Size</h4>

@@ -1,0 +1,6 @@
+.footer-manager { min-height: 100vh; background: #f9fafb; }
+.footer-manager__body { padding: 24px 32px; max-width: 1000px; }
+.footer-manager__tabs { display: flex; gap: 4px; margin-bottom: 20px; background: #f3f4f6; padding: 4px; border-radius: 10px; width: fit-content; }
+.footer-manager__tab { padding: 8px 18px; border-radius: 8px; border: none; background: transparent; font-size: 13px; font-weight: 500; color: #6b7280; cursor: pointer; transition: all 0.2s ease; }
+.footer-manager__tab.active { background: white; color: #111827; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+@media (max-width: 768px) { .footer-manager__body { padding: 16px; } .footer-manager__tabs { flex-wrap: wrap; } }

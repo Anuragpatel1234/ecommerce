@@ -19,6 +19,19 @@ export const API_ENDPOINTS = {
     SECTIONS: `${API_BASE_URL}/api/admin/sections`,
     SECTION_BY_ID: (id) => `${API_BASE_URL}/api/admin/sections/${id}`,
     SECTION_BY_KEY: (key) => `${API_BASE_URL}/api/admin/sections/${key}`,
+    UPLOAD: `${API_BASE_URL}/api/admin/upload`,
+  },
+  CMS: {
+    SETTINGS: `${API_BASE_URL}/api/admin/cms/settings`,
+    UPLOAD: `${API_BASE_URL}/api/admin/cms/upload`,
+    MEDIA: `${API_BASE_URL}/api/admin/cms/media`,
+    MEDIA_DELETE: (filename) => `${API_BASE_URL}/api/admin/cms/media/${filename}`,
+    SECTIONS_REORDER: `${API_BASE_URL}/api/admin/cms/sections/reorder`,
+    SECTIONS_BY_TYPE: (type) => `${API_BASE_URL}/api/admin/cms/sections/type/${type}`,
+    SECTION_BY_KEY: (key) => `${API_BASE_URL}/api/admin/cms/sections/key/${key}`,
+    // Admin section CRUD (reuse existing)
+    SECTIONS: `${API_BASE_URL}/api/admin/sections`,
+    SECTION_BY_ID: (id) => `${API_BASE_URL}/api/admin/sections/${id}`,
   },
 };
 

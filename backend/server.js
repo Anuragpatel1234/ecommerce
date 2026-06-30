@@ -20,6 +20,7 @@ app.use('/api/newsletter', require('./routes/newsletter'));
 app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/sections', require('./routes/sections'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/admin/cms', require('./routes/cms'));
 app.use('/api/paypal', require('./routes/paypal'));
 
 // MongoDB connection

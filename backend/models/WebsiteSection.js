@@ -15,7 +15,11 @@ const websiteSectionSchema = new mongoose.Schema({
   sectionType: {
     type: String,
     required: true,
-    enum: ['hero', 'featured', 'testimonial', 'banner', 'text', 'gallery', 'custom'],
+    enum: [
+      'hero', 'featured', 'testimonial', 'banner', 'text', 'gallery', 'custom',
+      'newsletter', 'footer', 'navigation', 'about', 'categories', 'homepage',
+      'product_section', 'site_settings'
+    ],
     default: 'custom'
   },
   title: {
@@ -48,6 +52,10 @@ const websiteSectionSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  isDraft: {
+    type: Boolean,
+    default: false
+  },
   order: {
     type: Number,
     default: 0
@@ -61,4 +69,3 @@ const websiteSectionSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('WebsiteSection', websiteSectionSchema);
-

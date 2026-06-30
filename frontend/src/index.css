@@ -154,7 +154,7 @@ button:active, .btn:active {
 }
 
 /* Primary Luxury Button - Automatically styles all main action buttons */
-.btn-primary, button:not(.qty-btn):not(.product-wishlist-icon):not(.wishlist-btn):not(.search-btn):not(.color-option):not(.size-option):not(.currency-selector):not(.nav-item-with-dropdown a):not(.mega-dropdown a):not(.user-dropdown i):not(.currency-dropdown-menu button):not(.user-dropdown-menu button):not(.hamburger-menu):not(.nav-item) {
+.btn-primary, button:not(.qty-btn):not(.product-wishlist-icon):not(.wishlist-btn):not(.search-btn):not(.color-option):not(.size-option):not(.currency-selector):not(.nav-item-with-dropdown a):not(.mega-dropdown a):not(.user-dropdown i):not(.currency-dropdown-menu button):not(.user-dropdown-menu button):not(.hamburger-menu):not(.nav-item):not(.accordion-title-btn) {
     background-color: var(--color-primary-maroon);
     color: #ffffff;
     border: 1px solid var(--color-primary-maroon);
@@ -168,14 +168,14 @@ button:active, .btn:active {
     gap: 8px;
 }
 
-.btn-primary:hover, button:not(.qty-btn):not(.product-wishlist-icon):not(.wishlist-btn):not(.search-btn):not(.color-option):not(.size-option):not(.currency-selector):not(.nav-item-with-dropdown a):not(.mega-dropdown a):not(.user-dropdown i):not(.currency-dropdown-menu button):not(.user-dropdown-menu button):not(.hamburger-menu):not(.nav-item):hover {
+.btn-primary:hover, button:not(.qty-btn):not(.product-wishlist-icon):not(.wishlist-btn):not(.search-btn):not(.color-option):not(.size-option):not(.currency-selector):not(.nav-item-with-dropdown a):not(.mega-dropdown a):not(.user-dropdown i):not(.currency-dropdown-menu button):not(.user-dropdown-menu button):not(.hamburger-menu):not(.nav-item):not(.accordion-title-btn):hover {
     background-color: var(--color-deep-wine);
     border-color: var(--color-antique-gold);
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(91, 30, 35, 0.2);
 }
 
-.btn-primary:disabled, button:not(.qty-btn):not(.product-wishlist-icon):not(.wishlist-btn):not(.search-btn):not(.color-option):not(.size-option):not(.currency-selector):not(.nav-item-with-dropdown a):not(.mega-dropdown a):not(.user-dropdown i):not(.currency-dropdown-menu button):not(.user-dropdown-menu button):not(.hamburger-menu):not(.nav-item):disabled {
+.btn-primary:disabled, button:not(.qty-btn):not(.product-wishlist-icon):not(.wishlist-btn):not(.search-btn):not(.color-option):not(.size-option):not(.currency-selector):not(.nav-item-with-dropdown a):not(.mega-dropdown a):not(.user-dropdown i):not(.currency-dropdown-menu button):not(.user-dropdown-menu button):not(.hamburger-menu):not(.nav-item):not(.accordion-title-btn):disabled {
     background-color: var(--color-borders);
     border-color: var(--color-borders);
     color: var(--color-text-secondary);

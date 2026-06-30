@@ -1,0 +1,7 @@
+.site-settings { min-height: 100vh; background: #f9fafb; }
+.site-settings__body { padding: 24px 32px; }
+.site-settings__tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 20px; background: #f3f4f6; padding: 4px; border-radius: 10px; width: fit-content; }
+.site-settings__tab { display: flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 8px; border: none; background: transparent; font-size: 13px; font-weight: 500; color: #6b7280; cursor: pointer; transition: all 0.2s ease; }
+.site-settings__tab.active { background: white; color: #111827; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.site-settings__content { max-width: 900px; }
+@media (max-width: 768px) { .site-settings__body { padding: 16px; } .site-settings__tabs { width: 100%; } }

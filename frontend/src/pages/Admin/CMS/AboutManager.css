@@ -1,0 +1,6 @@
+.about-manager { min-height: 100vh; background: #f9fafb; }
+.about-manager__body { padding: 24px 32px; }
+.about-manager__grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; align-items: start; }
+.about-stat-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+.about-stat-row .cms-input { flex: 1; }
+@media (max-width: 1024px) { .about-manager__grid { grid-template-columns: 1fr; } .about-manager__body { padding: 16px; } }

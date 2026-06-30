@@ -32,6 +32,19 @@ const OrderDetail = React.lazy(() => import('./pages/Admin/OrderDetail'));
 const AdminUsers = React.lazy(() => import('./pages/Admin/Users'));
 const Sections = React.lazy(() => import('./pages/Admin/Sections'));
 const SectionForm = React.lazy(() => import('./pages/Admin/SectionForm'));
+// CMS Pages
+const CMSDashboard = React.lazy(() => import('./pages/Admin/CMS/CMSDashboard'));
+const HeroManager = React.lazy(() => import('./pages/Admin/CMS/HeroManager'));
+const BannerManager = React.lazy(() => import('./pages/Admin/CMS/BannerManager'));
+const CategoryManager = React.lazy(() => import('./pages/Admin/CMS/CategoryManager'));
+const HomepageManager = React.lazy(() => import('./pages/Admin/CMS/HomepageManager'));
+const AboutManager = React.lazy(() => import('./pages/Admin/CMS/AboutManager'));
+const TestimonialManager = React.lazy(() => import('./pages/Admin/CMS/TestimonialManager'));
+const NewsletterManager = React.lazy(() => import('./pages/Admin/CMS/NewsletterManager'));
+const FooterManager = React.lazy(() => import('./pages/Admin/CMS/FooterManager'));
+const NavigationManager = React.lazy(() => import('./pages/Admin/CMS/NavigationManager'));
+const MediaLibrary = React.lazy(() => import('./pages/Admin/CMS/MediaLibrary'));
+const SiteSettings = React.lazy(() => import('./pages/Admin/CMS/SiteSettings'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -99,6 +112,19 @@ const AppContent = () => {
               <Route path="sections" element={<Sections />} />
               <Route path="sections/new" element={<SectionForm />} />
               <Route path="sections/:id/edit" element={<SectionForm />} />
+              {/* Website CMS Routes */}
+              <Route path="cms" element={<CMSDashboard />} />
+              <Route path="cms/hero" element={<HeroManager />} />
+              <Route path="cms/banners" element={<BannerManager />} />
+              <Route path="cms/categories" element={<CategoryManager />} />
+              <Route path="cms/homepage" element={<HomepageManager />} />
+              <Route path="cms/about" element={<AboutManager />} />
+              <Route path="cms/testimonials" element={<TestimonialManager />} />
+              <Route path="cms/newsletter" element={<NewsletterManager />} />
+              <Route path="cms/footer" element={<FooterManager />} />
+              <Route path="cms/navigation" element={<NavigationManager />} />
+              <Route path="cms/media" element={<MediaLibrary />} />
+              <Route path="cms/settings" element={<SiteSettings />} />
             </Route>
           </Routes>
         </Suspense>

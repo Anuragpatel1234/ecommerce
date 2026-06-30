@@ -5,11 +5,27 @@ import { API_ENDPOINTS } from '../../config/api';
 import MenuToggle from '../../components/ui/MenuToggle';
 import './AdminLayout.css';
 
+const CMS_SUB_LINKS = [
+  { path: '/admin/cms', label: 'Overview', icon: 'fa-solid fa-house-chimney' },
+  { path: '/admin/cms/hero', label: 'Hero Section', icon: 'fa-solid fa-image' },
+  { path: '/admin/cms/banners', label: 'Banners', icon: 'fa-solid fa-rectangle-ad' },
+  { path: '/admin/cms/categories', label: 'Categories', icon: 'fa-solid fa-th-large' },
+  { path: '/admin/cms/homepage', label: 'Homepage', icon: 'fa-solid fa-layer-group' },
+  { path: '/admin/cms/about', label: 'About Section', icon: 'fa-solid fa-circle-info' },
+  { path: '/admin/cms/testimonials', label: 'Testimonials', icon: 'fa-regular fa-star' },
+  { path: '/admin/cms/newsletter', label: 'Newsletter', icon: 'fa-solid fa-envelope' },
+  { path: '/admin/cms/footer', label: 'Footer', icon: 'fa-solid fa-shoe-prints' },
+  { path: '/admin/cms/navigation', label: 'Navigation', icon: 'fa-solid fa-bars' },
+  { path: '/admin/cms/media', label: 'Media Library', icon: 'fa-solid fa-photo-film' },
+  { path: '/admin/cms/settings', label: 'Site Settings', icon: 'fa-solid fa-gear' },
+];
+
 const AdminLayout = () => {
   const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [cmsExpanded, setCmsExpanded] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -17,6 +33,13 @@ const AdminLayout = () => {
   useEffect(() => {
     checkAdminAuth();
   }, []);
+
+  // Auto-expand CMS group when on a CMS route
+  useEffect(() => {
+    if (location.pathname.startsWith('/admin/cms')) {
+      setCmsExpanded(true);
+    }
+  }, [location.pathname]);
 
   const checkAdminAuth = async () => {
     try {
@@ -83,6 +106,7 @@ const AdminLayout = () => {
   }
 
   const isActive = (path) => location.pathname === path;
+  const isActivePrefix = (prefix) => location.pathname.startsWith(prefix);
 
   return (
     <div className="admin-layout">
@@ -118,6 +142,50 @@ const AdminLayout = () => {
         </div>
 
         <nav className="admin-nav">
+          {/* Website CMS Section (Moved to top) */}
+          {sidebarOpen ? (
+            <div className="cms-nav-group">
+              <button
+                type="button"
+                className={`cms-nav-group__toggle ${isActivePrefix('/admin/cms') ? 'active' : ''}`}
+                onClick={() => setCmsExpanded(!cmsExpanded)}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <i className="fa-solid fa-pen-to-square"></i>
+                  <span>Website CMS</span>
+                </div>
+                <i className={`fa-solid fa-chevron-${cmsExpanded ? 'up' : 'down'} cms-nav-group__chevron`}></i>
+              </button>
+
+              {cmsExpanded && (
+                <div className="cms-nav-group__sub">
+                  {CMS_SUB_LINKS.map(link => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      className={`cms-nav-sub-item ${isActive(link.path) ? 'active' : ''}`}
+                      onClick={() => window.innerWidth < 768 && setSidebarOpen(false)}
+                    >
+                      <i className={link.icon}></i>
+                      <span>{link.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            // Collapsed: show single CMS icon linking to CMS dashboard
+            <Link
+              to="/admin/cms"
+              className={`admin-nav-item ${isActivePrefix('/admin/cms') ? 'active' : ''}`}
+              title="Website CMS"
+            >
+              <i className="fa-solid fa-pen-to-square"></i>
+            </Link>
+          )}
+
+          {sidebarOpen && <div className="admin-nav-divider"></div>}
+
           <Link
             to="/admin/dashboard"
             className={`admin-nav-item ${isActive('/admin/dashboard') ? 'active' : ''}`}
@@ -130,7 +198,7 @@ const AdminLayout = () => {
 
           <Link
             to="/admin/products"
-            className={`admin-nav-item ${isActive('/admin/products') || location.pathname.startsWith('/admin/products') ? 'active' : ''}`}
+            className={`admin-nav-item ${isActivePrefix('/admin/products') ? 'active' : ''}`}
             onClick={() => window.innerWidth < 768 && setSidebarOpen(false)}
             title="Products"
           >
@@ -140,7 +208,7 @@ const AdminLayout = () => {
 
           <Link
             to="/admin/orders"
-            className={`admin-nav-item ${isActive('/admin/orders') || location.pathname.startsWith('/admin/orders') ? 'active' : ''}`}
+            className={`admin-nav-item ${isActivePrefix('/admin/orders') ? 'active' : ''}`}
             onClick={() => window.innerWidth < 768 && setSidebarOpen(false)}
             title="Orders"
           >
@@ -150,7 +218,7 @@ const AdminLayout = () => {
 
           <Link
             to="/admin/users"
-            className={`admin-nav-item ${isActive('/admin/users') || location.pathname.startsWith('/admin/users') ? 'active' : ''}`}
+            className={`admin-nav-item ${isActivePrefix('/admin/users') ? 'active' : ''}`}
             onClick={() => window.innerWidth < 768 && setSidebarOpen(false)}
             title="Users"
           >
@@ -158,17 +226,7 @@ const AdminLayout = () => {
             {sidebarOpen && <span>Users</span>}
           </Link>
 
-          <Link
-            to="/admin/sections"
-            className={`admin-nav-item ${isActive('/admin/sections') || location.pathname.startsWith('/admin/sections') ? 'active' : ''}`}
-            onClick={() => window.innerWidth < 768 && setSidebarOpen(false)}
-            title="Website Sections"
-          >
-            <i className="fa-solid fa-pen-to-square"></i>
-            {sidebarOpen && <span>Website Sections</span>}
-          </Link>
 
-          {sidebarOpen && <div className="admin-nav-divider"></div>}
 
           <Link
             to="/"
@@ -221,4 +279,3 @@ const AdminLayout = () => {
 };
 
 export default AdminLayout;
-
