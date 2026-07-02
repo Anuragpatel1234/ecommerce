@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
+import { getImageUrl } from '../../config/api';
 import './ProductCard.css';
 
 const ProductCard = ({ product, showNewBadge = false }) => {
@@ -104,7 +105,7 @@ const ProductCard = ({ product, showNewBadge = false }) => {
       <Link to={`/product/${product._id}`} className="product-link">
         <div className="product-image-container">
           <img
-            src={product.images?.[0] || 'img/placeholder.jpg'}
+            src={getImageUrl(product.images?.[0])}
             alt={product.name}
             className="product-image"
             loading="lazy"

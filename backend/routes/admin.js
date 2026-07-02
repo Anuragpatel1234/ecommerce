@@ -169,11 +169,17 @@ router.post('/products', upload.array('images', 5), [
       return res.status(400).json({ errors: errors.array() });
     }
 
+    let finalImages = req.files ? req.files.map(file => 'uploads/' + file.filename) : [];
+    if (req.body.existingImages) {
+      const parsed = JSON.parse(req.body.existingImages);
+      finalImages = [...finalImages, ...parsed];
+    }
+
     const productData = {
       ...req.body,
       price: parseFloat(req.body.price),
       originalPrice: req.body.originalPrice ? parseFloat(req.body.originalPrice) : undefined,
-      images: req.files ? req.files.map(file => 'uploads/' + file.filename) : []
+      images: finalImages
     };
 
     // Parse sizes and colors if they're strings
@@ -206,10 +212,19 @@ router.put('/products/:id', upload.array('images', 5), async (req, res) => {
     if (updateData.price) updateData.price = parseFloat(updateData.price);
     if (updateData.originalPrice) updateData.originalPrice = parseFloat(updateData.originalPrice);
 
+    let finalImages = [];
+    if (updateData.existingImages) {
+      finalImages = JSON.parse(updateData.existingImages);
+    } else {
+      finalImages = product.images || [];
+    }
+
     if (req.files && req.files.length > 0) {
       const newImages = req.files.map(file => 'uploads/' + file.filename);
-      updateData.images = [...(product.images || []), ...newImages];
+      finalImages = [...newImages, ...finalImages];
     }
+    
+    updateData.images = finalImages;
 
     // Parse sizes and colors if they're strings
     if (typeof updateData.sizes === 'string') {

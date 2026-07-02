@@ -65,7 +65,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Help */}
         <div className="footer-column footer-accordion">
           <div 
             className="footer-column-title footer-accordion-toggle"
@@ -81,8 +80,9 @@ const Footer = () => {
             <ul className="footer-links">
               <li><Link to="/shopping-guide">Online Shopping Guide</Link></li>
               <li><Link to="/returns">Return Policy</Link></li>
+              <li><Link to="/refund">Refund Policy</Link></li>
               <li><Link to="/privacy">Privacy Policy</Link></li>
-              <li><Link to="/accessibility">Accessibility</Link></li>
+              <li><Link to="/disclaimer">Disclaimer</Link></li>
               <li><Link to="/contact">Contact Us</Link></li>
             </ul>
           </div>

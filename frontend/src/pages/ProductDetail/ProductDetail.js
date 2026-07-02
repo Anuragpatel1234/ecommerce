@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
 import axios from 'axios';
+import { getImageUrl } from '../../config/api';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -118,14 +119,6 @@ const ProductDetail = () => {
       </div>
     );
   }
-
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return '/img/placeholder.jpg';
-    if (imagePath.startsWith('http') || imagePath.startsWith('data:')) {
-      return imagePath;
-    }
-    return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-  };
 
   const isWishlisted = wishlist.some(item => item._id === product._id);
 

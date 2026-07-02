@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -249,7 +250,7 @@ const OrderDetail = () => {
                         <div className="product-info-cell">
                           {item.product?.images?.[0] && (
                             <img
-                              src={item.product.images[0]}
+                              src={getImageUrl(item.product.images[0])}
                               alt={item.product.name}
                               className="product-thumb-small"
                             />

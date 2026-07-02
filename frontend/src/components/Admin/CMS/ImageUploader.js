@@ -92,6 +92,12 @@ const ImageUploader = ({ value, onChange, label = 'Image', aspectHint = '', requ
     setShowMediaModal(false);
   };
 
+  const getPreviewUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('/')) return url;
+    return `/${url}`;
+  };
+
   return (
     <div className="image-uploader">
       {label && (
@@ -110,7 +116,7 @@ const ImageUploader = ({ value, onChange, label = 'Image', aspectHint = '', requ
       >
         {value ? (
           <div className="image-uploader__preview">
-            <img src={value} alt="Preview" className="image-uploader__preview-img" />
+            <img src={getPreviewUrl(value)} alt="Preview" className="image-uploader__preview-img" />
             <div className="image-uploader__preview-overlay">
               <button
                 type="button"

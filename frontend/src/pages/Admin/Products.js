@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../config/api';
+import { API_ENDPOINTS, getImageUrl } from '../../config/api';
 import Breadcrumbs from '../../components/Admin/Breadcrumbs';
 import './Products.css';
 
@@ -142,7 +142,7 @@ const Products = () => {
                     <tr key={product._id}>
                       <td>
                         <img
-                          src={product.images?.[0] || 'img/placeholder.jpg'}
+                          src={getImageUrl(product.images?.[0])}
                           alt={product.name}
                           className="product-thumb"
                         />

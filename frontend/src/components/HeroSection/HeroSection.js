@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 import './HeroSection.css';
 
 const HeroSection = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
   const intervalRef = useRef(null);
-  
-  const slides = React.useMemo(() => [
+  const [slides, setSlides] = useState([]);
+  const fallbackSlides = React.useMemo(() => [
     { 
       src: 'img/pexels-vikashkr50-27103969.jpg', 
       alt: 'Royal Heritage Collection', 
@@ -44,7 +47,37 @@ const HeroSection = () => {
     }
   ], []);
 
-
+  useEffect(() => {
+    const fetchHero = async () => {
+      try {
+        const res = await axios.get(API_ENDPOINTS.PUBLIC.SECTION_BY_KEY('hero_section'));
+        const sectionSlides = res.data?.content?.slides || [];
+        
+        if (sectionSlides.length > 0) {
+          const mappedSlides = sectionSlides
+            .filter(s => s.isActive !== false)
+            .map(s => ({
+              src: s.image,
+              alt: s.heading || 'Hero Image',
+              subtitleTop: s.subheading,
+              title: s.heading,
+              subtitle: s.description,
+              ctaText: s.primaryBtnText,
+              link: s.primaryBtnUrl
+            }));
+          setSlides(mappedSlides.length > 0 ? mappedSlides : fallbackSlides);
+        } else {
+          setSlides(fallbackSlides);
+        }
+      } catch (err) {
+        console.error('Failed to fetch hero section', err);
+        setSlides(fallbackSlides);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHero();
+  }, [fallbackSlides]);
   const nextSlide = useCallback(() => {
     setCurrentSlideIndex((prevIndex) => (prevIndex + 1) % slides.length);
   }, [slides.length]);

@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -163,7 +164,7 @@ const Dashboard = () => {
               topProducts.map((product) => (
                 <div key={product._id} className="product-mini-card">
                   <img 
-                    src={product.images?.[0] || 'img/placeholder.jpg'} 
+                    src={getImageUrl(product.images?.[0])} 
                     alt={product.name}
                   />
                   <div className="product-mini-info">

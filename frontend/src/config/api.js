@@ -33,6 +33,16 @@ export const API_ENDPOINTS = {
     SECTIONS: `${API_BASE_URL}/api/admin/sections`,
     SECTION_BY_ID: (id) => `${API_BASE_URL}/api/admin/sections/${id}`,
   },
+  PUBLIC: {
+    SECTION_BY_KEY: (key) => `${API_BASE_URL}/api/sections/${key}`,
+  }
+};
+
+export const getImageUrl = (url) => {
+  if (!url) return '/img/placeholder.jpg';
+  if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('blob:')) return url;
+  if (url.startsWith('uploads/')) return `${API_BASE_URL}/${url}`;
+  return url.startsWith('/') ? url : `/${url}`;
 };
 
 export default API_BASE_URL;

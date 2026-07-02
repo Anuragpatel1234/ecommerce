@@ -22,6 +22,10 @@ const Payment = React.lazy(() => import('./pages/Payment/Payment'));
 const Orders = React.lazy(() => import('./pages/Orders/Orders'));
 const CategoryPage = React.lazy(() => import('./pages/CategoryPage/CategoryPage'));
 const About = React.lazy(() => import('./pages/About/About'));
+const ReturnPolicy = React.lazy(() => import('./pages/Policies/ReturnPolicy'));
+const RefundPolicy = React.lazy(() => import('./pages/Policies/RefundPolicy'));
+const PrivacyPolicy = React.lazy(() => import('./pages/Policies/PrivacyPolicy'));
+const Disclaimer = React.lazy(() => import('./pages/Policies/Disclaimer'));
 const AdminLogin = React.lazy(() => import('./pages/Admin/AdminLogin'));
 const AdminLayout = React.lazy(() => import('./pages/Admin/AdminLayout'));
 const Dashboard = React.lazy(() => import('./pages/Admin/Dashboard'));
@@ -97,6 +101,11 @@ const AppContent = () => {
             <Route path="/payment" element={<Payment />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/about" element={<About />} />
+            <Route path="/returns" element={<ReturnPolicy />} />
+            <Route path="/refund" element={<RefundPolicy />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/terms" element={<Disclaimer />} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />

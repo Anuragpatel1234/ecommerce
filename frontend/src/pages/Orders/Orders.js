@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../config/api';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
@@ -150,7 +151,7 @@ const Orders = () => {
               {order.items.map((item, index) => (
                 <div key={index} className="order-item">
                   <img 
-                    src={item.product?.images?.[0] || 'img/placeholder.jpg'} 
+                    src={getImageUrl(item.product?.images?.[0])} 
                     alt={item.product?.name || 'Product'} 
                   />
                   <div className="item-details">

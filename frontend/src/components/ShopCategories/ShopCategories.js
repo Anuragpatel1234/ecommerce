@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 import './ShopCategories.css';
 
 const ShopCategories = () => {
@@ -9,56 +11,55 @@ const ShopCategories = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
-  const categories = [
-    {
-      id: 1,
-      title: 'LEHENGAS',
-      image: 'img/Untitled-4.webp',
-      alt: 'Lehengas Collection'
-    },
-    {
-      id: 2,
-      title: 'SHARARA SETS',
-      image: 'img/0952.webp',
-      alt: 'Sharara Sets Collection'
-    },
-    {
-      id: 3,
-      title: 'ANARKALI SETS',
-      image: 'img/dupatta1.webp',
-      alt: 'Anarkali Sets Collection'
-    },
-    {
-      id: 4,
-      title: 'KURTA SETS',
-      image: 'img/SKIRTS1.jpg',
-      alt: 'Kurta Sets Collection'
-    },
-    {
-      id: 5,
-      title: 'COORD SETS',
-      image: 'img/traditional outfit 2.webp',
-      alt: 'Coord Sets Collection'
-    },
-    {
-      id: 6,
-      title: 'KAFTAN SETS',
-      image: 'img/kids lehenga set.webp',
-      alt: 'Kaftan Sets Collection'
-    },
-    {
-      id: 7,
-      title: 'DHOTI SETS',
-      image: 'img/Untitled-4.webp',
-      alt: 'Dhoti Sets Collection'
-    },
-    {
-      id: 8,
-      title: 'LOUNGE WEAR',
-      image: 'img/0952.webp',
-      alt: 'Lounge Wear Collection'
-    }
-  ];
+  const fallbackCategories = React.useMemo(() => [
+    { id: 1, title: 'LEHENGAS', image: '/img/Untitled-4.webp', alt: 'Lehengas Collection' },
+    { id: 2, title: 'SHARARA SETS', image: '/img/0952.webp', alt: 'Sharara Sets Collection' },
+    { id: 3, title: 'ANARKALI SETS', image: '/img/dupatta1.webp', alt: 'Anarkali Sets Collection' },
+    { id: 4, title: 'KURTA SETS', image: '/img/SKIRTS1.jpg', alt: 'Kurta Sets Collection' },
+    { id: 5, title: 'COORD SETS', image: '/img/traditional outfit 2.webp', alt: 'Coord Sets Collection' },
+    { id: 6, title: 'KAFTAN SETS', image: '/img/kids lehenga set.webp', alt: 'Kaftan Sets Collection' },
+    { id: 7, title: 'DHOTI SETS', image: '/img/Untitled-4.webp', alt: 'Dhoti Sets Collection' },
+    { id: 8, title: 'LOUNGE WEAR', image: '/img/0952.webp', alt: 'Lounge Wear Collection' }
+  ], []);
+
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(API_ENDPOINTS.PUBLIC.SECTION_BY_KEY('site_categories'));
+        const sectionCategories = res.data?.content?.categories || [];
+        
+        if (sectionCategories.length > 0) {
+          const mappedCategories = sectionCategories
+            .filter(c => c.isActive !== false)
+            .sort((a, b) => a.displayOrder - b.displayOrder)
+            .map(c => {
+              let imgUrl = c.image;
+              if (imgUrl && !imgUrl.startsWith('http') && !imgUrl.startsWith('/')) {
+                imgUrl = '/' + imgUrl;
+              }
+              return {
+                id: c.id || Math.random(),
+                title: c.name,
+                image: imgUrl,
+                alt: c.name + ' Collection'
+              };
+            });
+          setCategories(mappedCategories.length > 0 ? mappedCategories : fallbackCategories);
+        } else {
+          setCategories(fallbackCategories);
+        }
+      } catch (err) {
+        console.error('Failed to fetch categories section', err);
+        setCategories(fallbackCategories);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, [fallbackCategories]);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -134,7 +135,7 @@ const ShopCategories = () => {
           >
             <div className="category-image-section">
               <img 
-                src={`/${category.image}`} 
+                src={category.image} 
                 alt={category.alt} 
                 loading="lazy" 
                 decoding="async" 

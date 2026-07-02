@@ -1,3 +1,4 @@
+import { getImageUrl } from '../../config/api';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/SafeAppContext';
@@ -109,7 +110,7 @@ const Cart = () => {
             <div key={item._id} className="cart-item">
               <div className="item-image">
                 <img 
-                  src={item.product?.images?.[0] || 'img/placeholder.jpg'} 
+                  src={getImageUrl(item.product?.images?.[0])} 
                   alt={item.product?.name || 'Product'} 
                 />
               </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../config/api';
+import { API_ENDPOINTS, getImageUrl } from '../../config/api';
 import Breadcrumbs from '../../components/Admin/Breadcrumbs';
 import './ProductForm.css';
 
@@ -27,12 +27,11 @@ const ProductForm = () => {
     colors: []
   });
 
-  const [images, setImages] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPreview, setShowPreview] = useState(true);
+  const [draggedImageIndex, setDraggedImageIndex] = useState(null);
 
   useEffect(() => {
     if (isEdit) {
@@ -106,13 +105,66 @@ const ProductForm = () => {
     setFormData(prev => ({ ...prev, colors }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const files = Array.from(e.target.files);
-    setImages(files);
+    if (!files.length) return;
+
+    try {
+      const formData = new FormData();
+      files.forEach(file => formData.append('images', file));
+      
+      const token = localStorage.getItem('adminToken');
+      const res = await axios.post(API_ENDPOINTS.ADMIN.UPLOAD, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'x-auth-token': token
+        }
+      });
+      
+      if (res.data.urls && res.data.urls.length > 0) {
+        setExistingImages(prev => [...prev, ...res.data.urls]);
+      }
+    } catch (err) {
+      console.error('Failed to upload images', err);
+      setError('Failed to upload images. Please try again.');
+    }
     
-    // Create previews
-    const previews = files.map(file => URL.createObjectURL(file));
-    setImagePreviews(previews);
+    // Clear input
+    e.target.value = '';
+  };
+
+  const removeExistingImage = (indexToRemove) => {
+    setExistingImages(prev => prev.filter((_, i) => i !== indexToRemove));
+  };
+
+  const handleDragStart = (e, index) => {
+    setDraggedImageIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => {
+      if (e.target) e.target.style.opacity = '0.5';
+    }, 0);
+  };
+
+  const handleDragEnd = (e) => {
+    if (e.target) e.target.style.opacity = '1';
+    setDraggedImageIndex(null);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, targetIndex) => {
+    e.preventDefault();
+    if (draggedImageIndex === null || draggedImageIndex === targetIndex) return;
+
+    const newImages = [...existingImages];
+    const draggedItem = newImages[draggedImageIndex];
+    newImages.splice(draggedImageIndex, 1);
+    newImages.splice(targetIndex, 0, draggedItem);
+    
+    setExistingImages(newImages);
   };
 
   const handleSubmit = async (e) => {
@@ -151,10 +203,7 @@ const ProductForm = () => {
           submitData.append(key, formData[key]);
         }
       });
-
-      images.forEach(image => {
-        submitData.append('images', image);
-      });
+      submitData.append('existingImages', JSON.stringify(existingImages));
 
       if (isEdit) {
         await axios.put(API_ENDPOINTS.ADMIN.PRODUCT_BY_ID(id), submitData, {
@@ -384,27 +433,29 @@ const ProductForm = () => {
           
           {existingImages.length > 0 && (
             <div className="existing-images">
-              <p className="image-section-label">Existing Images:</p>
+              <p className="image-section-label">All Images (Drag to reorder):</p>
               {existingImages.map((img, index) => (
-                <div key={index} className="image-preview">
-                  <img src={img} alt={`Existing ${index + 1}`} />
-                  <span className="image-badge">Existing</span>
+                <div 
+                  key={index} 
+                  className="image-preview draggable"
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, index)}
+                >
+                  <img src={getImageUrl(img)} alt={`Image ${index + 1}`} />
+                  <span className="image-badge">Image {index + 1}</span>
+                  <button 
+                    type="button" 
+                    className="btn-remove-image" 
+                    onClick={() => removeExistingImage(index)}
+                    title="Remove Image"
+                  >
+                    <i className="fa-solid fa-times"></i>
+                  </button>
                 </div>
               ))}
-            </div>
-          )}
-
-          {imagePreviews.length > 0 && (
-            <div className="new-images">
-              <p className="image-section-label">New Images (Preview):</p>
-              <div className="existing-images">
-                {imagePreviews.map((preview, index) => (
-                  <div key={index} className="image-preview">
-                    <img src={preview} alt={`New ${index + 1}`} />
-                    <span className="image-badge new">New</span>
-                  </div>
-                ))}
-              </div>
             </div>
           )}
 
@@ -420,9 +471,6 @@ const ProductForm = () => {
               onChange={handleImageChange}
               className="file-input"
             />
-            {images.length > 0 && (
-              <p className="file-count">{images.length} file(s) selected</p>
-            )}
           </div>
         </div>
 
@@ -509,10 +557,8 @@ const ProductForm = () => {
           
           <div className="preview-card">
             <div className="preview-image">
-              {imagePreviews.length > 0 ? (
-                <img src={imagePreviews[0]} alt="Preview" />
-              ) : existingImages.length > 0 ? (
-                <img src={existingImages[0]} alt="Preview" />
+              {existingImages.length > 0 ? (
+                <img src={getImageUrl(existingImages[0])} alt="Preview" />
               ) : (
                 <div className="preview-placeholder">
                   <i className="fa-solid fa-image"></i>
