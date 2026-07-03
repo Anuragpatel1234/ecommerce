@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINTS, getImageUrl } from '../../config/api';
 import Breadcrumbs from '../../components/Admin/Breadcrumbs';
+import ImageCropperModal from '../../components/Admin/ImageCropperModal';
+import '../../components/ProductCard/ProductCard.css';
 import './ProductForm.css';
 
 const ProductForm = () => {
@@ -32,6 +34,11 @@ const ProductForm = () => {
   const [error, setError] = useState('');
   const [showPreview, setShowPreview] = useState(true);
   const [draggedImageIndex, setDraggedImageIndex] = useState(null);
+  
+  // Cropper State
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [cropImageSrc, setCropImageSrc] = useState(null);
+  const [cropImageIndex, setCropImageIndex] = useState(null);
 
   useEffect(() => {
     if (isEdit) {
@@ -165,6 +172,40 @@ const ProductForm = () => {
     newImages.splice(targetIndex, 0, draggedItem);
     
     setExistingImages(newImages);
+  };
+
+  const openCropper = (index) => {
+    setCropImageSrc(getImageUrl(existingImages[index]));
+    setCropImageIndex(index);
+    setCropModalOpen(true);
+  };
+
+  const handleCropComplete = async (croppedFile) => {
+    try {
+      const formData = new FormData();
+      formData.append('images', croppedFile);
+      
+      const token = localStorage.getItem('adminToken');
+      const res = await axios.post(API_ENDPOINTS.ADMIN.UPLOAD, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'x-auth-token': token
+        }
+      });
+      
+      if (res.data.urls && res.data.urls.length > 0) {
+        const newUrl = res.data.urls[0];
+        setExistingImages(prev => {
+          const updated = [...prev];
+          updated[cropImageIndex] = newUrl;
+          return updated;
+        });
+        setCropModalOpen(false);
+      }
+    } catch (err) {
+      console.error('Failed to upload cropped image', err);
+      alert('Failed to upload cropped image. Please try again.');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -446,14 +487,24 @@ const ProductForm = () => {
                 >
                   <img src={getImageUrl(img)} alt={`Image ${index + 1}`} />
                   <span className="image-badge">Image {index + 1}</span>
-                  <button 
-                    type="button" 
-                    className="btn-remove-image" 
-                    onClick={() => removeExistingImage(index)}
-                    title="Remove Image"
-                  >
-                    <i className="fa-solid fa-times"></i>
-                  </button>
+                  <div className="image-actions">
+                    <button 
+                      type="button" 
+                      className="btn-crop-image" 
+                      onClick={() => openCropper(index)}
+                      title="Crop Image"
+                    >
+                      <i className="fa-solid fa-crop-simple"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      className="btn-remove-image" 
+                      onClick={() => removeExistingImage(index)}
+                      title="Remove Image"
+                    >
+                      <i className="fa-solid fa-times"></i>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -555,90 +606,70 @@ const ProductForm = () => {
             <p className="preview-note">This is how your product will appear to customers</p>
           </div>
           
-          <div className="preview-card">
-            <div className="preview-image">
+          <div className="product-card" style={{ cursor: 'default' }}>
+            <div className="product-image-container">
               {existingImages.length > 0 ? (
-                <img src={getImageUrl(existingImages[0])} alt="Preview" />
+                <img src={getImageUrl(existingImages[0])} alt="Preview" className="product-image" />
               ) : (
-                <div className="preview-placeholder">
-                  <i className="fa-solid fa-image"></i>
-                  <p>No image</p>
+                <div className="preview-placeholder" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f9fafb' }}>
+                  <i className="fa-solid fa-image" style={{ fontSize: '48px', color: '#9CA3AF' }}></i>
+                  <p style={{ color: '#9CA3AF', marginTop: '12px' }}>No image</p>
                 </div>
               )}
-              {formData.onSale && (
-                <span className="preview-badge sale">SALE</span>
-              )}
+              
               {formData.newArrival && (
-                <span className="preview-badge new">NEW</span>
+                <span className="product-badge new-badge" style={{ backgroundColor: '#10B981', color: 'white' }}>NEW</span>
               )}
+              {formData.onSale && (
+                <span className="product-badge sale-badge" style={{ left: formData.newArrival ? 'auto' : '12px', right: formData.newArrival ? '12px' : 'auto', backgroundColor: '#EF4444', color: 'white' }}>SALE</span>
+              )}
+
+              <button className="product-wishlist-icon" type="button">
+                <i className="fa-regular fa-heart"></i>
+              </button>
+              
+              <div className="product-overlay">
+                <button className="overlay-btn add-to-cart-btn" type="button">
+                  <i className="fa-solid fa-bag-shopping"></i> ADD TO COLLECTION
+                </button>
+              </div>
             </div>
             
-            <div className="preview-content">
-              <h4 className="preview-title">
+            <div className="product-info">
+              <h3 className="product-name">
                 {formData.name || 'Product Name'}
-              </h4>
+              </h3>
               
-              <div className="preview-price">
+              <div className="product-price">
                 {formData.originalPrice && parseFloat(formData.originalPrice) > parseFloat(formData.price || 0) && (
-                  <span className="preview-original-price">
+                  <span className="original-price">
                     {formatPrice(formData.originalPrice)}
                   </span>
                 )}
-                <span className="preview-current-price">
+                <span className="current-price">
                   {formatPrice(formData.price || '0')}
                 </span>
-                {getDiscount() > 0 && (
-                  <span className="preview-discount">{getDiscount()}% OFF</span>
-                )}
               </div>
               
-              <p className="preview-description">
-                {formData.description || 'Product description will appear here...'}
-              </p>
-              
-              <div className="preview-details">
-                {formData.category && (
-                  <div className="preview-detail-item">
-                    <strong>Category:</strong> {formData.category}
-                  </div>
-                )}
-                {formData.material && (
-                  <div className="preview-detail-item">
-                    <strong>Material:</strong> {formData.material}
-                  </div>
-                )}
-                {formData.colors.length > 0 && (
-                  <div className="preview-detail-item">
-                    <strong>Colors:</strong> {formData.colors.join(', ')}
-                  </div>
-                )}
-                {formData.sizes.some(s => s.size) && (
-                  <div className="preview-detail-item">
-                    <strong>Sizes:</strong> {formData.sizes.filter(s => s.size).map(s => s.size).join(', ')}
-                  </div>
-                )}
-                <div className="preview-detail-item">
-                  <strong>Stock:</strong> {totalStock} units
+              <div className="product-rating">
+                <div className="stars">
+                  {[...Array(5)].map((_, i) => (
+                    <i key={i} className="fa-solid fa-star"></i>
+                  ))}
                 </div>
-              </div>
-              
-              <div className="preview-badges">
-                {formData.bestseller && (
-                  <span className="preview-tag">Bestseller</span>
-                )}
-                {formData.featured && (
-                  <span className="preview-tag">Featured</span>
-                )}
-                {formData.inStock ? (
-                  <span className="preview-tag in-stock">In Stock</span>
-                ) : (
-                  <span className="preview-tag out-of-stock">Out of Stock</span>
-                )}
+                <span className="rating-text">({Math.floor(Math.random() * 50) + 10})</span>
               </div>
             </div>
           </div>
         </div>
       )}
+      
+      <ImageCropperModal 
+        isOpen={cropModalOpen}
+        imageSrc={cropImageSrc}
+        onCropCompleteAction={handleCropComplete}
+        onCancel={() => setCropModalOpen(false)}
+      />
       </div>
     </div>
   );
