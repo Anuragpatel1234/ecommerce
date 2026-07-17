@@ -9,6 +9,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('profile');
   const [loading, setLoading] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [profileData, setProfileData] = useState({
     firstName: '',
@@ -44,7 +46,23 @@ const Profile = () => {
         country: user.address?.country || ''
       }
     });
-  }, [user, navigate]);
+
+    if (activeTab === 'orders' && orders.length === 0) {
+      fetchOrders();
+    }
+  }, [user, navigate, activeTab]);
+
+  const fetchOrders = async () => {
+    try {
+      setOrdersLoading(true);
+      const res = await axios.get('http://localhost:5000/api/orders');
+      setOrders(res.data);
+    } catch (err) {
+      console.error('Failed to fetch orders:', err);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -278,14 +296,46 @@ const Profile = () => {
           {activeTab === 'orders' && (
             <div className="profile-section">
               <h2>Order History</h2>
-              <div className="orders-placeholder">
-                <i className="fa-solid fa-box"></i>
-                <h3>No Orders Yet</h3>
-                <p>You haven't placed any orders yet. Start shopping to see your order history here.</p>
-                <button onClick={() => navigate('/shop')} className="shop-now-btn">
-                  Explore The Collection
-                </button>
-              </div>
+              {ordersLoading ? (
+                <p>Loading your orders...</p>
+              ) : orders.length > 0 ? (
+                <div className="profile-orders-list" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                  {orders.map(order => (
+                    <div key={order._id} style={{ border: '1px solid #eee', padding: '15px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <h4 style={{ margin: '0 0 5px 0' }}>Order #{order.orderNumber}</h4>
+                        <p style={{ margin: '0', color: '#666', fontSize: '14px' }}>Placed on {new Date(order.createdAt).toLocaleDateString()}</p>
+                        <span style={{ 
+                          display: 'inline-block', 
+                          marginTop: '8px', 
+                          padding: '3px 8px', 
+                          borderRadius: '12px', 
+                          fontSize: '12px', 
+                          backgroundColor: '#f3f4f6',
+                          fontWeight: '600'
+                        }}>
+                          {order.orderStatus.toUpperCase()}
+                        </span>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <p style={{ margin: '0 0 10px 0', fontWeight: 'bold' }}>₹{order.total?.toLocaleString()}</p>
+                        <button onClick={() => navigate('/orders')} style={{ padding: '6px 12px', background: '#1F2937', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                          View Details
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="orders-placeholder">
+                  <i className="fa-solid fa-box"></i>
+                  <h3>No Orders Yet</h3>
+                  <p>You haven't placed any orders yet. Start shopping to see your order history here.</p>
+                  <button onClick={() => navigate('/shop')} className="shop-now-btn">
+                    Explore The Collection
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

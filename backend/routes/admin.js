@@ -53,8 +53,8 @@ router.get('/dashboard/stats', async (req, res) => {
     const totalOrders = await Order.countDocuments();
     const totalUsers = await User.countDocuments({ role: 'user' });
     const totalRevenue = await Order.aggregate([
-      { $match: { status: { $in: ['completed', 'delivered'] } } },
-      { $group: { _id: null, total: { $sum: '$totalAmount' } } }
+      { $match: { orderStatus: { $in: ['completed', 'delivered'] } } },
+      { $group: { _id: null, total: { $sum: '$total' } } }
     ]);
 
     const recentOrders = await Order.find()
@@ -287,7 +287,7 @@ router.get('/orders', async (req, res) => {
     const query = {};
 
     if (status) {
-      query.status = status;
+      query.orderStatus = status;
     }
 
     const pageNum = parseInt(page);
@@ -353,7 +353,7 @@ router.put('/orders/:id/status', [
 
     const order = await Order.findByIdAndUpdate(
       req.params.id,
-      { status },
+      { orderStatus: status },
       { new: true }
     ).populate('user', 'firstName lastName email')
       .populate('items.product');

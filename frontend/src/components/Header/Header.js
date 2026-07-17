@@ -97,8 +97,9 @@ const Header = () => {
       if (adminToken && user) {
         // Check if user has admin role
         try {
-          axios.defaults.headers.common['x-auth-token'] = adminToken;
-          const response = await axios.get(API_ENDPOINTS.AUTH.PROFILE);
+          const response = await axios.get(API_ENDPOINTS.AUTH.PROFILE, {
+            headers: { 'x-auth-token': adminToken }
+          });
           setIsAdmin(response.data.role === 'admin');
         } catch (error) {
           setIsAdmin(false);

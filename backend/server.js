@@ -22,6 +22,7 @@ app.use('/api/sections', require('./routes/sections'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/admin/cms', require('./routes/cms'));
 app.use('/api/paypal', require('./routes/paypal'));
+app.use('/api/razorpay', require('./routes/razorpay'));
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/rangaara', {

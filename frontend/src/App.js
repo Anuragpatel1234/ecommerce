@@ -20,6 +20,7 @@ const Profile = React.lazy(() => import('./pages/Profile/Profile'));
 const Checkout = React.lazy(() => import('./pages/Checkout/Checkout'));
 const Payment = React.lazy(() => import('./pages/Payment/Payment'));
 const Orders = React.lazy(() => import('./pages/Orders/Orders'));
+const OrderDetails = React.lazy(() => import('./pages/Orders/OrderDetails'));
 const CategoryPage = React.lazy(() => import('./pages/CategoryPage/CategoryPage'));
 const About = React.lazy(() => import('./pages/About/About'));
 const ReturnPolicy = React.lazy(() => import('./pages/Policies/ReturnPolicy'));
@@ -100,6 +101,7 @@ const AppContent = () => {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/:id" element={<OrderDetails />} />
             <Route path="/about" element={<About />} />
             <Route path="/returns" element={<ReturnPolicy />} />
             <Route path="/refund" element={<RefundPolicy />} />

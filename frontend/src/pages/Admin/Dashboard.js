@@ -33,7 +33,8 @@ const Dashboard = () => {
   };
 
   const formatPrice = (price) => {
-    return `₹${price.toLocaleString()}`;
+    const validPrice = price || 0;
+    return `₹${validPrice.toLocaleString()}`;
   };
 
   if (loading) {
@@ -137,11 +138,11 @@ const Dashboard = () => {
                       <td>{order.user?.firstName} {order.user?.lastName}</td>
                       <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                       <td>
-                        <span className={`status-badge status-${order.status}`}>
-                          {order.status}
+                        <span className={`status-badge status-${order.orderStatus}`}>
+                          {order.orderStatus}
                         </span>
                       </td>
-                      <td>{formatPrice(order.totalAmount)}</td>
+                      <td>{formatPrice(order.total)}</td>
                     </tr>
                   ))}
                 </tbody>

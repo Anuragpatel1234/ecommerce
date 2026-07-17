@@ -32,6 +32,16 @@ const AdminLayout = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     checkAdminAuth();
+
+    return () => {
+      // Restore user token when leaving admin layout
+      const userToken = localStorage.getItem('token');
+      if (userToken) {
+        axios.defaults.headers.common['x-auth-token'] = userToken;
+      } else {
+        delete axios.defaults.headers.common['x-auth-token'];
+      }
+    };
   }, []);
 
   // Auto-expand CMS group when on a CMS route

@@ -37,7 +37,7 @@ const orderSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['card', 'paypal', 'cod'],
+    enum: ['card', 'paypal', 'cod', 'razorpay'],
     required: true
   },
   paymentStatus: {
@@ -57,6 +57,15 @@ const orderSchema = new mongoose.Schema({
   currency: {
     type: String,
     default: 'INR'
+  },
+  razorpayOrderId: {
+    type: String
+  },
+  razorpayPaymentId: {
+    type: String
+  },
+  razorpaySignature: {
+    type: String
   }
 }, {
   timestamps: true

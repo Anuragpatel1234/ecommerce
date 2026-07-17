@@ -57,7 +57,8 @@ const Orders = () => {
   };
 
   const formatPrice = (price) => {
-    return `₹${price.toLocaleString()}`;
+    const validPrice = price || 0;
+    return `₹${validPrice.toLocaleString()}`;
   };
 
   return (
@@ -134,10 +135,10 @@ const Orders = () => {
                       </td>
                       <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                       <td>{order.items?.length || 0} items</td>
-                      <td>{formatPrice(order.totalAmount)}</td>
+                      <td>{formatPrice(order.total)}</td>
                       <td>
                         <select
-                          value={order.status}
+                          value={order.orderStatus}
                           onChange={(e) => handleStatusChange(order._id, e.target.value)}
                           className="status-select"
                         >

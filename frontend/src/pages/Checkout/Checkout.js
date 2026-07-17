@@ -7,7 +7,6 @@ import './Checkout.css';
 const Checkout = () => {
   const { user, cart, currency, formatPrice } = useApp();
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     shippingAddress: {
@@ -19,8 +18,7 @@ const Checkout = () => {
       zipCode: '',
       country: '',
       phone: ''
-    },
-    paymentMethod: 'card'
+    }
   });
 
   useEffect(() => {
@@ -87,18 +85,13 @@ const Checkout = () => {
   };
 
   const handleNextStep = () => {
-    if (step === 1 && validateStep1()) {
-      setStep(2);
-    }
-  };
-
-  const handleProceedToPayment = () => {
-    if (step === 2) {
+    if (validateStep1()) {
+      setLoading(true);
       // Navigate to payment page with order data
       navigate('/payment', {
         state: {
           shippingAddress: formData.shippingAddress,
-          paymentMethod: formData.paymentMethod
+          paymentMethod: 'razorpay'
         }
       });
     }
@@ -119,20 +112,8 @@ const Checkout = () => {
   return (
     <div className="checkout-page">
       <div className="checkout-container">
-        <div className="checkout-steps">
-          <div className={`step ${step >= 1 ? 'active' : ''}`}>
-            <span className="step-number">1</span>
-            <span className="step-title">Shipping</span>
-          </div>
-          <div className={`step payment-step-header ${step >= 2 ? 'active' : ''}`}>
-            <span className="step-number">2</span>
-            <span className="step-title">Payment</span>
-          </div>
-        </div>
-
         <div className="checkout-content">
           <div className="checkout-form">
-            {step === 1 && (
               <div className="shipping-form">
                 <h2>Shipping Information</h2>
                 
@@ -238,90 +219,13 @@ const Checkout = () => {
                 <button 
                   className="next-btn"
                   onClick={handleNextStep}
-                  disabled={!validateStep1()}
+                  disabled={!validateStep1() || loading}
                 >
-                  Continue to Payment
+                  {loading ? 'Processing...' : 'Continue to Payment'}
                 </button>
               </div>
-            )}
 
-            {step === 2 && (
-              <div className="payment-form">
-                <h2>Payment Method</h2>
-                
-                <div className="payment-options">
-                  <label className="payment-option">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="card"
-                      checked={formData.paymentMethod === 'card'}
-                      onChange={handleInputChange}
-                    />
-                    <div className="payment-info">
-                      <i className="fa-solid fa-credit-card"></i>
-                      <span>Credit/Debit Card</span>
-                    </div>
-                  </label>
 
-                  <label className="payment-option">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="paypal"
-                      checked={formData.paymentMethod === 'paypal'}
-                      onChange={handleInputChange}
-                    />
-                    <div className="payment-info">
-                      <i className="fa-brands fa-paypal"></i>
-                      <span>PayPal</span>
-                    </div>
-                  </label>
-
-                  <label className="payment-option">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="cod"
-                      checked={formData.paymentMethod === 'cod'}
-                      onChange={handleInputChange}
-                    />
-                    <div className="payment-info">
-                      <i className="fa-solid fa-money-bill"></i>
-                      <span>
-                        Cash on Delivery {isInternational && <small className="intl-cod-label">(International COD)</small>}
-                      </span>
-                    </div>
-                  </label>
-                </div>
-
-                {formData.paymentMethod === 'cod' && isInternational && (
-                  <div className="intl-cod-notice">
-                    <i className="fa-solid fa-circle-info"></i>
-                    <p>International COD orders may require a verification call and may have longer processing times.</p>
-                  </div>
-                )}
-
-                <div className="checkout-actions">
-                  <button 
-                    className="back-btn"
-                    onClick={() => setStep(1)}
-                  >
-                    Back to Shipping
-                  </button>
-                  <button 
-                    className="place-order-btn"
-                    onClick={() => {
-                      setLoading(true);
-                      handleProceedToPayment();
-                    }}
-                    disabled={loading}
-                  >
-                    {loading ? 'Processing...' : `Proceed to Payment - ${formatPrice(total)}`}
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
 
           <div className="order-summary">

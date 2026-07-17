@@ -1,0 +1,255 @@
+.order-details-page {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.order-details-left {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-item-detail-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+}
+
+.order-item-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.order-item-info {
+    flex: 1;
+}
+
+.order-item-info h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #212121;
+    margin: 0 0 8px 0;
+}
+
+.order-item-variants {
+    font-size: 14px;
+    color: #878787;
+    margin: 0 0 8px 0;
+}
+
+.order-item-seller {
+    font-size: 12px;
+    color: #878787;
+    margin: 0 0 12px 0;
+}
+
+.order-item-price {
+    font-size: 20px;
+    font-weight: 500;
+    color: #212121;
+}
+
+.order-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-left: 20px;
+}
+
+.order-tracking-container {
+    padding: 32px 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.tracking-step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.tracking-step:last-child {
+    padding-bottom: 0;
+}
+
+.tracking-step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 7.5px;
+    top: 20px;
+    bottom: -10px;
+    width: 2px;
+    background-color: #26a541;
+}
+
+.tracking-step.inactive:not(:last-child)::before {
+    background-color: #e0e0e0;
+}
+
+.step-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #26a541;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 10px;
+    z-index: 1;
+}
+
+.step-icon.inactive {
+    background-color: #e0e0e0;
+    color: transparent;
+}
+
+.step-content {
+    font-size: 14px;
+    font-weight: 500;
+    color: #212121;
+}
+
+.step-content.inactive {
+    color: #878787;
+    font-weight: 400;
+}
+
+.see-updates-link {
+    color: #2874f0;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.return-policy-info {
+    padding: 24px;
+    font-size: 14px;
+    color: #878787;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.chat-with-us {
+    padding: 16px;
+    text-align: center;
+    color: #212121;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.chat-with-us i {
+    margin-right: 8px;
+}
+
+.order-details-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sidebar-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.address-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.address-row:last-child {
+    margin-bottom: 0;
+}
+
+.address-row i {
+    color: #878787;
+    margin-top: 4px;
+}
+
+.address-details {
+    font-size: 14px;
+    color: #212121;
+    line-height: 1.5;
+}
+
+.address-details strong {
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.price-breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #212121;
+    margin-bottom: 12px;
+}
+
+.price-breakdown-row.total {
+    font-weight: 500;
+    border-top: 1px dashed #e0e0e0;
+    padding-top: 12px;
+    margin-top: 12px;
+}
+
+.paid-by-box {
+    background: #f5f5f5;
+    padding: 12px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #212121;
+    margin: 20px 0;
+    align-items: center;
+}
+
+.download-invoice-btn {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    color: #212121;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.download-invoice-btn:hover {
+    background: #f9f9f9;
+}
+
+@media (max-width: 768px) {
+    .order-details-page {
+        flex-direction: column;
+    }
+    
+    .order-details-left,
+    .order-details-right {
+        width: 100%;
+    }
+}

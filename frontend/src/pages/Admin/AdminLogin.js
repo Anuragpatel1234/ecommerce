@@ -41,7 +41,12 @@ const AdminLogin = () => {
 
       if (userRes.data.role !== 'admin') {
         localStorage.removeItem('adminToken');
-        delete axios.defaults.headers.common['x-auth-token'];
+        const userToken = localStorage.getItem('token');
+        if (userToken) {
+          axios.defaults.headers.common['x-auth-token'] = userToken;
+        } else {
+          delete axios.defaults.headers.common['x-auth-token'];
+        }
         setError('Access denied. Admin privileges required.');
         setLoading(false);
         return;

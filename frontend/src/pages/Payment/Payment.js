@@ -10,16 +10,8 @@ const Payment = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('card');
-  const [cardData, setCardData] = useState({
-    cardNumber: '',
-    cardName: '',
-    expiryDate: '',
-    cvv: '',
-    cardType: ''
-  });
-  const [errors, setErrors] = useState({});
   const [orderData, setOrderData] = useState(null);
+  const [razorpaySdkReady, setRazorpaySdkReady] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -32,279 +24,108 @@ const Payment = () => {
       return;
     }
 
-    // Get order data from location state (passed from checkout)
     if (location.state) {
       setOrderData(location.state);
     }
   }, [user, cart, navigate, location]);
 
+  // Load Razorpay SDK
+  useEffect(() => {
+    if (!window.Razorpay) {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = () => {
+        setRazorpaySdkReady(true);
+      };
+      document.body.appendChild(script);
+    } else {
+      setRazorpaySdkReady(true);
+    }
+  }, []);
+
   const formatPrice = (price) => {
     const currencySymbols = {
-      INR: '₹',
-      USD: '$',
-      EUR: '€',
-      GBP: '£',
-      CAD: 'C$',
-      AUD: 'A$',
-      SGD: 'S$'
+      INR: '₹', USD: '$', EUR: '€', GBP: '£', CAD: 'C$', AUD: 'A$', SGD: 'S$'
     };
-
     const rates = {
-      INR: 1,
-      USD: 0.012,
-      EUR: 0.011,
-      GBP: 0.0095,
-      CAD: 0.016,
-      AUD: 0.018,
-      SGD: 0.016
+      INR: 1, USD: 0.012, EUR: 0.011, GBP: 0.0095, CAD: 0.016, AUD: 0.018, SGD: 0.016
     };
-
     const convertedPrice = Math.round(price * rates[currency]);
     return `${currencySymbols[currency]}${convertedPrice.toLocaleString()}`;
   };
 
-  const detectCardType = (cardNumber) => {
-    const number = cardNumber.replace(/\s/g, '');
-    if (/^4/.test(number)) return 'Visa';
-    if (/^5[1-5]/.test(number)) return 'Mastercard';
-    if (/^3[47]/.test(number)) return 'Amex';
-    if (/^6/.test(number)) return 'Discover';
-    return '';
-  };
-
-  const formatCardNumber = (value) => {
-    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-    const matches = v.match(/\d{4,16}/g);
-    const match = ((matches && matches[0]) || '');
-    const parts = [];
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4));
-    }
-    if (parts.length) {
-      return parts.join(' ');
-    } else {
-      return v;
-    }
-  };
-
-  const formatExpiryDate = (value) => {
-    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-    if (v.length >= 2) {
-      return v.substring(0, 2) + '/' + v.substring(2, 4);
-    }
-    return v;
-  };
-
-  const handleCardInputChange = (e) => {
-    const { name, value } = e.target;
-    let formattedValue = value;
-
-    if (name === 'cardNumber') {
-      formattedValue = formatCardNumber(value);
-      const cardType = detectCardType(value);
-      setCardData(prev => ({ ...prev, cardType }));
-    } else if (name === 'expiryDate') {
-      formattedValue = formatExpiryDate(value);
-    } else if (name === 'cvv') {
-      formattedValue = value.replace(/\D/g, '').substring(0, 4);
-    }
-
-    setCardData(prev => ({
-      ...prev,
-      [name]: formattedValue
-    }));
-
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
-  };
-
-  const validateCard = () => {
-    const newErrors = {};
-
-    if (!cardData.cardNumber || cardData.cardNumber.replace(/\s/g, '').length < 13) {
-      newErrors.cardNumber = 'Please enter a valid card number';
-    }
-
-    if (!cardData.cardName || cardData.cardName.length < 3) {
-      newErrors.cardName = 'Please enter cardholder name';
-    }
-
-    if (!cardData.expiryDate || cardData.expiryDate.length !== 5) {
-      newErrors.expiryDate = 'Please enter valid expiry date (MM/YY)';
-    } else {
-      const [month, year] = cardData.expiryDate.split('/');
-      const currentYear = new Date().getFullYear() % 100;
-      const currentMonth = new Date().getMonth() + 1;
-
-      if (parseInt(month) < 1 || parseInt(month) > 12) {
-        newErrors.expiryDate = 'Invalid month';
-      } else if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
-        newErrors.expiryDate = 'Card has expired';
-      }
-    }
-
-    if (!cardData.cvv || cardData.cvv.length < 3) {
-      newErrors.cvv = 'Please enter CVV';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const [sdkReady, setSdkReady] = useState(false);
-
-  useEffect(() => {
-    if (paymentMethod === 'paypal') {
-      const addPayPalScript = async () => {
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        // Replace 'sb' with the specific Client ID provided
-        // Use USD as fallback since PayPal does not support INR payments
-        const paypalCurrency = currency === 'INR' ? 'USD' : currency;
-        script.src = `https://www.paypal.com/sdk/js?client-id=ATuy3BptZUjcrnZ10MhcAfwXc8E2bbsTv7gNuKxVdQXUXfs_HiSqTEqqcirhU4f5j_oj4ixa0VPwA5uR&currency=${paypalCurrency}`;
-        script.async = true;
-        script.onload = () => {
-          setSdkReady(true);
-        };
-        document.body.appendChild(script);
-      };
-
-      if (!window.paypal) {
-        addPayPalScript();
-      } else {
-        setSdkReady(true);
-      }
-    }
-  }, [paymentMethod, currency]);
-
-  // eslint-disable-next-line no-unused-vars
-  const handlePayPalPayment = () => {
-    // This function is just a placeholder if needed, mostly logic is in buttons
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (sdkReady && paymentMethod === 'paypal' && window.paypal) {
-      // Clear any existing buttons
-      const container = document.getElementById('paypal-button-container');
-      if (container) container.innerHTML = "";
-
-      window.paypal.Buttons({
-        createOrder: (data, actions) => {
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: calculateTotalForPayPal()
-              }
-            }]
-          });
-        },
-        onApprove: (data, actions) => {
-          // Call backend to capture
-          return axios.post('http://localhost:5000/api/paypal/capture-order', {
-            orderID: data.orderID
-          })
-            .then((response) => {
-              // Successful capture
-              // Create local order record
-              handlePayPalSuccess(response.data);
-            })
-            .catch((err) => {
-              console.error("Capture failed", err);
-              alert("Transaction failed");
-            });
-        },
-        onError: (err) => {
-          console.error("PayPal Error", err);
-          alert("Payment could not be completed");
-        }
-      }).render('#paypal-button-container');
-    }
-  }, [sdkReady, paymentMethod]);
-
-  const calculateTotalForPayPal = () => {
-    const subtotal = cart.totalAmount || 0;
-    const shipping = subtotal > 2000 ? 0 : 200;
-    const tax = subtotal * 0.18;
-    const total = subtotal + shipping + tax;
-    
-    // Convert base price (INR) to checkout currency
-    // Use USD if base currency is INR since PayPal does not support INR
-    const targetCurrency = currency === 'INR' ? 'USD' : currency;
-    const rates = {
-      INR: 1,
-      USD: 0.012,
-      EUR: 0.011,
-      GBP: 0.0095,
-      CAD: 0.016,
-      AUD: 0.018,
-      SGD: 0.016
-    };
-    
-    const convertedTotal = total * (rates[targetCurrency] || 1);
-    return convertedTotal.toFixed(2);
-  };
-
-  const handlePayPalSuccess = async (details) => {
-    setLoading(true);
-    try {
-      // We reuse the create order API but mark it as paid via PayPal
-      // Or simply clear cart and redirect since payment is already captured
-      await axios.delete('http://localhost:5000/api/cart/clear');
-      loadCart();
-      navigate('/orders', {
-        state: {
-          success: true
-        }
-      });
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handlePayment = async () => {
-    if (paymentMethod === 'card') {
-      if (!validateCard()) {
-        return;
-      }
+    if (!razorpaySdkReady) {
+      alert("Payment gateway is still loading. Please wait a moment.");
+      return;
     }
 
     setLoading(true);
 
     try {
-      const orderPayload = {
-        shippingAddress: orderData?.shippingAddress || {},
-        paymentMethod: paymentMethod,
-        paymentDetails: paymentMethod === 'card' ? {
-          cardType: cardData.cardType,
-          last4: cardData.cardNumber.slice(-4)
-        } : {},
-        currency
+      // 1. Create order on backend
+      const orderRes = await axios.post('http://localhost:5000/api/razorpay/create-order');
+      
+      if (!orderRes.data || !orderRes.data.id) {
+        throw new Error('Failed to create Razorpay order');
+      }
+
+      // 2. Open Razorpay Modal
+      const options = {
+        key: orderRes.data.key_id, 
+        amount: orderRes.data.amount,
+        currency: orderRes.data.currency,
+        name: 'RANGAARA',
+        description: 'Payment for your Rangaara order',
+        image: getImageUrl('logo.png'), 
+        order_id: orderRes.data.id,
+        handler: async function (response) {
+          try {
+            setLoading(true);
+            const verifyRes = await axios.post('http://localhost:5000/api/razorpay/verify-payment', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              shippingAddress: orderData?.shippingAddress || {}
+            });
+            
+            if (verifyRes.data.message === 'Payment verified successfully') {
+              loadCart();
+              navigate('/orders', {
+                state: {
+                  orderId: verifyRes.data.order._id,
+                  success: true
+                }
+              });
+            }
+          } catch (err) {
+            console.error('Payment verification failed', err);
+            alert('Payment verification failed. Please contact support if amount was deducted.');
+          } finally {
+            setLoading(false);
+          }
+        },
+        prefill: {
+          name: user?.name || '',
+          email: user?.email || '',
+          contact: user?.phone || ''
+        },
+        theme: {
+          color: '#5b1e23'
+        }
       };
 
-      const response = await axios.post('http://localhost:5000/api/orders/create', orderPayload);
-
-      // Clear cart after successful order
-      await axios.delete('http://localhost:5000/api/cart/clear');
-      loadCart();
-
-      // Navigate to order confirmation
-      navigate('/orders', {
-        state: {
-          orderId: response.data.order?._id || response.data._id,
-          success: true
-        }
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response){
+        console.error(response.error);
+        alert('Payment Failed: ' + response.error.description);
       });
-    } catch (error) {
-      console.error('Error processing payment:', error);
-      alert('Payment failed. Please try again.');
+      rzp.open();
+      
+    } catch (err) {
+      console.error('Razorpay Error:', err);
+      alert('Could not initialize Razorpay checkout. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -323,188 +144,53 @@ const Payment = () => {
     <div className="payment-page">
       <div className="payment-container">
         <div className="payment-header">
-          <h1>Payment</h1>
+          <h1>Secure Checkout</h1>
           <p>Complete your purchase securely</p>
         </div>
 
         <div className="payment-content">
           <div className="payment-form-section">
-            <div className="payment-methods">
-              <h3>Select Payment Method</h3>
-              <div className="payment-options">
-                <label className={`payment-option ${paymentMethod === 'card' ? 'active' : ''}`}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="card"
-                    checked={paymentMethod === 'card'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  />
-                  <div className="payment-option-content">
-                    <i className="fa-solid fa-credit-card"></i>
-                    <span>Credit/Debit Card</span>
-                  </div>
-                </label>
-
-                <label className={`payment-option ${paymentMethod === 'paypal' ? 'active' : ''}`}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="paypal"
-                    checked={paymentMethod === 'paypal'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  />
-                  <div className="payment-option-content">
-                    <i className="fa-brands fa-paypal"></i>
-                    <span>PayPal</span>
-                  </div>
-                </label>
-
-                <label className={`payment-option ${paymentMethod === 'cod' ? 'active' : ''}`}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="cod"
-                    checked={paymentMethod === 'cod'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  />
-                  <div className="payment-option-content">
-                    <i className="fa-solid fa-money-bill"></i>
-                    <span>Cash on Delivery</span>
-                  </div>
-                </label>
+            <div className="razorpay-info" style={{ marginTop: 0, marginBottom: '30px' }}>
+              <div className="info-box">
+                <i className="fa-solid fa-shield-halved"></i>
+                <div>
+                  <h4>Secure Payment by Razorpay</h4>
+                  <p>Pay securely via UPI, Credit/Debit Card, or Net Banking on the next step.</p>
+                </div>
               </div>
             </div>
 
-            {paymentMethod === 'card' && (
-              <div className="card-form">
-                <h3>Card Details</h3>
-
-                <div className="form-group">
-                  <label htmlFor="cardNumber">Card Number</label>
-                  <div className="card-input-wrapper">
-                    <input
-                      type="text"
-                      id="cardNumber"
-                      name="cardNumber"
-                      value={cardData.cardNumber}
-                      onChange={handleCardInputChange}
-                      placeholder="1234 5678 9012 3456"
-                      maxLength="19"
-                      className={errors.cardNumber ? 'error' : ''}
-                    />
-                    {cardData.cardType && (
-                      <span className="card-type">{cardData.cardType}</span>
-                    )}
-                  </div>
-                  {errors.cardNumber && <span className="error-message">{errors.cardNumber}</span>}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="cardName">Cardholder Name</label>
-                  <input
-                    type="text"
-                    id="cardName"
-                    name="cardName"
-                    value={cardData.cardName}
-                    onChange={handleCardInputChange}
-                    placeholder="John Doe"
-                    className={errors.cardName ? 'error' : ''}
-                  />
-                  {errors.cardName && <span className="error-message">{errors.cardName}</span>}
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="expiryDate">Expiry Date</label>
-                    <input
-                      type="text"
-                      id="expiryDate"
-                      name="expiryDate"
-                      value={cardData.expiryDate}
-                      onChange={handleCardInputChange}
-                      placeholder="MM/YY"
-                      maxLength="5"
-                      className={errors.expiryDate ? 'error' : ''}
-                    />
-                    {errors.expiryDate && <span className="error-message">{errors.expiryDate}</span>}
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="cvv">CVV</label>
-                    <input
-                      type="text"
-                      id="cvv"
-                      name="cvv"
-                      value={cardData.cvv}
-                      onChange={handleCardInputChange}
-                      placeholder="123"
-                      maxLength="4"
-                      className={errors.cvv ? 'error' : ''}
-                    />
-                    {errors.cvv && <span className="error-message">{errors.cvv}</span>}
-                  </div>
-                </div>
-
-                <div className="security-info">
-                  <i className="fa-solid fa-lock"></i>
-                  <span>Your payment information is secure and encrypted</span>
-                </div>
-              </div>
-            )}
-
-            {paymentMethod === 'paypal' && (
-              <div className="paypal-info">
-                <p style={{ marginBottom: '15px' }}>Complete your payment securely with PayPal.</p>
-                <div id="paypal-button-container" style={{ maxWidth: '500px' }}></div>
-              </div>
-            )}
-
-            {paymentMethod === 'cod' && (
-              <div className="cod-info">
-                <div className="info-box">
-                  <i className="fa-solid fa-info-circle"></i>
-                  <div>
-                    <h4>Cash on Delivery</h4>
-                    <p>Pay cash when your order is delivered. Additional charges may apply.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {paymentMethod !== 'paypal' && (
-              <div className="payment-actions">
-                <button
-                  className="back-btn"
-                  onClick={() => navigate('/checkout')}
-                  disabled={loading}
-                >
-                  <i className="fa-solid fa-arrow-left"></i>
-                  Back to Checkout
-                </button>
-                <button
-                  className="pay-btn"
-                  onClick={handlePayment}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <div className="spinner-small"></div>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <i className="fa-solid fa-lock"></i>
-                      Pay {formatPrice(total)}
-                    </>
-                  )}
-                </button>
-              </div>
-            )}
+            <div className="payment-actions" style={{ borderTop: 'none', paddingTop: 0 }}>
+              <button
+                className="back-btn"
+                onClick={() => navigate('/checkout')}
+                disabled={loading}
+              >
+                <i className="fa-solid fa-arrow-left"></i>
+                Back to Shipping
+              </button>
+              <button
+                className="pay-btn"
+                onClick={handlePayment}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <div className="spinner-small"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <i className="fa-solid fa-lock"></i>
+                    Pay {formatPrice(total)}
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="payment-summary">
             <h3>Order Summary</h3>
-
             <div className="summary-items">
               {cart.items.map((item) => (
                 <div key={item._id} className="summary-item">
@@ -553,4 +239,3 @@ const Payment = () => {
 };
 
 export default Payment;
-
