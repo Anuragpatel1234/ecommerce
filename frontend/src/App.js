@@ -35,6 +35,7 @@ const ProductForm = React.lazy(() => import('./pages/Admin/ProductForm'));
 const AdminOrders = React.lazy(() => import('./pages/Admin/Orders'));
 const OrderDetail = React.lazy(() => import('./pages/Admin/OrderDetail'));
 const AdminUsers = React.lazy(() => import('./pages/Admin/Users'));
+const UserDetail = React.lazy(() => import('./pages/Admin/UserDetail'));
 const Sections = React.lazy(() => import('./pages/Admin/Sections'));
 const SectionForm = React.lazy(() => import('./pages/Admin/SectionForm'));
 // CMS Pages
@@ -120,6 +121,7 @@ const AppContent = () => {
               <Route path="orders" element={<AdminOrders />} />
               <Route path="orders/:id" element={<OrderDetail />} />
               <Route path="users" element={<AdminUsers />} />
+              <Route path="users/:id" element={<UserDetail />} />
               <Route path="sections" element={<Sections />} />
               <Route path="sections/new" element={<SectionForm />} />
               <Route path="sections/:id/edit" element={<SectionForm />} />

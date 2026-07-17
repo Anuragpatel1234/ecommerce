@@ -28,7 +28,10 @@ const Orders = () => {
         ...(statusFilter && { status: statusFilter })
       });
       
-      const res = await axios.get(`${API_ENDPOINTS.ADMIN.ORDERS}?${params}`);
+      const token = localStorage.getItem('adminToken');
+      const res = await axios.get(`${API_ENDPOINTS.ADMIN.ORDERS}?${params}`, {
+        headers: { 'x-auth-token': token }
+      });
       setOrders(res.data.orders || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (error) {
@@ -43,8 +46,11 @@ const Orders = () => {
     try {
       setError('');
       setSuccess('');
+      const token = localStorage.getItem('adminToken');
       await axios.put(API_ENDPOINTS.ADMIN.ORDER_STATUS(orderId), {
         status: newStatus
+      }, {
+        headers: { 'x-auth-token': token }
       });
       setSuccess('Order status updated successfully!');
       fetchOrders();

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { API_ENDPOINTS } from '../../config/api';
 import Breadcrumbs from '../../components/Admin/Breadcrumbs';
 import './Users.css';
@@ -92,6 +93,7 @@ const Users = () => {
                   <th>Phone</th>
                   <th>Location</th>
                   <th>Joined</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -100,6 +102,7 @@ const Users = () => {
                     <tr key={user._id}>
                       <td>
                         <strong>{user.firstName} {user.lastName}</strong>
+                        {user.isBlocked && <span style={{ marginLeft: '8px', fontSize: '11px', color: '#dc2626', backgroundColor: '#fef2f2', padding: '2px 6px', borderRadius: '4px', border: '1px solid #fecaca' }}>Blocked</span>}
                       </td>
                       <td>{user.email}</td>
                       <td>{user.phone || '-'}</td>
@@ -109,11 +112,16 @@ const Users = () => {
                           : '-'}
                       </td>
                       <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        <Link to={`/admin/users/${user._id}`} style={{ color: '#4e322d', fontWeight: 'bold', textDecoration: 'none' }}>
+                          View <i className="fa-solid fa-arrow-right"></i>
+                        </Link>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="no-data">
+                    <td colSpan="6" className="no-data">
                       No users found
                     </td>
                   </tr>

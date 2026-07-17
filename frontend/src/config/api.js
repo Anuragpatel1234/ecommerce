@@ -1,5 +1,21 @@
+import axios from 'axios';
+
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+// Global Axios Interceptor to attach the token
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
+    if (token) {
+      config.headers['x-auth-token'] = token;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -16,6 +32,7 @@ export const API_ENDPOINTS = {
     ORDER_STATUS: (id) => `${API_BASE_URL}/api/admin/orders/${id}/status`,
     USERS: `${API_BASE_URL}/api/admin/users`,
     USER_BY_ID: (id) => `${API_BASE_URL}/api/admin/users/${id}`,
+    USER_BLOCK: (id) => `${API_BASE_URL}/api/admin/users/${id}/block`,
     SECTIONS: `${API_BASE_URL}/api/admin/sections`,
     SECTION_BY_ID: (id) => `${API_BASE_URL}/api/admin/sections/${id}`,
     SECTION_BY_KEY: (key) => `${API_BASE_URL}/api/admin/sections/${key}`,

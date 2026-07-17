@@ -20,7 +20,10 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setError('');
-      const res = await axios.get(API_ENDPOINTS.ADMIN.DASHBOARD_STATS);
+      const token = localStorage.getItem('adminToken');
+      const res = await axios.get(API_ENDPOINTS.ADMIN.DASHBOARD_STATS, {
+        headers: { 'x-auth-token': token }
+      });
       setStats(res.data.stats);
       setRecentOrders(res.data.recentOrders || []);
       setTopProducts(res.data.topProducts || []);

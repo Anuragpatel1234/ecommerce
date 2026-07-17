@@ -425,6 +425,52 @@ router.get('/users/:id', async (req, res) => {
   }
 });
 
+router.put('/users/:id/block', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    // Prevent blocking other admins
+    if (user.role === 'admin') {
+      return res.status(403).json({ message: 'Cannot block an administrator' });
+    }
+
+    user.isBlocked = !user.isBlocked;
+    await user.save();
+
+    res.json({ message: `User successfully ${user.isBlocked ? 'blocked' : 'unblocked'}`, user });
+  } catch (error) {
+    console.error('Block user error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.delete('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Prevent deleting admins
+    if (user.role === 'admin') {
+      return res.status(403).json({ message: 'Cannot delete an administrator' });
+    }
+
+    // Cascade delete: Remove all orders associated with this user
+    await Order.deleteMany({ user: req.params.id });
+
+    await User.findByIdAndDelete(req.params.id);
+
+    res.json({ message: 'User and all associated data deleted successfully' });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // CMS - Website Sections Management
 // IMPORTANT: This route must come before /sections/:id to avoid route conflicts
 router.get('/sections', async (req, res) => {

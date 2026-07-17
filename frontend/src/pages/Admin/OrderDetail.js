@@ -24,7 +24,10 @@ const OrderDetail = () => {
     try {
       setLoading(true);
       setError('');
-      const res = await axios.get(API_ENDPOINTS.ADMIN.ORDER_BY_ID(id));
+      const token = localStorage.getItem('adminToken');
+      const res = await axios.get(API_ENDPOINTS.ADMIN.ORDER_BY_ID(id), {
+        headers: { 'x-auth-token': token }
+      });
       setOrder(res.data);
     } catch (error) {
       console.error('Error fetching order:', error);
@@ -39,8 +42,11 @@ const OrderDetail = () => {
       setUpdating(true);
       setError('');
       setSuccess('');
+      const token = localStorage.getItem('adminToken');
       await axios.put(API_ENDPOINTS.ADMIN.ORDER_STATUS(id), {
         status: newStatus
+      }, {
+        headers: { 'x-auth-token': token }
       });
       setSuccess('Order status updated successfully!');
       fetchOrder();
@@ -55,7 +61,8 @@ const OrderDetail = () => {
   };
 
   const formatPrice = (price) => {
-    return `₹${price.toLocaleString()}`;
+    const validPrice = price || 0;
+    return `₹${validPrice.toLocaleString()}`;
   };
 
   const getStatusColor = (status) => {
@@ -218,11 +225,11 @@ const OrderDetail = () => {
               </div>
               <div className="info-row">
                 <strong>Subtotal:</strong>
-                <span>{formatPrice(order.totalAmount)}</span>
+                <span>{formatPrice(order.total)}</span>
               </div>
               <div className="info-row total-row">
                 <strong>Total:</strong>
-                <span>{formatPrice(order.totalAmount)}</span>
+                <span>{formatPrice(order.total)}</span>
               </div>
             </div>
           </div>
