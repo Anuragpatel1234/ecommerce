@@ -15,6 +15,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [activeAccordion, setActiveAccordion] = useState(null);
+  const [mainImageLoaded, setMainImageLoaded] = useState(false);
   
   const toggleAccordion = (panel) => {
     setActiveAccordion(activeAccordion === panel ? null : panel);
@@ -126,13 +127,15 @@ const ProductDetail = () => {
     <div className="product-detail-page">
       <div className="product-detail-container">
         <div className="product-images">
-          <div className="main-image">
+          <div className={`main-image ${!mainImageLoaded ? 'image-loading' : ''}`}>
             <img 
               src={getImageUrl(product.images?.[activeImageIndex])} 
               alt={product.name}
+              className={mainImageLoaded ? 'loaded' : 'loading'}
               fetchpriority="high"
               loading="eager"
               decoding="sync"
+              onLoad={() => setMainImageLoaded(true)}
             />
             {product.onSale && <span className="sale-badge">SALE</span>}
             {product.newArrival && <span className="new-badge">NEW</span>}

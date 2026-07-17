@@ -7,6 +7,7 @@ import './ProductCard.css';
 const ProductCard = ({ product, showNewBadge = false }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
 
   const { user, wishlist, addToWishlist, removeFromWishlist, addToCart, currency } = useApp();
@@ -103,13 +104,14 @@ const ProductCard = ({ product, showNewBadge = false }) => {
   return (
     <div className="product-card">
       <Link to={`/product/${product._id}`} className="product-link">
-        <div className="product-image-container">
+        <div className={`product-image-container ${!imageLoaded ? 'image-loading' : ''}`}>
           <img
             src={getImageUrl(product.images?.[0])}
             alt={product.name}
-            className="product-image"
+            className={`product-image ${imageLoaded ? 'loaded' : 'loading'}`}
             loading="lazy"
             decoding="async"
+            onLoad={() => setImageLoaded(true)}
           />
 
           {showNewBadge && (

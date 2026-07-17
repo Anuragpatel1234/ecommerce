@@ -7,7 +7,44 @@ const HeroSection = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const intervalRef = useRef(null);
-  const [slides, setSlides] = useState([]);
+  const [slides, setSlides] = useState([
+    { 
+      src: 'img/pexels-vikashkr50-27103969.jpg', 
+      alt: 'Royal Heritage Collection', 
+      subtitleTop: 'RANGAARA AUTUMN EDIT',
+      title: 'THE ROYAL HERITAGE',
+      subtitle: 'Experience the regal elegance of handcrafted Indian couture',
+      ctaText: 'EXPLORE COLLECTION',
+      link: '/shop'
+    },
+    { 
+      src: 'img/Approved_Drzya-Desktop-14.webp', 
+      alt: 'Festive Splendor', 
+      subtitleTop: 'THE SHADI COLLECTION',
+      title: 'FESTIVE SPLENDOR',
+      subtitle: 'Premium ethnic wear designed for your special celebrations',
+      ctaText: 'DISCOVER NOW',
+      link: '/shop?collection=Nur'
+    },
+    { 
+      src: 'img/Drzya-Desktop-1_2.webp', 
+      alt: 'Modern Craftsmanship', 
+      subtitleTop: 'ARTISANAL CHRONICLES',
+      title: 'THE ART OF WEAVING',
+      subtitle: 'Where traditional artisan techniques meet contemporary design',
+      ctaText: 'OUR HERITAGE',
+      link: '/about'
+    },
+    { 
+      src: 'img/Drzya-Desktop-11.webp', 
+      alt: 'Luxury Edit', 
+      subtitleTop: 'VELVET & TISSUE SPECIALS',
+      title: 'THE LUXURY EDIT',
+      subtitle: 'Hand-selected silk, tissue and embroidered velvet silhouettes',
+      ctaText: 'SHOP EXCLUSIVES',
+      link: '/shop?filter=luxury'
+    }
+  ]);
   const fallbackSlides = React.useMemo(() => [
     { 
       src: 'img/pexels-vikashkr50-27103969.jpg', 
@@ -71,7 +108,7 @@ const HeroSection = () => {
         }
       } catch (err) {
         console.error('Failed to fetch hero section', err);
-        setSlides(fallbackSlides);
+        // slides is already initialized with fallbackSlides
       } finally {
         setLoading(false);
       }
