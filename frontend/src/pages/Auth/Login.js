@@ -149,31 +149,9 @@ const Login = () => {
               Don't have an account? 
               <Link to="/register" className="auth-link"> Create one</Link>
             </p>
-            <div className="auth-divider">
-              <span>or</span>
-            </div>
-            <p>
-              <Link to="/admin/login" className="admin-link">
-                <i className="fa-solid fa-shield-halved"></i> Admin Login
-              </Link>
-            </p>
           </div>
 
-          <div className="test-credentials">
-            <h4>Test Credentials</h4>
-            <div className="credentials-list">
-              <div className="credential-item">
-                <strong>Regular User:</strong>
-                <p>Email: test@rangaara.com</p>
-                <p>Password: test123</p>
-              </div>
-              <div className="credential-item">
-                <strong>Admin User:</strong>
-                <p>Email: admin@rangaara.com</p>
-                <p>Password: admin123</p>
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

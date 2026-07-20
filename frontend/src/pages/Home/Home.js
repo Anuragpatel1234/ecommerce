@@ -1,5 +1,6 @@
 import React from 'react';
 import HeroSection from '../../components/HeroSection/HeroSection';
+import PromoBanner from '../../components/PromoBanner/PromoBanner';
 import ShopCategories from '../../components/ShopCategories/ShopCategories';
 import ProductSection from '../../components/ProductSection/ProductSection';
 import HandcraftSection from '../../components/HandcraftSection/HandcraftSection';
@@ -17,6 +18,9 @@ const Home = () => {
       {/* 1. Hero Banner */}
       <HeroSection />
       
+      {/* Promotional Banners from CMS (Temporarily Removed) */}
+      {/* <PromoBanner /> */}
+
       {/* 2. Featured Categories */}
       <ShopCategories />
       
@@ -32,8 +36,8 @@ const Home = () => {
       {/* 6. Featured Collection */}
       <FeaturedCollection />
       
-      {/* Luxury Divider / Discount Banner */}
-      <Marquee />
+      {/* Luxury Divider / Discount Banner (Temporarily Removed) */}
+      {/* <Marquee /> */}
       
       {/* Luxury Scroll Effect Divider */}
       <ScrollingEffect />

@@ -144,9 +144,9 @@
     }
 
     .product-container .product-card {
-        flex: 0 0 240px;
-        min-width: 240px;
-        max-width: 240px;
+        flex: 0 0 280px;
+        min-width: 280px;
+        max-width: 280px;
     }
 }
 
@@ -159,9 +159,9 @@
     }
 
     .product-container .product-card {
-        flex: 0 0 200px;
-        min-width: 200px;
-        max-width: 200px;
+        flex: 0 0 260px;
+        min-width: 260px;
+        max-width: 260px;
     }
 
     .view-text {

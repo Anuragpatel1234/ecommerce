@@ -321,11 +321,13 @@
     }
 
     .product-add-to-cart-btn {
-        padding: 8px 16px;
-        font-size: 10px;
+        padding: 8px 12px;
+        font-size: 9px;
         bottom: 10px;
         transform: translateX(-50%) translateY(0);
         opacity: 1;
         visibility: visible;
+        white-space: nowrap;
+        width: auto;
     }
 }

@@ -232,8 +232,8 @@
 
 @media (max-width: 768px) {
     .hero-section {
-        height: 50vh;
-        min-height: 350px;
+        height: 75vh;
+        min-height: 450px;
     }
     
     .hero-slide img {

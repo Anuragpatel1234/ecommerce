@@ -128,9 +128,7 @@ const AdminLogin = () => {
           </form>
 
           <div className="admin-login-footer">
-            <p>Default Admin Credentials:</p>
-            <p><strong>Email:</strong> admin@rangaara.com</p>
-            <p><strong>Password:</strong> admin123</p>
+
             <div className="admin-login-divider">
               <span>or</span>
             </div>

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../config/api';
+import { API_ENDPOINTS, getImageUrl } from '../../config/api';
 import './ShopCategories.css';
 
 const ShopCategories = () => {
@@ -36,14 +36,10 @@ const ShopCategories = () => {
             .filter(c => c.isActive !== false)
             .sort((a, b) => a.displayOrder - b.displayOrder)
             .map(c => {
-              let imgUrl = c.image;
-              if (imgUrl && !imgUrl.startsWith('http') && !imgUrl.startsWith('/')) {
-                imgUrl = '/' + imgUrl;
-              }
               return {
                 id: c.id || Math.random(),
                 title: c.name,
-                image: imgUrl,
+                image: getImageUrl(c.image),
                 alt: c.name + ' Collection'
               };
             });

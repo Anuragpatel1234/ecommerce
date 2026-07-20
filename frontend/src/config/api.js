@@ -57,9 +57,14 @@ export const API_ENDPOINTS = {
 
 export const getImageUrl = (url) => {
   if (!url) return '/img/placeholder.jpg';
-  if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('blob:')) return url;
-  if (url.startsWith('uploads/')) return `${API_BASE_URL}/${url}`;
-  return url.startsWith('/') ? url : `/${url}`;
+  
+  // Normalize backslashes to forward slashes for Windows paths
+  const normalizedUrl = url.replace(/\\/g, '/');
+  
+  if (normalizedUrl.startsWith('http') || normalizedUrl.startsWith('data:') || normalizedUrl.startsWith('blob:')) return normalizedUrl;
+  if (normalizedUrl.startsWith('uploads/')) return `${API_BASE_URL}/${normalizedUrl}`;
+  
+  return normalizedUrl.startsWith('/') ? normalizedUrl : `/${normalizedUrl}`;
 };
 
 export default API_BASE_URL;

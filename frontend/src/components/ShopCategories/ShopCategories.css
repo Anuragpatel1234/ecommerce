@@ -160,7 +160,7 @@
     }
 
     .category-card {
-        height: 340px;
+        height: 500px;
         flex: 0 0 280px;
         min-width: 280px;
         max-width: 280px;
@@ -204,11 +204,11 @@
     }
 
     .category-card {
-        height: 300px;
-        flex: 0 0 240px;
-        min-width: 240px;
-        max-width: 240px;
-        border-radius: 12px; /* Slightly smaller radius on small mobile */
+        height: 480px;
+        flex: 0 0 260px;
+        min-width: 260px;
+        max-width: 260px;
+        border-radius: 12px;
     }
 
     .category-text-overlay .category-title {
