@@ -35,7 +35,9 @@ const ImageUploader = ({ value, onChange, label = 'Image', aspectHint = '', requ
         }
       });
       if (res.data.files && res.data.files.length > 0) {
-        const url = `${API_BASE_URL}/${res.data.files[0].url}`;
+        const url = res.data.files[0].url.startsWith('http') 
+          ? res.data.files[0].url 
+          : `${API_BASE_URL}/${res.data.files[0].url}`;
         onChange(url);
       }
     } catch (err) {
@@ -88,7 +90,8 @@ const ImageUploader = ({ value, onChange, label = 'Image', aspectHint = '', requ
   };
 
   const selectFromLibrary = (file) => {
-    onChange(`${API_BASE_URL}/${file.url}`);
+    const url = file.url.startsWith('http') ? file.url : `${API_BASE_URL}/${file.url}`;
+    onChange(url);
     setShowMediaModal(false);
   };
 
@@ -212,7 +215,7 @@ const ImageUploader = ({ value, onChange, label = 'Image', aspectHint = '', requ
                       onClick={() => selectFromLibrary(file)}
                       title={file.filename}
                     >
-                      <img src={`${API_BASE_URL}/${file.url}`} alt={file.filename} />
+                      <img src={file.url.startsWith('http') ? file.url : `${API_BASE_URL}/${file.url}`} alt={file.filename} />
                     </div>
                   ))}
                 </div>

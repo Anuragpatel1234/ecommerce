@@ -71,7 +71,7 @@ const MediaLibrary = () => {
   };
 
   const copyUrl = (file) => {
-    const url = `${API_BASE_URL}/${file.url}`;
+    const url = file.url.startsWith('http') ? file.url : `${API_BASE_URL}/${file.url}`;
     navigator.clipboard.writeText(url).then(() => showNotification('URL copied to clipboard!'));
   };
 
@@ -136,7 +136,7 @@ const MediaLibrary = () => {
                   onClick={() => setSelectedFile(selectedFile?.filename === file.filename ? null : file)}
                 >
                   <div className="media-file-card__img-wrap">
-                    <img src={`${API_BASE_URL}/${file.url}`} alt={file.filename} loading="lazy" />
+                    <img src={file.url.startsWith('http') ? file.url : `${API_BASE_URL}/${file.url}`} alt={file.filename} loading="lazy" />
                   </div>
                   <div className="media-file-card__info">
                     <p className="media-file-card__name" title={file.filename}>{file.filename}</p>
@@ -156,7 +156,7 @@ const MediaLibrary = () => {
                       <i className="fa-solid fa-xmark"></i>
                     </button>
                   </div>
-                  <img src={`${API_BASE_URL}/${selectedFile.url}`} alt={selectedFile.filename}
+                  <img src={selectedFile.url.startsWith('http') ? selectedFile.url : `${API_BASE_URL}/${selectedFile.url}`} alt={selectedFile.filename}
                     style={{ width: '100%', borderRadius: '8px', marginBottom: '16px', objectFit: 'contain', maxHeight: '200px', background: '#f9fafb' }} />
                   <p style={{ fontSize: '13px', fontWeight: 600, color: '#111827', wordBreak: 'break-all', margin: '0 0 8px' }}>{selectedFile.filename}</p>
                   <p style={{ fontSize: '12px', color: '#9ca3af', margin: '0 0 16px' }}>{formatSize(selectedFile.size)} · {new Date(selectedFile.uploadedAt).toLocaleDateString()}</p>
