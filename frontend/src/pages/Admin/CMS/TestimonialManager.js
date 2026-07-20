@@ -16,6 +16,37 @@ const defaultTestimonial = () => ({
   isActive: true
 });
 
+const fallbackTestimonialsData = [
+  {
+    id: 1,
+    testimonial: "The quality and craftsmanship are exceptional. Every piece tells a story and I feel confident wearing RANGAARA designs.",
+    customerName: "Priya Sharma",
+    designation: "Mumbai",
+    rating: 5,
+    image: "",
+    isActive: true
+  },
+  {
+    id: 2,
+    testimonial: "Absolutely love the handcraft designs! The attention to detail is amazing and the fit is perfect. Highly recommend!",
+    customerName: "Ananya Patel",
+    designation: "Delhi",
+    rating: 5,
+    image: "",
+    isActive: true
+  },
+  {
+    id: 3,
+    testimonial: "RANGAARA has become my go-to brand for traditional elegance. The designs beautifully blend heritage craftsmanship with modern style.",
+    customerName: "Riya Mehta",
+    designation: "Bangalore",
+    rating: 5,
+    image: "",
+    isActive: true
+  }
+];
+
+
 const StarRating = ({ value, onChange }) => (
   <div className="star-rating">
     {[1,2,3,4,5].map(n => (
@@ -52,8 +83,8 @@ const TestimonialManager = () => {
         headers: { 'x-auth-token': token }
       });
       setSectionId(res.data._id);
-      setTestimonials(res.data.content?.testimonials || []);
-    } catch (err) { if (err.response?.status === 404) setTestimonials([]); }
+      setTestimonials(res.data.content?.testimonials?.length > 0 ? res.data.content.testimonials : fallbackTestimonialsData);
+    } catch (err) { if (err.response?.status === 404) setTestimonials(fallbackTestimonialsData); }
     finally { setLoading(false); }
   }, []);
 

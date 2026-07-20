@@ -21,6 +21,53 @@ const defaultSlide = () => ({
   isActive: true
 });
 
+const fallbackSlidesData = [
+  { 
+    id: 1,
+    image: '/img/pexels-vikashkr50-27103969.jpg',
+    heading: 'THE ROYAL HERITAGE',
+    subheading: 'RANGAARA AUTUMN EDIT',
+    description: 'Experience the regal elegance of handcrafted Indian couture',
+    primaryBtnText: 'EXPLORE COLLECTION',
+    primaryBtnUrl: '/shop',
+    isActive: true,
+    overlayOpacity: 0.3
+  },
+  { 
+    id: 2,
+    image: '/img/Approved_Drzya-Desktop-14.webp',
+    heading: 'FESTIVE SPLENDOR',
+    subheading: 'THE SHADI COLLECTION',
+    description: 'Premium ethnic wear designed for your special celebrations',
+    primaryBtnText: 'DISCOVER NOW',
+    primaryBtnUrl: '/shop?collection=Nur',
+    isActive: true,
+    overlayOpacity: 0.3
+  },
+  { 
+    id: 3,
+    image: '/img/Drzya-Desktop-1_2.webp',
+    heading: 'THE ART OF WEAVING',
+    subheading: 'ARTISANAL CHRONICLES',
+    description: 'Where traditional artisan techniques meet contemporary design',
+    primaryBtnText: 'OUR HERITAGE',
+    primaryBtnUrl: '/about',
+    isActive: true,
+    overlayOpacity: 0.3
+  },
+  { 
+    id: 4,
+    image: '/img/Drzya-Desktop-11.webp',
+    heading: 'THE LUXURY EDIT',
+    subheading: 'VELVET & TISSUE SPECIALS',
+    description: 'Hand-selected silk, tissue and embroidered velvet silhouettes',
+    primaryBtnText: 'SHOP EXCLUSIVES',
+    primaryBtnUrl: '/shop?filter=luxury',
+    isActive: true,
+    overlayOpacity: 0.3
+  }
+];
+
 const HeroManager = () => {
   const navigate = useNavigate();
   const [slides, setSlides] = useState([]);
@@ -49,11 +96,11 @@ const HeroManager = () => {
       if (section.content?.slides?.length > 0) {
         setSlides(section.content.slides.map((s, i) => ({ ...s, id: s.id || i })));
       } else {
-        setSlides([defaultSlide()]);
+        setSlides(fallbackSlidesData);
       }
     } catch (err) {
       if (err.response?.status === 404) {
-        setSlides([defaultSlide()]);
+        setSlides(fallbackSlidesData);
       }
     } finally {
       setLoading(false);

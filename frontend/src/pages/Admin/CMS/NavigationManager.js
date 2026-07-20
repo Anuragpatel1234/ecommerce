@@ -13,6 +13,67 @@ const defaultItem = () => ({
   children: []
 });
 
+const fallbackNavData = [
+  {
+    id: 1, label: 'NEW ARRIVALS', url: '/shop?filter=newArrival', isActive: true,
+    children: [
+      { id: 101, label: 'Jameela', url: '/shop?collection=Jameela', isActive: true },
+      { id: 102, label: 'Nur', url: '/shop?collection=Nur', isActive: true },
+      { id: 103, label: 'Dilbaro Tissue', url: '/shop?collection=Dilbaro Tissue', isActive: true },
+      { id: 104, label: 'Dilbaro Embroidered Velvets', url: '/shop?collection=Dilbaro Embroidered Velvets', isActive: true },
+      { id: 105, label: 'Dilbaro', url: '/shop?collection=Dilbaro', isActive: true },
+      { id: 106, label: 'Zoya', url: '/shop?collection=Zoya', isActive: true },
+      { id: 107, label: 'Boond 3.0', url: '/shop?collection=Boond 3.0', isActive: true },
+      { id: 108, label: 'Phillauri 2', url: '/shop?collection=Phillauri 2', isActive: true },
+      { id: 109, label: 'Gulzaar', url: '/shop?collection=Gulzaar', isActive: true },
+      { id: 110, label: 'Ishq', url: '/shop?collection=Ishq', isActive: true },
+      { id: 111, label: 'Kapaas', url: '/shop?collection=Kapaas', isActive: true },
+      { id: 112, label: 'Layla Florals', url: '/shop?collection=Layla Florals', isActive: true },
+      { id: 113, label: 'Gulmohar Khari 25', url: '/shop?collection=Gulmohar Khari 25', isActive: true },
+      { id: 114, label: 'Gulmohar Block Prints', url: '/shop?collection=Gulmohar Block Prints', isActive: true },
+      { id: 115, label: 'Gulmohar', url: '/shop?collection=Gulmohar', isActive: true }
+    ]
+  },
+  {
+    id: 2, label: 'SHOP', url: '/shop', isActive: true,
+    children: [
+      { id: 201, label: 'Co-ord Sets', url: '/shop?category=Co-ord Sets', isActive: true },
+      { id: 202, label: 'Lehengas', url: '/shop?category=Lehengas', isActive: true },
+      { id: 203, label: 'Sarees', url: '/shop?category=Sarees', isActive: true },
+      { id: 204, label: 'Anarkali Sets', url: '/shop?category=Anarkali Sets', isActive: true },
+      { id: 205, label: 'Sharara Sets', url: '/shop?category=Sharara Sets', isActive: true },
+      { id: 206, label: 'Kurta Sets', url: '/shop?category=Kurta Sets', isActive: true },
+      { id: 207, label: 'Kaftan Sets', url: '/shop?category=Kaftan Sets', isActive: true },
+      { id: 208, label: 'Dhoti Sets', url: '/shop?category=Dhoti Sets', isActive: true },
+      { id: 209, label: 'Best Sellers', url: '/shop?filter=bestseller', isActive: true },
+      { id: 210, label: 'Accessories', url: '/shop?category=Accessories', isActive: true },
+      { id: 211, label: 'Home Edit', url: '/shop?category=Home Edit', isActive: true },
+      { id: 212, label: 'Tote Bags', url: '/shop?category=Tote Bags', isActive: true },
+      { id: 213, label: 'Potli Bags', url: '/shop?category=Potli Bags', isActive: true },
+      { id: 214, label: 'Shawls', url: '/shop?category=Shawls', isActive: true },
+      { id: 215, label: 'Caps', url: '/shop?category=Caps', isActive: true },
+      { id: 216, label: 'Dupattas', url: '/shop?category=Dupattas', isActive: true }
+    ]
+  },
+  { id: 3, label: 'OUR STORY', url: '/about', isActive: true, children: [] },
+  { id: 4, label: 'READY TO SHIP', url: '/shop?filter=readyToShip', isActive: true, children: [] },
+  { id: 5, label: 'LUXURY COLLECTION', url: '/shop?filter=luxury', isActive: true, children: [] },
+  { id: 6, label: 'BESTSELLERS', url: '/shop?filter=bestseller', isActive: true, children: [] },
+  { id: 7, label: 'ON SALE', url: '/shop?filter=onSale', isActive: true, children: [] },
+  {
+    id: 8, label: 'KIDS COLLECTION', url: '/category/KIDS OUTFITS', isActive: true,
+    children: [
+      { id: 801, label: 'Kids Lehengas', url: '/category/KIDS OUTFITS?type=Lehengas', isActive: true },
+      { id: 802, label: 'Kids Anarkali', url: '/category/KIDS OUTFITS?type=Anarkali', isActive: true },
+      { id: 803, label: 'Kids Kurta Sets', url: '/category/KIDS OUTFITS?type=Kurta Sets', isActive: true },
+      { id: 804, label: 'Kids Co-ord Sets', url: '/category/KIDS OUTFITS?type=Co-ord Sets', isActive: true },
+      { id: 805, label: 'Kids Party Wear', url: '/category/KIDS OUTFITS?type=Party Wear', isActive: true },
+      { id: 806, label: 'Kids Casual Wear', url: '/category/KIDS OUTFITS?type=Casual Wear', isActive: true }
+    ]
+  }
+];
+
+
 const NavigationManager = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
@@ -35,8 +96,8 @@ const NavigationManager = () => {
       const token = localStorage.getItem('adminToken');
       const res = await axios.get(`${API_BASE_URL}/api/admin/cms/sections/key/main_navigation`, { headers: { 'x-auth-token': token } });
       setSectionId(res.data._id);
-      setItems(res.data.content?.items || []);
-    } catch (err) { if (err.response?.status === 404) setItems([]); }
+      setItems(res.data.content?.items?.length > 0 ? res.data.content.items : fallbackNavData);
+    } catch (err) { if (err.response?.status === 404) setItems(fallbackNavData); }
     finally { setLoading(false); }
   }, []);
 

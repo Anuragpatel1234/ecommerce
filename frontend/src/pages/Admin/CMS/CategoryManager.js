@@ -19,6 +19,17 @@ const defaultCategory = () => ({
 
 const slugify = (text) => text.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 
+const fallbackCategoriesData = [
+  { id: 1, name: 'LEHENGAS', slug: 'lehengas', image: '/img/Untitled-4.webp', isActive: true, displayOrder: 0 },
+  { id: 2, name: 'SHARARA SETS', slug: 'sharara-sets', image: '/img/0952.webp', isActive: true, displayOrder: 1 },
+  { id: 3, name: 'ANARKALI SETS', slug: 'anarkali-sets', image: '/img/dupatta1.webp', isActive: true, displayOrder: 2 },
+  { id: 4, name: 'KURTA SETS', slug: 'kurta-sets', image: '/img/SKIRTS1.jpg', isActive: true, displayOrder: 3 },
+  { id: 5, name: 'COORD SETS', slug: 'coord-sets', image: '/img/traditional outfit 2.webp', isActive: true, displayOrder: 4 },
+  { id: 6, name: 'KAFTAN SETS', slug: 'kaftan-sets', image: '/img/kids lehenga set.webp', isActive: true, displayOrder: 5 },
+  { id: 7, name: 'DHOTI SETS', slug: 'dhoti-sets', image: '/img/Untitled-4.webp', isActive: true, displayOrder: 6 },
+  { id: 8, name: 'LOUNGE WEAR', slug: 'lounge-wear', image: '/img/0952.webp', isActive: true, displayOrder: 7 }
+];
+
 const CategoryManager = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
@@ -43,9 +54,9 @@ const CategoryManager = () => {
         headers: { 'x-auth-token': token }
       });
       setSectionId(res.data._id);
-      setCategories(res.data.content?.categories || []);
+      setCategories(res.data.content?.categories?.length > 0 ? res.data.content.categories : fallbackCategoriesData);
     } catch (err) {
-      if (err.response?.status === 404) setCategories([]);
+      if (err.response?.status === 404) setCategories(fallbackCategoriesData);
     } finally {
       setLoading(false);
     }

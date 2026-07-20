@@ -6,6 +6,55 @@ import ImageUploader from '../../../components/Admin/CMS/ImageUploader';
 import { API_ENDPOINTS } from '../../../config/api';
 import './SiteSettings.css';
 
+const fallbackSettingsData = {
+  siteName: "RANGAARA",
+  tagline: "Luxury Indian Ethnic Wear",
+  logo: "/img/RANGAARA-navbar-logo.png",
+  favicon: "/img/favicon.ico",
+  footer: {
+    description: "Online brand clothing founded in 2024. RANGAARA focuses on selling only quality and branded items, limited edition collections by best fashion designers.",
+    quickLinks: [
+      { label: "Our Story", url: "/about", order: 0 },
+      { label: "Bulk Purchase", url: "/bulk-purchase", order: 1 },
+      { label: "Online Shopping Guide", url: "/shopping-guide", order: 2 },
+      { label: "Return Policy", url: "/returns", order: 3 },
+      { label: "Refund Policy", url: "/refund", order: 4 },
+      { label: "Privacy Policy", url: "/privacy", order: 5 },
+      { label: "Disclaimer", url: "/disclaimer", order: 6 },
+      { label: "Contact Us", url: "/contact", order: 7 }
+    ],
+    copyright: "© 2025 Rangaara. All rights reserved."
+  },
+  contact: {
+    address: "",
+    email: "",
+    phone: "",
+    whatsapp: "",
+    googleMapsLink: ""
+  },
+  social: {
+    facebook: "https://facebook.com/rangaara",
+    instagram: "https://instagram.com/rangaara",
+    youtube: "https://youtube.com/rangaara",
+    twitter: "",
+    pinterest: ""
+  },
+  seo: {
+    metaTitle: "Rangaara - Luxury Indian Ethnic Wear",
+    metaDescription: "Experience the regal elegance of handcrafted Indian couture.",
+    canonicalUrl: "https://rangaara.com",
+    ogImage: "/img/RANGAARA-logo.png",
+    noIndex: false
+  },
+  announcementBar: {
+    enabled: true,
+    text: "USE CODE 'FESTIVE10' FOR 10% OFF ON ORDERS ABOVE ₹5000",
+    link: "/shop",
+    bgColor: "#5B1E23",
+    textColor: "#ffffff"
+  }
+};
+
 const SiteSettings = () => {
   const navigate = useNavigate();
   const [settings, setSettings] = useState(null);
@@ -25,8 +74,8 @@ const SiteSettings = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const res = await axios.get(API_ENDPOINTS.CMS.SETTINGS, { headers: { 'x-auth-token': token } });
-      setSettings(res.data);
-    } catch (err) { console.error(err); }
+      setSettings(res.data && Object.keys(res.data).length > 0 ? res.data : fallbackSettingsData);
+    } catch (err) { setSettings(fallbackSettingsData); }
     finally { setLoading(false); }
   }, []);
 

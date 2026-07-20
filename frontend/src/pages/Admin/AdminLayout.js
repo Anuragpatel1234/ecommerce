@@ -8,12 +8,9 @@ import './AdminLayout.css';
 const CMS_SUB_LINKS = [
   { path: '/admin/cms', label: 'Overview', icon: 'fa-solid fa-house-chimney' },
   { path: '/admin/cms/hero', label: 'Hero Section', icon: 'fa-solid fa-image' },
-  { path: '/admin/cms/banners', label: 'Banners', icon: 'fa-solid fa-rectangle-ad' },
   { path: '/admin/cms/categories', label: 'Categories', icon: 'fa-solid fa-th-large' },
-  { path: '/admin/cms/homepage', label: 'Homepage', icon: 'fa-solid fa-layer-group' },
   { path: '/admin/cms/about', label: 'About Section', icon: 'fa-solid fa-circle-info' },
   { path: '/admin/cms/testimonials', label: 'Testimonials', icon: 'fa-regular fa-star' },
-  { path: '/admin/cms/newsletter', label: 'Newsletter', icon: 'fa-solid fa-envelope' },
   { path: '/admin/cms/footer', label: 'Footer', icon: 'fa-solid fa-shoe-prints' },
   { path: '/admin/cms/navigation', label: 'Navigation', icon: 'fa-solid fa-bars' },
   { path: '/admin/cms/media', label: 'Media Library', icon: 'fa-solid fa-photo-film' },

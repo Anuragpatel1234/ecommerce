@@ -12,28 +12,12 @@ const CMS_SECTIONS = [
     color: '#5B1E23'
   },
   {
-    key: 'banners',
-    label: 'Promotional Banners',
-    description: 'Create, edit and schedule promotional banner campaigns.',
-    icon: 'fa-solid fa-rectangle-ad',
-    path: '/admin/cms/banners',
-    color: '#7c3aed'
-  },
-  {
     key: 'categories',
     label: 'Categories',
     description: 'Manage shop categories — names, images, order and active state.',
     icon: 'fa-solid fa-th-large',
     path: '/admin/cms/categories',
     color: '#0891b2'
-  },
-  {
-    key: 'homepage',
-    label: 'Homepage Sections',
-    description: 'Show, hide and reorder sections on the homepage.',
-    icon: 'fa-solid fa-house',
-    path: '/admin/cms/homepage',
-    color: '#059669'
   },
   {
     key: 'about',
@@ -50,14 +34,6 @@ const CMS_SECTIONS = [
     icon: 'fa-solid fa-star',
     path: '/admin/cms/testimonials',
     color: '#ea580c'
-  },
-  {
-    key: 'newsletter',
-    label: 'Newsletter Section',
-    description: 'Edit the newsletter heading, description and CTA button.',
-    icon: 'fa-solid fa-envelope',
-    path: '/admin/cms/newsletter',
-    color: '#0284c7'
   },
   {
     key: 'footer',

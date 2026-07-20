@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import API_BASE_URL from '../../config/api';
+import API_BASE_URL, { getImageUrl } from '../../config/api';
 import './FeaturedCollection.css';
 
 const FeaturedCollection = () => {
@@ -77,8 +77,18 @@ const FeaturedCollection = () => {
     }
   ];
 
-  const heroProduct = staticProducts[0];
-  const gridProducts = staticProducts.slice(1);
+  const displayProducts = products.length > 0 ? products : staticProducts;
+  
+  if (displayProducts.length === 0) return null;
+
+  const heroProduct = displayProducts[0];
+  const gridProducts = displayProducts.slice(1, 5);
+
+  const getProductImage = (product) => {
+    if (product.image) return product.image; // fallback for static
+    if (product.images && product.images.length > 0) return getImageUrl(product.images[0]);
+    return '/img/placeholder.jpg';
+  };
 
   return (
     <section className="featured-collection-section">
@@ -88,10 +98,10 @@ const FeaturedCollection = () => {
         <Link to={`/product/${heroProduct._id}`} className="hero-card">
           <div className="hero-image">
             <img 
-              src={heroProduct.image} 
+              src={getProductImage(heroProduct)} 
               alt={heroProduct.name}
               onError={(e) => {
-                console.error(`Failed to load hero image: ${heroProduct.image}`);
+                console.error(`Failed to load hero image`);
                 e.target.src = '/img/placeholder.jpg';
               }}
             />
@@ -117,10 +127,10 @@ const FeaturedCollection = () => {
               >
                 <div className="featured-card-image">
                   <img 
-                    src={product.image}
+                    src={getProductImage(product)}
                     alt={product.name}
                     onError={(e) => {
-                      console.error(`Failed to load image at index ${index}: ${product.image}`);
+                      console.error(`Failed to load image at index ${index}`);
                       e.target.src = '/img/placeholder.jpg';
                     }}
                   />

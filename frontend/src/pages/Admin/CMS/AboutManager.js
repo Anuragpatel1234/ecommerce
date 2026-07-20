@@ -8,19 +8,17 @@ import './AboutManager.css';
 
 const AboutManager = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState({
-    heading: '',
-    subheading: '',
-    description: '',
-    image: '',
-    btnText: '',
-    btnUrl: '',
-    stats: [
-      { label: 'Years of Craft', value: '10+' },
-      { label: 'Happy Customers', value: '5000+' },
-      { label: 'Handcrafted Pieces', value: '12000+' },
-    ]
-  });
+  const fallbackData = {
+    heading: 'Our Heritage',
+    subheading: 'Preserving the artistry of Indian handlooms and crafts',
+    description: "At Rangaara, our mission is to celebrate Indian heritage through timeless craftsmanship and contemporary design. We honor the artisans whose skilled hands weave stories of tradition into every thread—preserving centuries-old techniques while making them relevant for today's modern world.\n\nOur garments are more than clothing; they are emblems of cultural pride, bridging the gap between traditional Indian craftsmanship and global fashion. Each piece carries the legacy of artisan communities, the beauty of handcrafted details, and the elegance of heritage reimagined for contemporary life.",
+    image: 'img/93cc167593f14ad0652725d72a9ddd59.jpg',
+    btnText: 'Discover Our Craft',
+    btnUrl: '/shop',
+    stats: []
+  };
+
+  const [data, setData] = useState(fallbackData);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
@@ -41,8 +39,8 @@ const AboutManager = () => {
         headers: { 'x-auth-token': token }
       });
       setSectionId(res.data._id);
-      if (res.data.content) setData({ ...data, ...res.data.content });
-    } catch (err) { /* use defaults */ }
+      if (res.data.content && Object.keys(res.data.content).length > 0) setData({ ...data, ...res.data.content });
+    } catch (err) { setData(fallbackData); }
     finally { setLoading(false); }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
