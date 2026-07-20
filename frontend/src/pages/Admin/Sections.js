@@ -60,7 +60,7 @@ const Sections = () => {
         const errorMsg = error.response?.data?.message || error.response?.data?.error || 'Failed to load sections';
         setError(`${errorMsg} (Status: ${error.response.status})`);
       } else if (error.request) {
-        setError('Cannot connect to server. Please make sure the backend server is running on port 5000.');
+        setError('Cannot connect to the server. Please check your internet connection or try again later.');
       } else {
         setError(error.message || 'Failed to load sections. Please try again.');
       }

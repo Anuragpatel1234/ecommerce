@@ -178,7 +178,7 @@ export const AppProvider = ({ children }) => {
         message = error.response.data?.message || error.response.data?.errors?.[0]?.msg || 'Login failed';
       } else if (error.request) {
         // Request was made but no response received
-        message = 'Cannot connect to server. Please make sure the backend server is running on port 5000.';
+        message = 'Cannot connect to the server. Please check your internet connection or try again later.';
       } else {
         // Something else happened
         message = error.message || 'Login failed';
@@ -217,7 +217,7 @@ export const AppProvider = ({ children }) => {
         message = error.response.data?.message || error.response.data?.errors?.[0]?.msg || 'Registration failed';
       } else if (error.request) {
         // Request was made but no response received
-        message = 'Cannot connect to server. Please make sure the backend server is running on port 5000.';
+        message = 'Cannot connect to the server. Please check your internet connection or try again later.';
       } else {
         // Something else happened
         message = error.message || 'Registration failed';

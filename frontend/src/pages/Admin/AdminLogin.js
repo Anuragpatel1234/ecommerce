@@ -63,7 +63,7 @@ const AdminLogin = () => {
         errorMessage = err.response.data?.message || err.response.data?.errors?.[0]?.msg || 'Login failed';
       } else if (err.request) {
         // Request was made but no response received
-        errorMessage = 'Cannot connect to server. Please make sure the backend server is running on port 5000.';
+        errorMessage = 'Cannot connect to the server. Please check your internet connection or try again later.';
       } else {
         // Something else happened
         errorMessage = err.message || 'Login failed';
