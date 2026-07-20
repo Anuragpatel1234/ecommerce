@@ -16,36 +16,27 @@ const DOMPurify = createDOMPurify(window);
 router.use(auth);
 router.use(admin);
 
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 // Configure multer for CMS image uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadDir = 'uploads/cms/';
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'rangaara/cms',
+    allowed_formats: ['jpeg', 'jpg', 'png', 'webp', 'gif', 'svg']
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'cms-' + uniqueSuffix + path.extname(file.originalname));
-  }
 });
 
 const upload = multer({
   storage: storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|webp|gif|svg/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const allowedMimes = /image\/(jpeg|jpg|png|webp|gif|svg\+xml)/;
-    const mimetype = allowedMimes.test(file.mimetype);
-
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed (jpg, png, webp, gif, svg)!'));
-    }
-  }
 });
 
 // ─── CMS Settings ───────────────────────────────────────────────────────────
@@ -90,19 +81,9 @@ router.post('/upload', upload.array('images', 20), (req, res) => {
       return res.status(400).json({ message: 'No files uploaded' });
     }
     const files = req.files.map(file => {
-      // Sanitize SVG files to prevent XSS
-      if (file.mimetype === 'image/svg+xml') {
-        const filePath = path.join(file.destination, file.filename);
-        const svgContent = fs.readFileSync(filePath, 'utf8');
-        // Sanitize with SVG profile and return trusted string
-        const cleanSvg = DOMPurify.sanitize(svgContent, { USE_PROFILES: { svg: true } });
-        fs.writeFileSync(filePath, cleanSvg, 'utf8');
-        file.size = Buffer.byteLength(cleanSvg, 'utf8');
-      }
-
       return {
-        url: 'uploads/cms/' + file.filename,
-        filename: file.filename,
+        url: file.path,
+        filename: file.filename || file.originalname,
         originalName: file.originalname,
         size: file.size,
         mimetype: file.mimetype,
@@ -122,25 +103,23 @@ router.post('/upload', upload.array('images', 20), (req, res) => {
 router.get('/media', async (req, res) => {
   try {
     const { search, page = 1, limit = 50 } = req.query;
-    const uploadDir = path.join(__dirname, '..', 'uploads', 'cms');
 
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-      return res.json({ files: [], total: 0 });
-    }
+    const result = await cloudinary.api.resources({
+      type: 'upload',
+      prefix: 'rangaara/cms/',
+      max_results: 500
+    });
 
-    let files = fs.readdirSync(uploadDir)
-      .filter(f => /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(f))
-      .map(filename => {
-        const stat = fs.statSync(path.join(uploadDir, filename));
-        return {
-          filename,
-          url: 'uploads/cms/' + filename,
-          size: stat.size,
-          uploadedAt: stat.mtime
-        };
-      })
-      .sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+    let files = result.resources.map(item => {
+      // Extract just the filename with extension
+      const name = item.public_id.replace('rangaara/cms/', '');
+      return {
+        filename: `${name}.${item.format}`,
+        url: item.secure_url,
+        size: item.bytes,
+        uploadedAt: item.created_at
+      };
+    }).sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
 
     if (search) {
       files = files.filter(f => f.filename.toLowerCase().includes(search.toLowerCase()));
@@ -159,15 +138,15 @@ router.get('/media', async (req, res) => {
 });
 
 // DELETE media file
-router.delete('/media/:filename', (req, res) => {
+router.delete('/media/:filename', async (req, res) => {
   try {
-    const filePath = path.join(__dirname, '..', 'uploads', 'cms', req.params.filename);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-      res.json({ message: 'File deleted successfully' });
-    } else {
-      res.status(404).json({ message: 'File not found' });
-    }
+    const filename = req.params.filename;
+    // Extract public_id by removing the extension
+    const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.')) || filename;
+    const publicId = 'rangaara/cms/' + nameWithoutExt;
+    
+    await cloudinary.uploader.destroy(publicId);
+    res.json({ message: 'File deleted successfully' });
   } catch (error) {
     console.error('CMS media delete error:', error);
     res.status(500).json({ message: 'Failed to delete file', error: error.message });

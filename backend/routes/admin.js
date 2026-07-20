@@ -11,35 +11,27 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 // Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadDir = 'uploads/';
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'rangaara/products',
+    allowed_formats: ['jpeg', 'jpg', 'png', 'webp', 'gif']
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
 });
 
 const upload = multer({
   storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|webp|gif/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
-
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed!'));
-    }
-  }
 });
 
 // All admin routes require authentication and admin role
@@ -91,7 +83,7 @@ router.post('/upload', upload.array('images', 10), (req, res) => {
       return res.status(400).json({ message: 'No files uploaded' });
     }
 
-    const filePaths = req.files.map(file => 'uploads/' + file.filename);
+    const filePaths = req.files.map(file => file.path);
     res.json({
       message: 'Files uploaded successfully',
       urls: filePaths
@@ -169,7 +161,7 @@ router.post('/products', upload.array('images', 5), [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    let finalImages = req.files ? req.files.map(file => 'uploads/' + file.filename) : [];
+    let finalImages = req.files ? req.files.map(file => file.path) : [];
     if (req.body.existingImages) {
       const parsed = JSON.parse(req.body.existingImages);
       finalImages = [...finalImages, ...parsed];
@@ -220,7 +212,7 @@ router.put('/products/:id', upload.array('images', 5), async (req, res) => {
     }
 
     if (req.files && req.files.length > 0) {
-      const newImages = req.files.map(file => 'uploads/' + file.filename);
+      const newImages = req.files.map(file => file.path);
       finalImages = [...newImages, ...finalImages];
     }
     
