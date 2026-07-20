@@ -26,6 +26,8 @@ app.use('/api', limiter);
 // CORS setup
 const allowedOrigins = [
   process.env.FRONTEND_URL,
+  'https://rangaara.com',
+  'https://www.rangaara.com',
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:3002'
