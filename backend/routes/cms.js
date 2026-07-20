@@ -16,26 +16,11 @@ const DOMPurify = createDOMPurify(window);
 router.use(auth);
 router.use(admin);
 
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('cloudinary').v2;
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
+const { imagekit, uploadToImageKit } = require('../middleware/imagekitUpload');
 
 // Configure multer for CMS image uploads
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'rangaara/cms',
-    allowed_formats: ['jpeg', 'jpg', 'png', 'webp', 'gif', 'svg']
-  },
-});
-
 const upload = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
 });
 
@@ -75,7 +60,7 @@ router.put('/settings', async (req, res) => {
 // ─── Image Upload ─────────────────────────────────────────────────────────────
 
 // Upload single or multiple images to CMS
-router.post('/upload', upload.array('images', 20), (req, res) => {
+router.post('/upload', upload.array('images', 20), uploadToImageKit('rangaara/cms'), (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'No files uploaded' });
@@ -83,7 +68,7 @@ router.post('/upload', upload.array('images', 20), (req, res) => {
     const files = req.files.map(file => {
       return {
         url: file.path,
-        filename: file.filename || file.originalname,
+        filename: file.fileId || file.filename || file.originalname,
         originalName: file.originalname,
         size: file.size,
         mimetype: file.mimetype,
@@ -104,20 +89,17 @@ router.get('/media', async (req, res) => {
   try {
     const { search, page = 1, limit = 50 } = req.query;
 
-    const result = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: 'rangaara/cms/',
-      max_results: 500
+    const result = await imagekit.listFiles({
+      path: 'rangaara/cms',
+      limit: 500
     });
 
-    let files = result.resources.map(item => {
-      // Extract just the filename with extension
-      const name = item.public_id.replace('rangaara/cms/', '');
+    let files = result.map(item => {
       return {
-        filename: `${name}.${item.format}`,
-        url: item.secure_url,
-        size: item.bytes,
-        uploadedAt: item.created_at
+        filename: item.fileId,
+        url: item.url,
+        size: item.size,
+        uploadedAt: item.createdAt
       };
     }).sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
 
@@ -140,12 +122,9 @@ router.get('/media', async (req, res) => {
 // DELETE media file
 router.delete('/media/:filename', async (req, res) => {
   try {
-    const filename = req.params.filename;
-    // Extract public_id by removing the extension
-    const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.')) || filename;
-    const publicId = 'rangaara/cms/' + nameWithoutExt;
+    const fileId = req.params.filename; // We passed fileId as filename in the response
     
-    await cloudinary.uploader.destroy(publicId);
+    await imagekit.deleteFile(fileId);
     res.json({ message: 'File deleted successfully' });
   } catch (error) {
     console.error('CMS media delete error:', error);

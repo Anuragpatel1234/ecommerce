@@ -11,26 +11,11 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('cloudinary').v2;
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
+const { uploadToImageKit } = require('../middleware/imagekitUpload');
 
 // Configure multer for file uploads
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'rangaara/products',
-    allowed_formats: ['jpeg', 'jpg', 'png', 'webp', 'gif']
-  },
-});
-
 const upload = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
 });
 
@@ -76,8 +61,8 @@ router.get('/dashboard/stats', async (req, res) => {
   }
 });
 
-// Generic Image Upload Route
-router.post('/upload', upload.array('images', 10), (req, res) => {
+// Generic Image// Upload single or multiple images
+router.post('/upload', upload.array('images', 20), uploadToImageKit('rangaara/products'), (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'No files uploaded' });
@@ -150,7 +135,7 @@ router.get('/products/:id', async (req, res) => {
   }
 });
 
-router.post('/products', upload.array('images', 5), [
+router.post('/products', upload.array('images', 5), uploadToImageKit('rangaara/products'), [
   body('name').notEmpty().withMessage('Product name is required'),
   body('price').isNumeric().withMessage('Price must be a number'),
   body('category').notEmpty().withMessage('Category is required')
@@ -192,7 +177,7 @@ router.post('/products', upload.array('images', 5), [
   }
 });
 
-router.put('/products/:id', upload.array('images', 5), async (req, res) => {
+router.put('/products/:id', upload.array('images', 5), uploadToImageKit('rangaara/products'), async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) {
