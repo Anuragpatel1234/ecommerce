@@ -59,10 +59,14 @@ export const getImageUrl = (url) => {
   if (!url) return '/img/placeholder.jpg';
   
   // Normalize backslashes to forward slashes for Windows paths
-  const normalizedUrl = url.replace(/\\/g, '/');
+  let normalizedUrl = url.replace(/\\/g, '/');
   
   if (normalizedUrl.startsWith('http') || normalizedUrl.startsWith('data:') || normalizedUrl.startsWith('blob:')) return normalizedUrl;
-  if (normalizedUrl.startsWith('uploads/')) return `${API_BASE_URL}/${normalizedUrl}`;
+  
+  // Remove leading slash if present to properly match 'uploads/'
+  const cleanUrl = normalizedUrl.startsWith('/') ? normalizedUrl.substring(1) : normalizedUrl;
+  
+  if (cleanUrl.startsWith('uploads/')) return `${API_BASE_URL}/${cleanUrl}`;
   
   return normalizedUrl.startsWith('/') ? normalizedUrl : `/${normalizedUrl}`;
 };
