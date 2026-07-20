@@ -7,6 +7,10 @@ const CmsSettings = require('../models/CmsSettings');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
 
 // All CMS routes require authentication and admin role
 router.use(auth);
@@ -85,14 +89,26 @@ router.post('/upload', upload.array('images', 20), (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'No files uploaded' });
     }
-    const files = req.files.map(file => ({
-      url: 'uploads/cms/' + file.filename,
-      filename: file.filename,
-      originalName: file.originalname,
-      size: file.size,
-      mimetype: file.mimetype,
-      uploadedAt: new Date()
-    }));
+    const files = req.files.map(file => {
+      // Sanitize SVG files to prevent XSS
+      if (file.mimetype === 'image/svg+xml') {
+        const filePath = path.join(file.destination, file.filename);
+        const svgContent = fs.readFileSync(filePath, 'utf8');
+        // Sanitize with SVG profile and return trusted string
+        const cleanSvg = DOMPurify.sanitize(svgContent, { USE_PROFILES: { svg: true } });
+        fs.writeFileSync(filePath, cleanSvg, 'utf8');
+        file.size = Buffer.byteLength(cleanSvg, 'utf8');
+      }
+
+      return {
+        url: 'uploads/cms/' + file.filename,
+        filename: file.filename,
+        originalName: file.originalname,
+        size: file.size,
+        mimetype: file.mimetype,
+        uploadedAt: new Date()
+      };
+    });
     res.json({ message: 'Files uploaded successfully', files });
   } catch (error) {
     console.error('CMS upload error:', error);

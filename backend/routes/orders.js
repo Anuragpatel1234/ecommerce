@@ -2,6 +2,7 @@ const express = require('express');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 
 const router = express.Router();
 
@@ -91,7 +92,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // Update order status (for admin)
-router.put('/:id/status', auth, async (req, res) => {
+router.put('/:id/status', [auth, admin], async (req, res) => {
   try {
     const { orderStatus, paymentStatus } = req.body;
     

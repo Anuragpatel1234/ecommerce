@@ -1,17 +1,25 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
+const rateLimit = require('express-rate-limit');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
+
+// Login rate limiter to prevent brute-force attacks
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 login attempts per window per IP
+  message: { message: 'Too many login attempts from this IP, please try again after 15 minutes' }
+});
 
 // Register
 router.post('/register', [
   body('firstName').notEmpty().withMessage('First name is required'),
   body('lastName').notEmpty().withMessage('Last name is required'),
   body('email').isEmail().withMessage('Please enter a valid email'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+  body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -41,7 +49,7 @@ router.post('/register', [
       }
     };
 
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' }, (err, token) => {
       if (err) throw err;
       res.json({ 
         token,
@@ -60,7 +68,7 @@ router.post('/register', [
 });
 
 // Login
-router.post('/login', [
+router.post('/login', loginLimiter, [
   body('email').isEmail().withMessage('Please enter a valid email'),
   body('password').exists().withMessage('Password is required')
 ], async (req, res) => {
@@ -92,7 +100,7 @@ router.post('/login', [
       }
     };
 
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' }, (err, token) => {
       if (err) throw err;
       res.json({ 
         token,
